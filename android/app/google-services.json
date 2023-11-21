@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "511795380278",
+    "project_id": "safarday-driver",
+    "storage_bucket": "safarday-driver.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:511795380278:android:75d8fc2b1052805ebdd897",
+        "android_client_info": {
+          "package_name": "com.pishranesh.transportationdriver"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBKtNXEj1gwezfqMt1xZg_V0tVynVRrc7M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

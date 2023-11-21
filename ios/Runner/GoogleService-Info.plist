@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>AIzaSyBYO4Wdb-jR4pxNnbFh3xMHIBWfKLdxxLs</string>
+	<key>GCM_SENDER_ID</key>
+	<string>511795380278</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.pishranesh.transportationdriver</string>
+	<key>PROJECT_ID</key>
+	<string>safarday-driver</string>
+	<key>STORAGE_BUCKET</key>
+	<string>safarday-driver.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:511795380278:ios:5b5856ab1d0cd600bdd897</string>
+</dict>
+</plist>
