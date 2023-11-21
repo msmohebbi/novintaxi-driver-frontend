@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:persian_datetime_picker/persian_datetime_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:transportationdriver/providers/driver_data.dart';
-import 'package:transportationdriver/widgets/select_image.dart';
 
-class Page2 extends StatefulWidget {
-  const Page2({super.key});
+class Page3 extends StatefulWidget {
+  const Page3({super.key});
 
   @override
-  State<Page2> createState() => _Page2State();
+  State<Page3> createState() => _Page3State();
 }
 
-class _Page2State extends State<Page2> {
+class _Page3State extends State<Page3> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -30,7 +28,7 @@ class _Page2State extends State<Page2> {
                   borderRadius: BorderRadius.circular(12),
                   color: Theme.of(context).colorScheme.primary,
                 ),
-                child: const Text('فرم مشخصات راننده'),
+                child: const Text('فرم مشخصات خودرو'),
               ),
             ],
           ),
@@ -51,7 +49,7 @@ class _Page2State extends State<Page2> {
                   padding:
                       EdgeInsets.symmetric(horizontal: kToolbarHeight * 0.4),
                   child: Text(
-                    "شماره گواهینامه:",
+                    "مدل خودرو:",
                     style: TextStyle(),
                   ),
                 ),
@@ -68,8 +66,7 @@ class _Page2State extends State<Page2> {
                   margin: const EdgeInsets.symmetric(
                       horizontal: kToolbarHeight * 0.4),
                   child: TextFormField(
-                    controller:
-                        Provider.of<DriverData>(context).melliCodeController,
+                    controller: Provider.of<DriverData>(context).vehicleModel,
                     textInputAction: TextInputAction.next,
                     // autofocus: true,
                     keyboardType: TextInputType.name,
@@ -92,46 +89,37 @@ class _Page2State extends State<Page2> {
                 const Padding(
                   padding:
                       EdgeInsets.symmetric(horizontal: kToolbarHeight * 0.4),
-                  child: Row(
-                    children: [
-                      Text('مدت اعتبار گواهینامه:'),
-                    ],
+                  child: Text(
+                    "رنگ خودرو:",
+                    style: TextStyle(),
                   ),
                 ),
                 const SizedBox(height: kToolbarHeight * 0.2),
-                Padding(
+                Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Theme.of(context).hintColor.withAlpha(60),
+                    ),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                   padding: const EdgeInsets.symmetric(
                       horizontal: kToolbarHeight * 0.4),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      const Text("تاریخ:"),
-                      const SizedBox(width: kToolbarHeight * 0.2),
-                      InkWell(
-                        borderRadius: BorderRadius.circular(12),
-                        onTap: () async {
-                          Jalali? picked = await showPersianDatePicker(
-                            context: context,
-                            initialDate: Jalali.now(),
-                            firstDate: Jalali.now(),
-                            lastDate: Jalali.now().addDays(7),
-                            builder: (context, child) {
-                              return Theme(data: ThemeData(), child: child!);
-                            },
-                          );
-                          if (picked != null && context.mounted) {
-                            Provider.of<DriverData>(context, listen: false)
-                                .setgovahiExpDate(picked.toDateTime());
-                          }
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.all(kToolbarHeight * 0.1),
-                          child: Text(Provider.of<DriverData>(context)
-                                  .govahiExpDateString ??
-                              "انتخاب کنید"),
-                        ),
-                      ),
-                    ],
+                  margin: const EdgeInsets.symmetric(
+                      horizontal: kToolbarHeight * 0.4),
+                  child: TextFormField(
+                    controller: Provider.of<DriverData>(context).vehicleColor,
+                    textInputAction: TextInputAction.next,
+                    // autofocus: true,
+                    keyboardType: TextInputType.name,
+                    autovalidateMode: AutovalidateMode.always,
+                    validator: (val) {
+                      return null;
+                    },
+                    decoration: const InputDecoration(
+                        isDense: true,
+                        border: InputBorder.none,
+                        fillColor: Colors.blue,
+                        hintStyle: TextStyle()),
                   ),
                 ),
                 const SizedBox(height: kToolbarHeight * 0.4),
@@ -143,40 +131,37 @@ class _Page2State extends State<Page2> {
                   padding:
                       EdgeInsets.symmetric(horizontal: kToolbarHeight * 0.4),
                   child: Text(
-                    "عکس از روی گواهینامه:",
+                    "پلاک خودرو:",
                     style: TextStyle(),
                   ),
                 ),
                 const SizedBox(height: kToolbarHeight * 0.2),
-                SelectImage(
-                  onSelectImage: (cFile) {
-                    Provider.of<DriverData>(context, listen: false)
-                        .setmelliFrontImage(cFile);
-                  },
-                  selectedImage:
-                      Provider.of<DriverData>(context).melliFrontImage,
-                ),
-                const SizedBox(height: kToolbarHeight * 0.4),
-                Divider(
-                  color: Theme.of(context).hintColor.withAlpha(60),
-                ),
-                const SizedBox(height: kToolbarHeight * 0.2),
-                const Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: kToolbarHeight * 0.4),
-                  child: Text(
-                    "عکس از پشت گواهینامه:",
-                    style: TextStyle(),
+                Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Theme.of(context).hintColor.withAlpha(60),
+                    ),
+                    borderRadius: BorderRadius.circular(12),
                   ),
-                ),
-                const SizedBox(height: kToolbarHeight * 0.2),
-                SelectImage(
-                  onSelectImage: (cFile) {
-                    Provider.of<DriverData>(context, listen: false)
-                        .setmelliBackImage(cFile);
-                  },
-                  selectedImage:
-                      Provider.of<DriverData>(context).melliBackImage,
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: kToolbarHeight * 0.4),
+                  margin: const EdgeInsets.symmetric(
+                      horizontal: kToolbarHeight * 0.4),
+                  child: TextFormField(
+                    controller: Provider.of<DriverData>(context).vehiclePelak,
+                    textInputAction: TextInputAction.next,
+                    // autofocus: true,
+                    keyboardType: TextInputType.name,
+                    autovalidateMode: AutovalidateMode.always,
+                    validator: (val) {
+                      return null;
+                    },
+                    decoration: const InputDecoration(
+                        isDense: true,
+                        border: InputBorder.none,
+                        fillColor: Colors.blue,
+                        hintStyle: TextStyle()),
+                  ),
                 ),
                 const SizedBox(height: kToolbarHeight),
                 Padding(
@@ -193,7 +178,7 @@ class _Page2State extends State<Page2> {
                             borderRadius: BorderRadius.circular(12),
                             onTap: () async {
                               Provider.of<DriverData>(context, listen: false)
-                                  .setpageIndex(1);
+                                  .setpageIndex(2);
                             },
                             child: Container(
                               alignment: Alignment.center,
@@ -220,7 +205,7 @@ class _Page2State extends State<Page2> {
                             borderRadius: BorderRadius.circular(12),
                             onTap: () async {
                               Provider.of<DriverData>(context, listen: false)
-                                  .setpageIndex(3);
+                                  .setpageIndex(4);
                             },
                             child: Container(
                               alignment: Alignment.center,

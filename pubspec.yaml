@@ -99,6 +99,7 @@ flutter:
     - assets/images/intro.png
     - assets/images/introtext.png
     - assets/images/search.png
+    - assets/images/waitingprofile.png
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 

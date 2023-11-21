@@ -142,7 +142,7 @@ class _Page1State extends State<Page1> {
                             borderRadius: BorderRadius.circular(12),
                             onTap: () async {
                               Provider.of<DriverData>(context, listen: false)
-                                  .setpageIndex(0);
+                                  .setpageIndex(1);
                             },
                             child: Container(
                               alignment: Alignment.center,
@@ -169,7 +169,7 @@ class _Page1State extends State<Page1> {
                             borderRadius: BorderRadius.circular(12),
                             onTap: () async {
                               Provider.of<DriverData>(context, listen: false)
-                                  .setpageIndex(1);
+                                  .setpageIndex(2);
                             },
                             child: Container(
                               alignment: Alignment.center,

@@ -69,15 +69,15 @@ class DriverData with ChangeNotifier {
 
   File? _melliFrontImage;
   File? get melliFrontImage => _melliFrontImage;
-  setmelliFrontImage(File? newmelliFrontImage) {
-    _melliFrontImage = newmelliFrontImage;
+  setmelliFrontImage(File? newImage) {
+    _melliFrontImage = newImage;
     notifyListeners();
   }
 
   File? _melliBackImage;
   File? get melliBackImage => _melliBackImage;
-  setmelliBackImage(File? newmelliBackImage) {
-    _melliBackImage = newmelliBackImage;
+  setmelliBackImage(File? newImage) {
+    _melliBackImage = newImage;
     notifyListeners();
   }
 
@@ -100,6 +100,56 @@ class DriverData with ChangeNotifier {
 
   setgovahiExpDate(DateTime newDateTime) {
     _govahiExpDate = newDateTime.millisecondsSinceEpoch;
+    notifyListeners();
+  }
+
+// Page 3
+  TextEditingController get vehicleModel => _vehicleModel;
+  final TextEditingController _vehicleModel = TextEditingController(text: "");
+
+  TextEditingController get vehicleColor => _vehicleColor;
+  final TextEditingController _vehicleColor = TextEditingController(text: "");
+
+  TextEditingController get vehiclePelak => _vehiclePelak;
+  final TextEditingController _vehiclePelak = TextEditingController(text: "");
+
+// Page 4
+  TextEditingController get vehicleCartBackNo => _vehicleCartBackNo;
+  final TextEditingController _vehicleCartBackNo =
+      TextEditingController(text: "");
+
+  File? get vehicleCartBackImage => _vehicleCartBackImage;
+  File? _vehicleCartBackImage;
+  setvehicleCartBackImage(File? newImage) {
+    _vehicleCartBackImage = newImage;
+    notifyListeners();
+  }
+
+  File? get vehicleCartFrontImage => _vehicleCartFrontImage;
+  File? _vehicleCartFrontImage;
+  setvehicleCartFrontImage(File? newImage) {
+    _vehicleCartFrontImage = newImage;
+    notifyListeners();
+  }
+
+  File? get vehicleImage1 => _vehicleImage1;
+  File? _vehicleImage1;
+  setvehicleImage1(File? newImage) {
+    _vehicleImage1 = newImage;
+    notifyListeners();
+  }
+
+  File? get vehicleImage2 => _vehicleImage2;
+  File? _vehicleImage2;
+  setvehicleImage2(File? newImage) {
+    _vehicleImage2 = newImage;
+    notifyListeners();
+  }
+
+  File? get vehicleImage3 => _vehicleImage3;
+  File? _vehicleImage3;
+  setvehicleImage3(File? newImage) {
+    _vehicleImage3 = newImage;
     notifyListeners();
   }
 }
