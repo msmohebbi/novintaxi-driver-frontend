@@ -12,7 +12,7 @@ import '../../providers/settings_data.dart';
 // import 'package:http/http.dart' as htp;
 
 class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({Key? key}) : super(key: key);
+  const SignUpScreen({super.key});
 
   @override
   SignUpScreenState createState() => SignUpScreenState();

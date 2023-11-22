@@ -44,7 +44,6 @@ MaterialColor myColorForDark = MaterialColor(500, <int, Color>{
 });
 
 final lightTheme = ThemeData.light().copyWith(
-  useMaterial3: true,
   textTheme: ThemeData.light().textTheme.apply(fontFamily: 'IRANYekan'),
   primaryTextTheme:
       ThemeData.light().primaryTextTheme.apply(fontFamily: 'IRANYekan'),
@@ -79,7 +78,6 @@ final lightTheme = ThemeData.light().copyWith(
 );
 
 final darkTheme = ThemeData.dark().copyWith(
-  useMaterial3: true,
   textTheme: ThemeData.dark().textTheme.apply(
         fontFamily: 'IRANYekan',
       ),

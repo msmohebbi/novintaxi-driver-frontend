@@ -8,7 +8,7 @@ import '../providers/settings_data.dart';
 import '../providers/auth_data.dart';
 
 class AppDrawer extends StatefulWidget {
-  const AppDrawer({Key? key}) : super(key: key);
+  const AppDrawer({super.key});
 
   @override
   AppDrawerState createState() => AppDrawerState();

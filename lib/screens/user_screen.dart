@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 import '../providers/settings_data.dart';
 
 class UserScreen extends StatefulWidget {
-  const UserScreen({Key? key}) : super(key: key);
+  const UserScreen({super.key});
 
   @override
   State<UserScreen> createState() => _UserScreenState();

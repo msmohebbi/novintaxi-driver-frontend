@@ -12,7 +12,7 @@ import '../../screens/auth/verify_screen.dart';
 import '../../screens/auth/intro_screen.dart';
 
 class AuthScreen extends StatefulWidget {
-  const AuthScreen({Key? key}) : super(key: key);
+  const AuthScreen({super.key});
 
   @override
   AuthScreenState createState() => AuthScreenState();

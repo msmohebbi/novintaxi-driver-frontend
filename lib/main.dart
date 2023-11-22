@@ -115,8 +115,8 @@ class MyApp extends StatelessWidget {
 
 class MyMaterial extends StatelessWidget {
   const MyMaterial({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   // final navigatorKey = GlobalKey<NavigatorState>(debugLabel: "Main Navigator");
 

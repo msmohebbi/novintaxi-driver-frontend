@@ -13,7 +13,7 @@ import '../../providers/auth_data.dart';
 // import 'package:http/http.dart' as htp;
 
 class VerifyScreen extends StatefulWidget {
-  const VerifyScreen({Key? key}) : super(key: key);
+  const VerifyScreen({super.key});
 
   @override
   VerifyScreenState createState() => VerifyScreenState();

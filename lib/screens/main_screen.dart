@@ -8,8 +8,8 @@ import 'user_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<MainScreen> createState() => _MainScreenState();

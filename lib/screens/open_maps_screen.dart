@@ -20,7 +20,7 @@ import '../providers/profile_data.dart';
 import '../widgets/app_drawer.dart';
 
 class OpenMapsScreen extends StatefulWidget {
-  const OpenMapsScreen({Key? key}) : super(key: key);
+  const OpenMapsScreen({super.key});
   @override
   State<OpenMapsScreen> createState() => OpenMapsScreenState();
 }
@@ -120,17 +120,17 @@ class OpenMapsScreenState extends State<OpenMapsScreen> {
           w = element.longitude;
         }
       }
-      var xx = mapController.centerZoomFitBounds(
-        LatLngBounds(
+      var xx = CameraFit.bounds(
+        bounds: LatLngBounds(
           LatLng(s, w),
           LatLng(n, e),
         ),
-        options: FitBoundsOptions(
-            padding: EdgeInsets.symmetric(
+        padding: EdgeInsets.symmetric(
           horizontal: wSize * 0.3,
           vertical: hSized * 0.3,
-        )),
-      );
+        ),
+      ).fit(mapController.camera);
+
       setState(() {
         mapController.move(xx.center, xx.zoom);
       });
@@ -154,9 +154,9 @@ class OpenMapsScreenState extends State<OpenMapsScreen> {
                     minZoom: 6,
                     maxZoom: 18,
                     onTap: (newTap, newLatLng) async {},
-                    center: LatLng(kStartPoint.center!.latitude,
+                    initialCenter: LatLng(kStartPoint.center!.latitude,
                         kStartPoint.center!.longitude),
-                    zoom: kStartPoint.zoom!,
+                    initialZoom: kStartPoint.zoom!,
                   ),
                   children: [
                     TileLayer(
@@ -177,8 +177,6 @@ class OpenMapsScreenState extends State<OpenMapsScreen> {
                             height: kToolbarHeight,
                             width: kToolbarHeight,
                             point: originLocation.latLng,
-                            // TODO
-                            // anchorPos: AnchorPos.align(AnchorAlign.top),
                             child: Icon(
                               Icons.location_on,
                               size: kToolbarHeight,
@@ -194,8 +192,6 @@ class OpenMapsScreenState extends State<OpenMapsScreen> {
                             height: kToolbarHeight,
                             width: kToolbarHeight,
                             point: targetLocation.latLng,
-                            // TODO
-                            // anchorPos: AnchorPos.align(AnchorAlign.top),
                             child: Icon(
                               Icons.location_on,
                               size: kToolbarHeight,
@@ -578,8 +574,8 @@ class OpenMapsScreenState extends State<OpenMapsScreen> {
                       heroTag: "zoom+",
                       onPressed: () {
                         setState(() {
-                          mapController.move(
-                              mapController.center, mapController.zoom + 1);
+                          mapController.move(mapController.camera.center,
+                              mapController.camera.zoom + 1);
                         });
                       },
                       backgroundColor: Theme.of(context).colorScheme.background,
@@ -593,8 +589,8 @@ class OpenMapsScreenState extends State<OpenMapsScreen> {
                       heroTag: "zoom-",
                       onPressed: () {
                         setState(() {
-                          mapController.move(
-                              mapController.center, mapController.zoom - 1);
+                          mapController.move(mapController.camera.center,
+                              mapController.camera.zoom - 1);
                         });
                       },
                       backgroundColor: Theme.of(context).colorScheme.background,
@@ -653,8 +649,8 @@ class OpenMapsScreenState extends State<OpenMapsScreen> {
 
                       // Reverse Geocoding ---------------------------------------------------------------------------------------
                       var revGeo = await MapBackend().reverseGeocoding(
-                          mapController.center.latitude,
-                          mapController.center.longitude);
+                          mapController.camera.center.latitude,
+                          mapController.camera.center.longitude);
                       var newLocation = AppLocation.fromMap(revGeo);
                       if (isOrigin) {
                         Provider.of<TransportData>(context, listen: false)
@@ -693,8 +689,9 @@ class OpenMapsScreenState extends State<OpenMapsScreen> {
                               points: MapsCurvedLines.getPointsOnCurve(
                                 gmap.LatLng(
                                     originLocation.lat, originLocation.lng),
-                                gmap.LatLng(mapController.center.latitude,
-                                    mapController.center.longitude),
+                                gmap.LatLng(
+                                    mapController.camera.center.latitude,
+                                    mapController.camera.center.longitude),
                               )
                                   .map(
                                     (e) => LatLng(e.latitude, e.longitude),
