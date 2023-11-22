@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:transportationdriver/providers/driver_data.dart';
-import 'package:transportationdriver/screens/driver_profile_screen.dart';
+import 'package:transportationdriver/screens/waiting_screen.dart';
 import 'screens/auth/auth_screen.dart';
 import 'screens/search_driver_screen.dart';
 import 'package:url_strategy/url_strategy.dart';
@@ -146,7 +146,8 @@ class MyMaterial extends StatelessWidget {
       },
       // onGenerateRoute: (route) {},
       home: Provider.of<AuthData>(context).accessToken != ""
-          ? const DriverProfileScreen()
+          // ? const DriverProfileScreen()
+          ? const WaitingScreen()
           : const AuthScreen(),
     );
   }
