@@ -1,10 +1,12 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:transportationdriver/screens/history_screen.dart';
 
 import '../providers/settings_data.dart';
 import 'home_screen.dart';
 
-import 'user_screen.dart';
+import 'settings_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({
@@ -25,9 +27,8 @@ class _MainScreenState extends State<MainScreen> {
   var homeScreen = const HomeScreen();
   List<Widget> screensList = [
     const HomeScreen(),
-    Container(),
-    Container(),
-    const UserScreen(),
+    const HistoryScreen(),
+    const SettingsScreen(),
   ];
 
   @override
@@ -55,28 +56,62 @@ class _MainScreenState extends State<MainScreen> {
           maintainBottomViewPadding: true,
           bottom: true,
           child: Scaffold(
-              appBar: AppBar(
-                elevation: 0,
-                title: const Text(
-                  "حمل و نقل بین شهری",
-                  style: TextStyle(
-                    fontSize: 15,
-                  ),
-                ),
-                backgroundColor: Theme.of(context).colorScheme.background,
-                leading: Padding(
-                  padding: const EdgeInsets.all(kToolbarHeight * 0.1),
-                  child: Image.asset(
-                    'assets/images/logo.png',
-                    color: Theme.of(context).primaryColor,
-                    fit: BoxFit.fitHeight,
-                  ),
+            appBar: AppBar(
+              elevation: 0,
+              title: const Text(
+                "حمل و نقل بین شهری",
+                style: TextStyle(
+                  fontSize: 15,
                 ),
               ),
-              body: IndexedStack(
-                index: bnbIndex,
-                children: screensList,
-              )),
+              backgroundColor: Theme.of(context).colorScheme.background,
+              leading: Padding(
+                padding: const EdgeInsets.all(kToolbarHeight * 0.1),
+                child: Image.asset(
+                  'assets/images/logo.png',
+                  color: Theme.of(context).primaryColor,
+                  fit: BoxFit.fitHeight,
+                ),
+              ),
+            ),
+            body: IndexedStack(
+              index: bnbIndex,
+              children: screensList,
+            ),
+            bottomNavigationBar: ClipRRect(
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(12),
+                topRight: Radius.circular(12),
+              ),
+              child: BottomNavigationBar(
+                backgroundColor: Theme.of(context).cardColor,
+                showSelectedLabels: false,
+                showUnselectedLabels: false,
+                currentIndex: bnbIndex,
+                onTap: (newIndex) {
+                  Provider.of<SettingData>(context, listen: false)
+                      .setbnbIndex(newIndex);
+                },
+                items: const [
+                  BottomNavigationBarItem(
+                    icon: Icon(CupertinoIcons.house),
+                    activeIcon: Icon(CupertinoIcons.house_fill),
+                    label: 'خانه',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(CupertinoIcons.square_list),
+                    activeIcon: Icon(CupertinoIcons.square_list_fill),
+                    label: 'تاریخچه',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(CupertinoIcons.settings),
+                    activeIcon: Icon(CupertinoIcons.settings_solid),
+                    label: 'تنظیمات',
+                  ),
+                ],
+              ),
+            ),
+          ),
         ),
       ),
     );

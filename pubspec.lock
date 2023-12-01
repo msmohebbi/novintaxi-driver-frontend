@@ -5,10 +5,10 @@ packages:
     dependency: transitive
     description:
       name: _flutterfire_internals
-      sha256: dd68ecea9f1e3556d385521bd21c7bafd6311a8c1e11abe2595ca27974f468ee
+      sha256: eb0ac20f704799b986049fbb3c1c16421eca319a1b872378d669513e12452ba5
       url: "https://pub.dev"
     source: hosted
-    version: "1.3.13"
+    version: "1.3.14"
   archive:
     dependency: transitive
     description:
@@ -125,10 +125,10 @@ packages:
     dependency: transitive
     description:
       name: cross_file
-      sha256: "445db18de832dba8d851e287aff8ccf169bed30d2e94243cb54c7d2f1ed2142c"
+      sha256: "2f9d2cbccb76127ba28528cb3ae2c2326a122446a83de5a056aaa3880d3882c5"
       url: "https://pub.dev"
     source: hosted
-    version: "0.3.3+6"
+    version: "0.3.3+7"
   crypto:
     dependency: transitive
     description:
@@ -221,34 +221,34 @@ packages:
     dependency: "direct main"
     description:
       name: firebase_analytics
-      sha256: de3d73b5c5618bf31004308b017b4067b7d9156b96e97b62d59ae5eab71081ec
+      sha256: "6325991042226a515406b4fc9204d3102e54a514b72fffb945b625d9f69c5196"
       url: "https://pub.dev"
     source: hosted
-    version: "10.7.1"
+    version: "10.7.2"
   firebase_analytics_platform_interface:
     dependency: transitive
     description:
       name: firebase_analytics_platform_interface
-      sha256: ffc59c0b00a572cd1fbf915a1d50cb4ccdc61e429614aa6ae9a598ee5723b96a
+      sha256: "38ad4bec1fa0fe16577e6f178e4c4280f029181b18e16bf68782c527c7d82bfe"
       url: "https://pub.dev"
     source: hosted
-    version: "3.8.1"
+    version: "3.8.2"
   firebase_analytics_web:
     dependency: transitive
     description:
       name: firebase_analytics_web
-      sha256: "0e725a7dcdeb0a59e44d93d1d45dfec94efe54329ac9d6aa145e24d31429100c"
+      sha256: "6c0deb691a26db2006ded65fd8999a204dcfe8ef67d7d75b7f55ebc08e1d89a4"
       url: "https://pub.dev"
     source: hosted
-    version: "0.5.5+8"
+    version: "0.5.5+9"
   firebase_core:
     dependency: "direct main"
     description:
       name: firebase_core
-      sha256: "471b46ea6a9af503184d4de691566887daedd312aec5baac5baa42d819f56446"
+      sha256: d301561d614487688d797717bef013a264c517d1d09e4c5c1325c3a64c835efb
       url: "https://pub.dev"
     source: hosted
-    version: "2.23.0"
+    version: "2.24.0"
   firebase_core_platform_interface:
     dependency: transitive
     description:
@@ -261,34 +261,34 @@ packages:
     dependency: transitive
     description:
       name: firebase_core_web
-      sha256: "0631a2ec971dbc540275e2fa00c3a8a2676f0a7adbc3c197d6fba569db689d97"
+      sha256: "10159d9ee42c79f4548971d92f3f0fcd5791f6738cda3583a4e3b2c8b244c018"
       url: "https://pub.dev"
     source: hosted
-    version: "2.8.1"
+    version: "2.9.0"
   firebase_messaging:
     dependency: "direct main"
     description:
       name: firebase_messaging
-      sha256: f4576000e749c906d44649feadb2449ada39eab9777650319bdd6fa69a3044f5
+      sha256: "260064e1b512a9e1970b5964d645eba888208ca3de42459c38e484c8ecdc37a9"
       url: "https://pub.dev"
     source: hosted
-    version: "14.7.5"
+    version: "14.7.6"
   firebase_messaging_platform_interface:
     dependency: transitive
     description:
       name: firebase_messaging_platform_interface
-      sha256: dcf065ecb9518ddc671477f9b8592274df7ccf74c6aaa15f02fc92b1f2b9c8a8
+      sha256: "81fb8c983356dd75ee660f276c918380325df7a1ab1e981ede911809e9ddff30"
       url: "https://pub.dev"
     source: hosted
-    version: "4.5.14"
+    version: "4.5.15"
   firebase_messaging_web:
     dependency: transitive
     description:
       name: firebase_messaging_web
-      sha256: "11b7920273367ce2cb272d29153bb7aaae93577eba1eba423c7af61d7f2a3eb2"
+      sha256: "1c5d9b6cf929ab471300143059d1641a26b73c9c24adb5266e241aea23c090aa"
       url: "https://pub.dev"
     source: hosted
-    version: "3.5.14"
+    version: "3.5.15"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -428,10 +428,10 @@ packages:
     dependency: transitive
     description:
       name: google_maps_flutter_android
-      sha256: "4023e79184c762e63efe04da629d876085e0c296a7ca26745fb5750d4acd0aa2"
+      sha256: "4279a338b79288fad5c8b03e5ae6ec30888bff210e0bab10b1f31f31e5a90558"
       url: "https://pub.dev"
     source: hosted
-    version: "2.5.3"
+    version: "2.6.0"
   google_maps_flutter_ios:
     dependency: transitive
     description:
@@ -468,10 +468,10 @@ packages:
     dependency: "direct main"
     description:
       name: http
-      sha256: "759d1a329847dd0f39226c688d3e06a6b8679668e350e2891a6474f8b4bb8525"
+      sha256: d4872660c46d929f6b8a9ef4e7a7eff7e49bbf0c4ec3f385ee32df5119175139
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.0"
+    version: "1.1.2"
   http_parser:
     dependency: "direct main"
     description:
@@ -492,10 +492,10 @@ packages:
     dependency: "direct main"
     description:
       name: image_cropper
-      sha256: "19340e50a8c09124ef2196884e9eb79d219d84cb819cfbf52141221216e30515"
+      sha256: f4bad5ed2dfff5a7ce0dfbad545b46a945c702bb6182a921488ef01ba7693111
       url: "https://pub.dev"
     source: hosted
-    version: "5.0.0"
+    version: "5.0.1"
   image_cropper_for_web:
     dependency: transitive
     description:
