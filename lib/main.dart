@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:transportationdriver/providers/driver_data.dart';
+import 'package:transportationdriver/providers/driver_transport_data.dart';
 import 'package:transportationdriver/screens/main_screen.dart';
 import 'screens/auth/auth_screen.dart';
 import 'screens/search_driver_screen.dart';
@@ -66,6 +67,9 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (_) => SettingData(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => DriverTransportData(),
         ),
         // -====================================================================
         Provider<FirebaseAnalytics>.value(value: analytics),

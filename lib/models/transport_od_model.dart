@@ -19,7 +19,7 @@ class AppTransportOD {
   bool isEnd;
   int order;
   String status;
-  String map;
+  String? map;
 
   Map<String, dynamic> toMap() {
     var mapedObj = {
@@ -35,6 +35,15 @@ class AppTransportOD {
       : id = newOrder["id"],
         transport = newOrder["transport"],
         location = newOrder["location"],
+        isStart = newOrder["is_start"],
+        isEnd = newOrder["is_end"],
+        order = newOrder["order"],
+        status = newOrder["status"],
+        map = newOrder["map"];
+  AppTransportOD.fromMapWithTransport(
+      Map<String, dynamic> newOrder, this.transport)
+      : id = newOrder["id"],
+        location = AppLocation.fromMap(newOrder["location"]),
         isStart = newOrder["is_start"],
         isEnd = newOrder["is_end"],
         order = newOrder["order"],

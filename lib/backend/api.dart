@@ -80,8 +80,8 @@ class AppAPI {
         url,
         headers: hasAccess ? {"Authorization": "JWT $accessToken"} : {},
       );
-      log(url.toString());
-      log("get  $urlPath  ${res.statusCode}");
+      print(url.toString());
+      print("get  $urlPath  ${res.statusCode}");
 
       if (res.statusCode == 401) {
         isFinish = false;

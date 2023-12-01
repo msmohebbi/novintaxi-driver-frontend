@@ -32,6 +32,14 @@ class AppTransport {
   int id;
   bool back;
   String type;
+  String get typeFa {
+    if (type == 'scheduled') {
+      return 'برنامه ریزی شده';
+    } else {
+      return 'فوری';
+    }
+  }
+
   int price;
   double time;
   double meter;
@@ -62,6 +70,8 @@ class AppTransport {
   bool isCanceled;
   String? detail;
   int? dateSchedule;
+  List<AppTransportOD>? ods;
+
   String? get dateScheduleDateString {
     if (dateSchedule != null) {
       Jalali? jalali = Jalali.fromDateTime(
@@ -137,5 +147,11 @@ class AppTransport {
         isCanceled = newOrder["is_canceled"],
         followingCode = newOrder["following_code"],
         passengerName = newOrder["passenger_name"],
-        passengerPhone = newOrder["passenger_phone"];
+        passengerPhone = newOrder["passenger_phone"] {
+    ods = newOrder["transport_ods"] != null
+        ? (newOrder["transport_ods"] as List)
+            .map((e) => AppTransportOD.fromMapWithTransport(e, this))
+            .toList()
+        : null;
+  }
 }

@@ -30,6 +30,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return ListView(
       shrinkWrap: true,
       children: [
+        const SizedBox(height: kToolbarHeight * 0.3),
         Container(
           alignment: Alignment.center,
           margin: const EdgeInsets.symmetric(
@@ -253,23 +254,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text('تماس با ما'),
-                          Icon(
-                            CupertinoIcons.forward,
-                            size: 20,
-                          ),
-                        ],
-                      ),
-                    ),
-                    const Divider(height: 1),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(
-                        vertical: kToolbarHeight * 0.3,
-                        horizontal: kToolbarHeight * 0.4,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('اطلاعات گواهینامه'),
                           Icon(
                             CupertinoIcons.forward,
                             size: 20,
