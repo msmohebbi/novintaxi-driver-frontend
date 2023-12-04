@@ -12,6 +12,11 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:transportationdriver/providers/driver_data.dart';
 import 'package:transportationdriver/providers/driver_transport_data.dart';
+import 'package:transportationdriver/providers/faq_data.dart';
+import 'package:transportationdriver/providers/message_data.dart';
+import 'package:transportationdriver/screens/chat_screen.dart';
+import 'package:transportationdriver/screens/driver_profile_screen.dart';
+import 'package:transportationdriver/screens/faq_screen.dart';
 import 'package:transportationdriver/screens/main_screen.dart';
 import 'screens/auth/auth_screen.dart';
 import 'screens/search_driver_screen.dart';
@@ -104,10 +109,17 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => NotificationData(),
         ),
+        ChangeNotifierProvider(
+          create: (_) => MessageData(),
+        ),
         // No Need Authentication--------------------------------------
 
         ChangeNotifierProvider(
           create: (_) => FuncData(),
+        ),
+
+        ChangeNotifierProvider(
+          create: (_) => FAQData(),
         ),
       ],
       builder: (context, child) {
@@ -142,16 +154,19 @@ class MyMaterial extends StatelessWidget {
       title: "حمل و نقل",
       theme: Provider.of<SettingData>(context).isDark ? darkTheme : lightTheme,
       builder: (context, child) => MediaQuery(
-          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
-          child: child!),
+        data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
+        child: child!,
+      ),
       routes: {
         "/mapscreen": (ctx) => checkAuth(const OpenMapsScreen()),
         "/search": (ctx) => checkAuth(const SearchDriverScreen()),
+        "/faqs": (ctx) => checkAuth(const FAQScreen()),
+        "/support": (ctx) => checkAuth(const ChatScreen()),
       },
       // onGenerateRoute: (route) {},
       home: Provider.of<AuthData>(context).accessToken != ""
-          // ? const DriverProfileScreen()
-          ? const MainScreen()
+          ? const DriverProfileScreen()
+          // ? const MainScreen()
           : const AuthScreen(),
     );
   }

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:transportationdriver/providers/driver_data.dart';
 
 class WaitingScreen extends StatefulWidget {
   const WaitingScreen({super.key});
@@ -61,7 +63,10 @@ class _WaitingScreenState extends State<WaitingScreen> {
                       borderRadius: BorderRadius.circular(12),
                       child: InkWell(
                         borderRadius: BorderRadius.circular(12),
-                        onTap: () {},
+                        onTap: () {
+                          Provider.of<DriverData>(context, listen: false)
+                              .setpageIndex(0);
+                        },
                         child: const Padding(
                           padding: EdgeInsets.symmetric(
                             vertical: kToolbarHeight * 0.2,

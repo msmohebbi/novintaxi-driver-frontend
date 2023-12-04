@@ -236,7 +236,7 @@ class _Page4State extends State<Page4> {
                             borderRadius: BorderRadius.circular(12),
                             onTap: () async {
                               Provider.of<DriverData>(context, listen: false)
-                                  .setpageIndex(4);
+                                  .setpageIndex(5);
                             },
                             child: Container(
                               alignment: Alignment.center,

@@ -17,4 +17,7 @@ class EndPoints {
   static const String cities = "core/cities";
   static const String jobTypes = "core/jobtypes";
   static const String jobs = "core/jobs";
+  // =========================================
+  static const String support = "chat/messages/support_message";
+  static const String faq = "utils/faqs";
 }

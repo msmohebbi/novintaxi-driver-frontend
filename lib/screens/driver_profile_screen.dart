@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:transportationdriver/providers/driver_data.dart';
+import 'package:transportationdriver/screens/waiting_screen.dart';
 import 'package:transportationdriver/widgets/page_0.dart';
 import 'package:transportationdriver/widgets/page_1.dart';
 import 'package:transportationdriver/widgets/page_2.dart';
@@ -21,6 +22,7 @@ class _DriverProfileScreenState extends State<DriverProfileScreen> {
     const Page2(),
     const Page3(),
     const Page4(),
+    const WaitingScreen(),
   ];
   @override
   Widget build(BuildContext context) {

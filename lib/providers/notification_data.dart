@@ -102,23 +102,6 @@ class NotificationData with ChangeNotifier {
     return returnedMap;
   }
 
-  // Future<bool> subUnsubCategory(SLCategory category) async {
-  //   var isSub = await SLAPI().subunsubcategory(category.id);
-  //   // _allPosts.add(newPost);
-  //   if (isSub) {
-  //     _allNotificationSubscribes.insert(
-  //       0,
-  //       AppNotificationSubsribe(
-  //           destination: category.id, type: "دسته بندی", id: -1),
-  //     );
-  //   } else {
-  //     _allNotificationSubscribes.removeWhere((element) =>
-  //         element.destination == category.id && element.type == "دسته بندی");
-  //   }
-  //   notifyListeners();
-  //   return isSub;
-  // }
-
   List<AppNotificationSubsribe> _allNotificationSubscribes = [];
   List<AppNotificationSubsribe> get allNotificationSubscribes =>
       _allNotificationSubscribes;

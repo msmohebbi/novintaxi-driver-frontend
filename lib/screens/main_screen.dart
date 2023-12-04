@@ -92,20 +92,29 @@ class _MainScreenState extends State<MainScreen> {
                   Provider.of<SettingData>(context, listen: false)
                       .setbnbIndex(newIndex);
                 },
-                items: const [
+                items: [
                   BottomNavigationBarItem(
-                    icon: Icon(CupertinoIcons.house),
-                    activeIcon: Icon(CupertinoIcons.house_fill),
+                    icon: const Icon(CupertinoIcons.house),
+                    activeIcon: Icon(
+                      CupertinoIcons.house_fill,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
                     label: 'خانه',
                   ),
                   BottomNavigationBarItem(
-                    icon: Icon(CupertinoIcons.square_list),
-                    activeIcon: Icon(CupertinoIcons.square_list_fill),
+                    icon: const Icon(CupertinoIcons.square_list),
+                    activeIcon: Icon(
+                      CupertinoIcons.square_list_fill,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
                     label: 'تاریخچه',
                   ),
                   BottomNavigationBarItem(
-                    icon: Icon(CupertinoIcons.settings),
-                    activeIcon: Icon(CupertinoIcons.settings_solid),
+                    icon: const Icon(CupertinoIcons.settings),
+                    activeIcon: Icon(
+                      CupertinoIcons.settings_solid,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
                     label: 'تنظیمات',
                   ),
                 ],

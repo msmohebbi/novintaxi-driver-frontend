@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:transportationdriver/providers/auth_data.dart';
 
 import '../providers/settings_data.dart';
 
@@ -97,23 +98,29 @@ class _SettingsScreenState extends State<SettingsScreen> {
           padding: const EdgeInsets.symmetric(
             horizontal: kToolbarHeight * 0.2,
           ),
-          child: Material(
-            color: Theme.of(context).colorScheme.primary.withAlpha(50),
-            borderRadius: BorderRadius.circular(12),
-            child: InkWell(
+          child: Container(
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
-              onTap: () {},
-              child: Container(
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    color: Theme.of(context).colorScheme.primary.withAlpha(180),
+              border: Border.all(
+                color: Theme.of(context).colorScheme.primary.withAlpha(180),
+              ),
+            ),
+            child: Column(
+              children: [
+                Material(
+                  color: Theme.of(context).colorScheme.primary.withAlpha(50),
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(12),
+                    topRight: Radius.circular(12),
                   ),
-                ),
-                child: const Column(
-                  children: [
-                    Padding(
+                  child: InkWell(
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(12),
+                      topRight: Radius.circular(12),
+                    ),
+                    onTap: () {},
+                    child: const Padding(
                       padding: EdgeInsets.symmetric(
                         vertical: kToolbarHeight * 0.3,
                         horizontal: kToolbarHeight * 0.4,
@@ -129,8 +136,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         ],
                       ),
                     ),
-                    Divider(height: 1),
-                    Padding(
+                  ),
+                ),
+                const Divider(height: 1),
+                Material(
+                  color: Theme.of(context).colorScheme.primary.withAlpha(50),
+                  child: InkWell(
+                    onTap: () {},
+                    child: const Padding(
                       padding: EdgeInsets.symmetric(
                         vertical: kToolbarHeight * 0.3,
                         horizontal: kToolbarHeight * 0.4,
@@ -146,8 +159,22 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         ],
                       ),
                     ),
-                    Divider(height: 1),
-                    Padding(
+                  ),
+                ),
+                const Divider(height: 1),
+                Material(
+                  color: Theme.of(context).colorScheme.primary.withAlpha(50),
+                  borderRadius: const BorderRadius.only(
+                    bottomLeft: Radius.circular(12),
+                    bottomRight: Radius.circular(12),
+                  ),
+                  child: InkWell(
+                    borderRadius: const BorderRadius.only(
+                      bottomLeft: Radius.circular(12),
+                      bottomRight: Radius.circular(12),
+                    ),
+                    onTap: () {},
+                    child: const Padding(
                       padding: EdgeInsets.symmetric(
                         vertical: kToolbarHeight * 0.3,
                         horizontal: kToolbarHeight * 0.4,
@@ -163,9 +190,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         ],
                       ),
                     ),
-                  ],
+                  ),
                 ),
-              ),
+              ],
             ),
           ),
         ),
@@ -174,25 +201,31 @@ class _SettingsScreenState extends State<SettingsScreen> {
           padding: const EdgeInsets.symmetric(
             horizontal: kToolbarHeight * 0.2,
           ),
-          child: Material(
-            color: Theme.of(context).hintColor.withAlpha(50),
-            borderRadius: BorderRadius.circular(12),
-            child: InkWell(
+          child: Container(
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
-              onTap: () {},
-              child: Container(
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    color: Theme.of(context).hintColor.withAlpha(100),
+              border: Border.all(
+                color: Theme.of(context).hintColor.withAlpha(100),
+              ),
+            ),
+            child: Column(
+              children: [
+                Material(
+                  color: Theme.of(context).hintColor.withAlpha(50),
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(12),
+                    topRight: Radius.circular(12),
                   ),
-                ),
-                child: Column(
-                  children: [
-                    Padding(
+                  child: InkWell(
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(12),
+                      topRight: Radius.circular(12),
+                    ),
+                    onTap: () {},
+                    child: Padding(
                       padding: const EdgeInsets.symmetric(
-                        vertical: kToolbarHeight * 0.3,
+                        vertical: kToolbarHeight * 0.2,
                         horizontal: kToolbarHeight * 0.4,
                       ),
                       child: Row(
@@ -210,8 +243,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         ],
                       ),
                     ),
-                    const Divider(height: 1),
-                    const Padding(
+                  ),
+                ),
+                const Divider(height: 1),
+                Material(
+                  color: Theme.of(context).hintColor.withAlpha(50),
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.of(context).pushNamed('/faqs');
+                    },
+                    child: const Padding(
                       padding: EdgeInsets.symmetric(
                         vertical: kToolbarHeight * 0.3,
                         horizontal: kToolbarHeight * 0.4,
@@ -227,8 +268,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         ],
                       ),
                     ),
-                    const Divider(height: 1),
-                    const Padding(
+                  ),
+                ),
+                const Divider(height: 1),
+                Material(
+                  color: Theme.of(context).hintColor.withAlpha(50),
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.of(context).pushNamed('/support');
+                    },
+                    child: const Padding(
                       padding: EdgeInsets.symmetric(
                         vertical: kToolbarHeight * 0.3,
                         horizontal: kToolbarHeight * 0.4,
@@ -244,8 +293,22 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         ],
                       ),
                     ),
-                    const Divider(height: 1),
-                    const Padding(
+                  ),
+                ),
+                const Divider(height: 1),
+                Material(
+                  color: Theme.of(context).hintColor.withAlpha(50),
+                  borderRadius: const BorderRadius.only(
+                    bottomLeft: Radius.circular(12),
+                    bottomRight: Radius.circular(12),
+                  ),
+                  child: InkWell(
+                    borderRadius: const BorderRadius.only(
+                      bottomLeft: Radius.circular(12),
+                      bottomRight: Radius.circular(12),
+                    ),
+                    onTap: () {},
+                    child: const Padding(
                       padding: EdgeInsets.symmetric(
                         vertical: kToolbarHeight * 0.3,
                         horizontal: kToolbarHeight * 0.4,
@@ -261,9 +324,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         ],
                       ),
                     ),
-                  ],
+                  ),
                 ),
-              ),
+              ],
             ),
           ),
         ),
@@ -272,23 +335,29 @@ class _SettingsScreenState extends State<SettingsScreen> {
           padding: const EdgeInsets.symmetric(
             horizontal: kToolbarHeight * 0.2,
           ),
-          child: Material(
-            color: Theme.of(context).hintColor.withAlpha(50),
-            borderRadius: BorderRadius.circular(12),
-            child: InkWell(
+          child: Container(
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
-              onTap: () {},
-              child: Container(
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    color: Theme.of(context).hintColor.withAlpha(100),
+              border: Border.all(
+                color: Theme.of(context).hintColor.withAlpha(100),
+              ),
+            ),
+            child: Column(
+              children: [
+                Material(
+                  color: Theme.of(context).hintColor.withAlpha(50),
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(12),
+                    topRight: Radius.circular(12),
                   ),
-                ),
-                child: const Column(
-                  children: [
-                    Padding(
+                  child: InkWell(
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(12),
+                      topRight: Radius.circular(12),
+                    ),
+                    onTap: () {},
+                    child: const Padding(
                       padding: EdgeInsets.symmetric(
                         vertical: kToolbarHeight * 0.3,
                         horizontal: kToolbarHeight * 0.4,
@@ -304,8 +373,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         ],
                       ),
                     ),
-                    Divider(height: 1),
-                    Padding(
+                  ),
+                ),
+                const Divider(height: 1),
+                Material(
+                  color: Theme.of(context).hintColor.withAlpha(50),
+                  child: InkWell(
+                    onTap: () {},
+                    child: const Padding(
                       padding: EdgeInsets.symmetric(
                         vertical: kToolbarHeight * 0.3,
                         horizontal: kToolbarHeight * 0.4,
@@ -321,8 +396,68 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         ],
                       ),
                     ),
-                    Divider(height: 1),
-                    Padding(
+                  ),
+                ),
+                const Divider(height: 1),
+                Material(
+                  color: Theme.of(context).colorScheme.error.withAlpha(50),
+                  borderRadius: const BorderRadius.only(
+                    bottomLeft: Radius.circular(12),
+                    bottomRight: Radius.circular(12),
+                  ),
+                  child: InkWell(
+                    borderRadius: const BorderRadius.only(
+                      bottomLeft: Radius.circular(12),
+                      bottomRight: Radius.circular(12),
+                    ),
+                    onTap: () {
+                      showCupertinoDialog(
+                        barrierDismissible: true,
+                        context: context,
+                        builder: (context) {
+                          return Directionality(
+                            textDirection: TextDirection.rtl,
+                            child: CupertinoAlertDialog(
+                              title: const Text(
+                                'شما درحال خروج از حساب کاربری خود هستید، \n آیا مطمئن هستید',
+                                style: TextStyle(
+                                  height: 2,
+                                  fontSize: 13,
+                                  fontFamily: 'IRANYekan',
+                                  fontWeight: FontWeight.normal,
+                                ),
+                              ),
+                              actions: [
+                                IconButton(
+                                  onPressed: () async {
+                                    await Provider.of<AuthData>(context,
+                                            listen: false)
+                                        .signOut();
+
+                                    if (mounted) {
+                                      Navigator.of(context).pop();
+                                    }
+                                  },
+                                  icon: Icon(
+                                    Icons.check,
+                                    color: Theme.of(context).colorScheme.error,
+                                  ),
+                                ),
+                                IconButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  icon: const Icon(
+                                    Icons.close,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      );
+                    },
+                    child: const Padding(
                       padding: EdgeInsets.symmetric(
                         vertical: kToolbarHeight * 0.3,
                         horizontal: kToolbarHeight * 0.4,
@@ -338,12 +473,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         ],
                       ),
                     ),
-                  ],
+                  ),
                 ),
-              ),
+              ],
             ),
           ),
         ),
+        const SizedBox(height: kToolbarHeight),
       ],
     );
   }
