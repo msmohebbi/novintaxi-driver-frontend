@@ -17,7 +17,6 @@ import 'package:transportationdriver/providers/message_data.dart';
 import 'package:transportationdriver/screens/chat_screen.dart';
 import 'package:transportationdriver/screens/driver_profile_screen.dart';
 import 'package:transportationdriver/screens/faq_screen.dart';
-import 'package:transportationdriver/screens/main_screen.dart';
 import 'screens/auth/auth_screen.dart';
 import 'screens/search_driver_screen.dart';
 import 'package:url_strategy/url_strategy.dart';

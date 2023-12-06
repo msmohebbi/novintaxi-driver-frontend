@@ -39,6 +39,13 @@ class DriverData with ChangeNotifier {
   AppTransport? _cTransport;
   AppTransport? get cTransport => _cTransport;
 // Page 0
+  File? get personalImage => _personalImage;
+  File? _personalImage;
+  setpersonalImage(File? newImage) {
+    _personalImage = newImage;
+    notifyListeners();
+  }
+
   final TextEditingController _nameController = TextEditingController(text: "");
   TextEditingController get nameController => _nameController;
 

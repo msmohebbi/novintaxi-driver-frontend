@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:transportationdriver/providers/driver_data.dart';
+import 'package:transportationdriver/widgets/select_image.dart';
 
 class Page0 extends StatefulWidget {
   const Page0({super.key});
@@ -44,6 +45,27 @@ class _Page0State extends State<Page0> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                const SizedBox(height: kToolbarHeight * 0.2),
+                const Padding(
+                  padding:
+                      EdgeInsets.symmetric(horizontal: kToolbarHeight * 0.4),
+                  child: Text(
+                    "عکس پرسنلی:",
+                    style: TextStyle(),
+                  ),
+                ),
+                const SizedBox(height: kToolbarHeight * 0.2),
+                SelectImage(
+                  onSelectImage: (cFile) {
+                    Provider.of<DriverData>(context, listen: false)
+                        .setpersonalImage(cFile);
+                  },
+                  selectedImage: Provider.of<DriverData>(context).personalImage,
+                ),
+                const SizedBox(height: kToolbarHeight * 0.4),
+                Divider(
+                  color: Theme.of(context).hintColor.withAlpha(60),
+                ),
                 const SizedBox(height: kToolbarHeight * 0.2),
                 const Padding(
                   padding:

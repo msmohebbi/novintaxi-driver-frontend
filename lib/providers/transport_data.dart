@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/location_model.dart';
 import '../models/transport_model.dart';
 
-import '../models/vehicle_model.dart';
+import '../models/vehicle_type_model.dart';
 
 import '../backend/api.dart';
 import '../backend/api_endpoints.dart';
@@ -52,9 +52,9 @@ class TransportData with ChangeNotifier {
   AppTransport? _cTransport;
   AppTransport? get cTransport => _cTransport;
 
-  AppVehicle? _selectedVehicle;
-  AppVehicle? get selectedVehicle => _selectedVehicle;
-  setSelectedVehicle(AppVehicle newVehicle) async {
+  AppVehicleType? _selectedVehicle;
+  AppVehicleType? get selectedVehicle => _selectedVehicle;
+  setSelectedVehicle(AppVehicleType newVehicle) async {
     _isUpdatingTransport = true;
     notifyListeners();
     var newTransport = await AppAPI().update(
@@ -300,15 +300,15 @@ class TransportData with ChangeNotifier {
   }
 
 // ---------------------------------- Vehicles ------------------------
-  List<AppVehicle> _allVehicles = [];
-  List<AppVehicle> get allVehicles => _allVehicles;
+  List<AppVehicleType> _allVehicles = [];
+  List<AppVehicleType> get allVehicles => _allVehicles;
 
   getVehicles() async {
     var listofmap =
         await AppAPI().getWithoutPaginate(urlPath: EndPoints.vehicles);
     _allVehicles.clear();
-    for (var newAppVehicle in listofmap) {
-      _allVehicles.add(AppVehicle.fromMap(newAppVehicle));
+    for (var newAppVehicleType in listofmap) {
+      _allVehicles.add(AppVehicleType.fromMap(newAppVehicleType));
     }
     notifyListeners();
   }
