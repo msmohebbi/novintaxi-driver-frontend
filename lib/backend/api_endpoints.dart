@@ -20,8 +20,8 @@ class EndPoints {
   static const String support = "chat/messages/support_message";
   static const String faq = "utils/faqs";
   // =========================================
-  static const String drivers = "drivers/drivers";
-  static const String driverProfiles = "drivers/profiles";
-  static const String driverVehicles = "drivers/driver_vehicles";
+  static const String drivers = "driver/drivers";
+  static const String driverProfiles = "driver/profiles";
+  static const String driverVehicles = "driver/driver_vehicles";
   static const String vehicles = "driver/vehicles";
 }

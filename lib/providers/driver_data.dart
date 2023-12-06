@@ -12,13 +12,23 @@ import '../models/transport_model.dart';
 
 class DriverData with ChangeNotifier {
   DriverData() {
-    // getUserLocations();
+    initilizeDriverData();
+  }
+
+  initilizeDriverData() async {
+    await getDriver();
+    await getDriverProfile();
+    await getDriverVehicle();
     _isInitialized = true;
     notifyListeners();
   }
 
   clearDriverData() {
+    _cDriver = null;
+    _cDriverProfile = null;
+    _cDriverVehicle = null;
     _isInitialized = false;
+    notifyListeners();
   }
 
   int _pageIndex = 0;
@@ -180,6 +190,42 @@ class DriverData with ChangeNotifier {
   }
 
   // ------------------ Connect to  backend ------------------------------
+  AppDriver? get cDriver => _cDriver;
+  AppDriver? _cDriver;
+
+  AppDriverProfile? get cDriverProfile => _cDriverProfile;
+  AppDriverProfile? _cDriverProfile;
+
+  AppDriverVehicle? get cDriverVehicle => _cDriverVehicle;
+  AppDriverVehicle? _cDriverVehicle;
+
+  Future<void> getDriver() async {
+    var fetchedData = await AppAPI().getWithoutPaginate(
+      urlPath: EndPoints.drivers,
+    );
+    if (fetchedData.isNotEmpty) {
+      _cDriver = AppDriver.fromMap(fetchedData[0]);
+    }
+  }
+
+  Future<void> getDriverProfile() async {
+    var fetchedData = await AppAPI().getWithoutPaginate(
+      urlPath: EndPoints.driverProfiles,
+    );
+    if (fetchedData.isNotEmpty) {
+      _cDriverProfile = AppDriverProfile.fromMap(fetchedData[0]);
+    }
+  }
+
+  Future<void> getDriverVehicle() async {
+    var fetchedData = await AppAPI().getWithoutPaginate(
+      urlPath: EndPoints.driverVehicles,
+    );
+    if (fetchedData.isNotEmpty) {
+      _cDriverVehicle = AppDriverVehicle.fromMap(fetchedData[0]);
+    }
+  }
+
   Future<void> createDriver() async {
     _isUpdatingProfile = true;
     notifyListeners();
