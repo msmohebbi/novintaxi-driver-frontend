@@ -69,7 +69,7 @@ class _Page2State extends State<Page2> {
                       horizontal: kToolbarHeight * 0.4),
                   child: TextFormField(
                     controller:
-                        Provider.of<DriverData>(context).melliCodeController,
+                        Provider.of<DriverData>(context).govahiCodeController,
                     textInputAction: TextInputAction.next,
                     // autofocus: true,
                     keyboardType: TextInputType.name,
@@ -151,10 +151,10 @@ class _Page2State extends State<Page2> {
                 SelectImage(
                   onSelectImage: (cFile) {
                     Provider.of<DriverData>(context, listen: false)
-                        .setmelliFrontImage(cFile);
+                        .setgovahiFrontImage(cFile);
                   },
                   selectedImage:
-                      Provider.of<DriverData>(context).melliFrontImage,
+                      Provider.of<DriverData>(context).govahiFrontImage,
                 ),
                 const SizedBox(height: kToolbarHeight * 0.4),
                 Divider(
@@ -173,10 +173,10 @@ class _Page2State extends State<Page2> {
                 SelectImage(
                   onSelectImage: (cFile) {
                     Provider.of<DriverData>(context, listen: false)
-                        .setmelliBackImage(cFile);
+                        .setgovahiBackImage(cFile);
                   },
                   selectedImage:
-                      Provider.of<DriverData>(context).melliBackImage,
+                      Provider.of<DriverData>(context).govahiBackImage,
                 ),
                 const SizedBox(height: kToolbarHeight),
                 Padding(

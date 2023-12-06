@@ -1,45 +1,47 @@
+import 'package:transportationdriver/models/driver_model.dart';
+
 class AppDriverProfile {
   AppDriverProfile({
     required this.id,
     required this.driver,
-    this.national_card_image,
-    this.national_card_image_back,
+    required this.nationalCardImageFront,
+    required this.nationalCardImageBack,
     required this.address,
-    required this.post_code,
-    required this.car_license_id,
-    this.car_license_image,
-    this.car_license_image_back,
+    required this.postalCode,
+    required this.carLicenseId,
+    required this.carLicenseExpireDate,
+    required this.carLicenseImageFront,
+    required this.carLicenseImageBack,
   });
   int id;
-  String driver;
-  String? national_card_image;
-  String? national_card_image_back;
+  AppDriver driver;
+  String nationalCardImageFront;
+  String nationalCardImageBack;
   String address;
-  String post_code;
-  String car_license_id;
-  String? car_license_image;
-  String? car_license_image_back;
+  String postalCode;
+  String carLicenseId;
+  int carLicenseExpireDate;
+  String carLicenseImageFront;
+  String carLicenseImageBack;
   AppDriverProfile.fromMap(Map<String, dynamic> newItem)
       : id = newItem["id"],
         driver = newItem["driver"],
-        national_card_image = newItem["national_card_image"],
-        national_card_image_back = newItem["national_card_image_back"],
+        nationalCardImageFront = newItem["national_card_image"],
+        nationalCardImageBack = newItem["national_card_image_back"],
         address = newItem["address"],
-        post_code = newItem["post_code"],
-        car_license_id = newItem["car_license_id"],
-        car_license_image = newItem["car_license_image"],
-        car_license_image_back = newItem["car_license_image_back"] {}
+        postalCode = newItem["post_code"],
+        carLicenseId = newItem["car_license_id"],
+        carLicenseExpireDate = newItem["car_license_expire_date"],
+        carLicenseImageFront = newItem["car_license_image"],
+        carLicenseImageBack = newItem["car_license_image_back"];
   Map<String, dynamic> toMap() {
     return {
       "id": id,
-      "driver": driver,
-      "national_card_image": national_card_image,
-      "national_card_image_back": national_card_image_back,
+      "driver": driver.id,
       "address": address,
-      "post_code": post_code,
-      "car_license_id": car_license_id,
-      "car_license_image": car_license_image,
-      "car_license_image_back": car_license_image_back,
+      "post_code": postalCode,
+      "car_license_id": carLicenseId,
+      "car_license_expire_date": carLicenseExpireDate,
     };
   }
 }

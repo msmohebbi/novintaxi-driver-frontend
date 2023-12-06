@@ -2,7 +2,6 @@ class EndPoints {
   EndPoints._();
 
   static const String profiles = "customer/profiles";
-  static const String vehicles = "driver/vehicles";
   // =================================================
   static const String images = "api/images";
   static const String notification = "notification";
@@ -20,4 +19,9 @@ class EndPoints {
   // =========================================
   static const String support = "chat/messages/support_message";
   static const String faq = "utils/faqs";
+  // =========================================
+  static const String drivers = "drivers/drivers";
+  static const String driverProfiles = "drivers/profiles";
+  static const String driverVehicles = "drivers/driver_vehicles";
+  static const String vehicles = "driver/vehicles";
 }

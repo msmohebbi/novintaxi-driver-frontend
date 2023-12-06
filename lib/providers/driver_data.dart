@@ -2,6 +2,11 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:persian_datetime_picker/persian_datetime_picker.dart';
+import 'package:transportationdriver/backend/api.dart';
+import 'package:transportationdriver/backend/api_endpoints.dart';
+import 'package:transportationdriver/models/driver_model.dart';
+import 'package:transportationdriver/models/driverprofile_model.dart';
+import 'package:transportationdriver/models/drivervehicle_model.dart';
 import '../models/location_model.dart';
 import '../models/transport_model.dart';
 
@@ -89,9 +94,9 @@ class DriverData with ChangeNotifier {
   }
 
 // Page 2
-  final TextEditingController _givahiCodeController =
+  final TextEditingController _govahiCodeController =
       TextEditingController(text: "");
-  TextEditingController get givahiCodeController => _givahiCodeController;
+  TextEditingController get govahiCodeController => _govahiCodeController;
 
   int? _govahiExpDate;
   int? get govahiExpDate => _govahiExpDate;
@@ -107,6 +112,20 @@ class DriverData with ChangeNotifier {
 
   setgovahiExpDate(DateTime newDateTime) {
     _govahiExpDate = newDateTime.millisecondsSinceEpoch;
+    notifyListeners();
+  }
+
+  File? _govahiFrontImage;
+  File? get govahiFrontImage => _govahiFrontImage;
+  setgovahiFrontImage(File? newImage) {
+    _govahiFrontImage = newImage;
+    notifyListeners();
+  }
+
+  File? _govahiBackImage;
+  File? get govahiBackImage => _govahiBackImage;
+  setgovahiBackImage(File? newImage) {
+    _govahiBackImage = newImage;
     notifyListeners();
   }
 
@@ -157,6 +176,78 @@ class DriverData with ChangeNotifier {
   File? _vehicleImage3;
   setvehicleImage3(File? newImage) {
     _vehicleImage3 = newImage;
+    notifyListeners();
+  }
+
+  // ------------------ Connect to  backend ------------------------------
+  Future<void> createDriver() async {
+    _isUpdatingProfile = true;
+    notifyListeners();
+    // 1st Request
+    var driver = AppDriver(
+      id: 1,
+      user: '1',
+      name: nameController.text.trim(),
+      nationalId: melliCodeController.text.trim(),
+      gender: selectedSexualTypes!,
+    );
+    var driverDataMap = driver.toMap();
+    var driverFileMap = {
+      'personal_image': personalImage!,
+    };
+    await AppAPI().create(
+      EndPoints.drivers,
+      driverDataMap,
+      driverFileMap,
+    );
+    // 2nd Request
+    var driverProfile = AppDriverProfile(
+      id: 1,
+      driver: driver,
+      nationalCardImageFront: '',
+      nationalCardImageBack: '',
+      address: addressController.text.trim(),
+      postalCode: postalController.text.trim(),
+      carLicenseId: govahiCodeController.text.trim(),
+      carLicenseImageFront: '',
+      carLicenseImageBack: '',
+      carLicenseExpireDate: govahiExpDate!,
+    );
+    var driverProfileDataMap = driverProfile.toMap();
+    var driverProfileFileMap = {
+      "national_card_image": melliFrontImage!,
+      "national_card_image_back": melliBackImage!,
+      "car_license_image": govahiFrontImage!,
+      "car_license_image_back": govahiBackImage!,
+    };
+    await AppAPI().create(
+      EndPoints.driverProfiles,
+      driverProfileDataMap,
+      driverProfileFileMap,
+    );
+    // 3nd Request
+    var driverVehicle = AppDriverVehicle(
+      id: 1,
+      driver: driver,
+      vehicleName: vehicleModel.text.trim(),
+      vehicleColor: vehicleColor.text.trim(),
+      vehicleLicense: vehiclePelak.text.trim(),
+      vin: vehicleCartBackNo.text.trim(),
+    );
+    var driverVehicleDataMap = driverVehicle.toMap();
+    var driverVehicleFileMap = {
+      "vehicle_card_image": vehicleCartFrontImage!,
+      "vehicle_card_image_back": vehicleCartBackImage!,
+      "vehicle_image": vehicleImage1!,
+      "vehicle_image_back": vehicleImage2!,
+      "vehicle_image_in": vehicleImage3!,
+    };
+    await AppAPI().create(
+      EndPoints.driverVehicles,
+      driverVehicleDataMap,
+      driverVehicleFileMap,
+    );
+    _isUpdatingProfile = false;
     notifyListeners();
   }
 }
