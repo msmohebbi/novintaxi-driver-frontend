@@ -98,6 +98,20 @@ class DriverData with ChangeNotifier {
     notifyListeners();
   }
 
+  clearImages() {
+    _personalImage = null;
+    _melliFrontImage = null;
+    _melliBackImage = null;
+    _govahiFrontImage = null;
+    _govahiBackImage = null;
+    _vehicleCartBackImage = null;
+    _vehicleCartFrontImage = null;
+    _vehicleImage1 = null;
+    _vehicleImage2 = null;
+    _vehicleImage3 = null;
+    notifyListeners();
+  }
+
   AppTransport? _cTransport;
   AppTransport? get cTransport => _cTransport;
 // Page 0
@@ -289,11 +303,20 @@ class DriverData with ChangeNotifier {
     if (personalImage != null) {
       driverFileMap['personal_image'] = personalImage!;
     }
-    await AppAPI().create(
-      EndPoints.drivers,
-      driverDataMap,
-      driverFileMap,
-    );
+    if (cDriver != null) {
+      await AppAPI().update(
+        EndPoints.drivers,
+        cDriver!.id,
+        driverDataMap,
+        driverFileMap.isNotEmpty ? driverFileMap : null,
+      );
+    } else {
+      await AppAPI().create(
+        EndPoints.drivers,
+        driverDataMap,
+        driverFileMap,
+      );
+    }
     // 2nd Request
     var driverProfile = AppDriverProfile(
       id: 1,
@@ -310,23 +333,31 @@ class DriverData with ChangeNotifier {
     var driverProfileDataMap = driverProfile.toMap();
     Map<String, File> driverProfileFileMap = {};
     if (melliFrontImage != null) {
-      driverFileMap['national_card_image'] = melliFrontImage!;
+      driverProfileFileMap['national_card_image'] = melliFrontImage!;
     }
     if (melliBackImage != null) {
-      driverFileMap['national_card_image'] = melliBackImage!;
+      driverProfileFileMap['national_card_image_back'] = melliBackImage!;
     }
     if (govahiFrontImage != null) {
-      driverFileMap['car_license_image'] = govahiFrontImage!;
+      driverProfileFileMap['car_license_image'] = govahiFrontImage!;
     }
     if (govahiBackImage != null) {
-      driverFileMap['car_license_image_back'] = govahiBackImage!;
+      driverProfileFileMap['car_license_image_back'] = govahiBackImage!;
     }
-
-    await AppAPI().create(
-      EndPoints.driverProfiles,
-      driverProfileDataMap,
-      driverProfileFileMap,
-    );
+    if (cDriverProfile != null) {
+      await AppAPI().update(
+        EndPoints.driverProfiles,
+        cDriverProfile!.id,
+        driverProfileDataMap,
+        driverProfileFileMap.isNotEmpty ? driverProfileFileMap : null,
+      );
+    } else {
+      await AppAPI().create(
+        EndPoints.driverProfiles,
+        driverProfileDataMap,
+        driverProfileFileMap,
+      );
+    }
     // 3nd Request
     var driverVehicle = AppDriverVehicle(
       id: 1,
@@ -338,28 +369,38 @@ class DriverData with ChangeNotifier {
     );
     Map<String, File> driverVehicleFileMap = {};
     if (vehicleCartFrontImage != null) {
-      driverFileMap['vehicle_card_image'] = vehicleCartFrontImage!;
+      driverVehicleFileMap['vehicle_card_image'] = vehicleCartFrontImage!;
     }
     if (vehicleCartBackImage != null) {
-      driverFileMap['vehicle_card_image_back'] = vehicleCartBackImage!;
+      driverVehicleFileMap['vehicle_card_image_back'] = vehicleCartBackImage!;
     }
     if (vehicleImage1 != null) {
-      driverFileMap['vehicle_image'] = vehicleImage1!;
+      driverVehicleFileMap['vehicle_image'] = vehicleImage1!;
     }
     if (vehicleImage2 != null) {
-      driverFileMap['vehicle_image_back'] = vehicleImage2!;
+      driverVehicleFileMap['vehicle_image_back'] = vehicleImage2!;
     }
     if (vehicleImage3 != null) {
-      driverFileMap['vehicle_image_in'] = vehicleImage3!;
+      driverVehicleFileMap['vehicle_image_in'] = vehicleImage3!;
     }
     var driverVehicleDataMap = driverVehicle.toMap();
-    await AppAPI().create(
-      EndPoints.driverVehicles,
-      driverVehicleDataMap,
-      driverVehicleFileMap,
-    );
+    if (cDriverVehicle != null) {
+      await AppAPI().update(
+        EndPoints.driverVehicles,
+        cDriverVehicle!.id,
+        driverVehicleDataMap,
+        driverVehicleFileMap.isNotEmpty ? driverVehicleFileMap : null,
+      );
+    } else {
+      await AppAPI().create(
+        EndPoints.driverVehicles,
+        driverVehicleDataMap,
+        driverVehicleFileMap,
+      );
+    }
     await checkDriverData();
     await changeisEditRequested(false);
+    clearImages();
     _isUpdatingProfile = false;
     notifyListeners();
   }

@@ -209,12 +209,12 @@ class AppAPI {
     bool isFinish = false;
     int maxTry = 2;
     int currentTries = 0;
-    log(dataMap.toString());
+    Map<String, dynamic> finalMap = {};
     while (maxTry >= currentTries && !isFinish) {
       currentTries += 1;
       var hasAccess = await checkAccess();
       var accessToken = prefs.getString("access");
-      var res = await htp.put(
+      var res = await htp.patch(
         url,
         body: json.encode(dataMap),
         headers: hasAccess
@@ -231,10 +231,10 @@ class AppAPI {
         await Auth().checkAndFixAccesToken(true);
       } else {
         isFinish = true;
-        log("update $urlPath ${res.statusCode}");
+        print("update $urlPath ${res.statusCode}");
         // log("update $urlPath ${res.body}");
         if (res.statusCode == 201 || res.statusCode == 200) {
-          return json.decode(utf8.decode(res.bodyBytes));
+          finalMap = json.decode(utf8.decode(res.bodyBytes));
           // return {
           //   "status": "$urlPath updated",
           //   "data": json.decode(utf8.decode(res.bodyBytes)),
@@ -244,7 +244,9 @@ class AppAPI {
           return {};
         }
       }
+
       if (filesMap != null) {
+        print(filesMap);
         var request = htp.MultipartRequest('PATCH', url)
           ..headers.addAll(
             hasAccess
@@ -271,12 +273,13 @@ class AppAPI {
           await Auth().checkAndFixAccesToken(true);
         } else {
           isFinish = true;
-          log("patch update file $urlPath ${res.statusCode}");
+          print("patch update file $urlPath ${res.statusCode}");
           if (resFile.statusCode == 201) {
             var response = await htp.Response.fromStream(resFile);
             return {
               "status": "$urlPath updated",
-              "data": json.decode(utf8.decode(response.bodyBytes)),
+              "data": finalMap
+                ..addAll(json.decode(utf8.decode(response.bodyBytes))),
             };
           }
           if (resFile.statusCode == 204) {
@@ -284,6 +287,7 @@ class AppAPI {
           }
         }
       }
+      return finalMap;
     }
     return {};
   }
