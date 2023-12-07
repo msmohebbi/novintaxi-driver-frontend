@@ -1,5 +1,3 @@
-import 'package:transportationdriver/models/driver_model.dart';
-
 class AppDriverVehicle {
   AppDriverVehicle({
     required this.id,
@@ -15,7 +13,7 @@ class AppDriverVehicle {
     this.vehicleImageIn = '',
   });
   int id;
-  AppDriver driver;
+  int driver;
   String vehicleName;
   String vehicleColor;
   String vehicleLicense;
@@ -40,7 +38,6 @@ class AppDriverVehicle {
   Map<String, dynamic> toMap() {
     return {
       "id": id,
-      "driver": driver.id,
       "vehicle_name": vehicleName,
       "vehicle_color": vehicleColor,
       "vehicle_license": vehicleLicense,

@@ -10,18 +10,18 @@ class AppDriver {
     this.vehicleType,
     this.isAvailable = false,
     this.isDisable = false,
-    this.personalImage,
+    this.personalImage = '',
     this.isVerify = false,
   });
   int id;
-  String user;
+  int user;
   String name;
   String nationalId;
   String gender;
   AppVehicleType? vehicleType;
   bool isAvailable;
   bool isDisable;
-  String? personalImage;
+  String personalImage;
   bool isVerify;
   AppDriver.fromMap(Map<String, dynamic> newItem)
       : id = newItem["id"],
@@ -39,12 +39,9 @@ class AppDriver {
   Map<String, dynamic> toMap() {
     return {
       "id": id,
-      "user": user,
       "name": name,
       "national_id": nationalId,
       "gender": gender,
-      "vehicle_type": vehicleType?.id,
-      "personal_image": personalImage,
     };
   }
 }

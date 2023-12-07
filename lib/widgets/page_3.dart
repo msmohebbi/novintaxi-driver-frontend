@@ -10,6 +10,8 @@ class Page3 extends StatefulWidget {
 }
 
 class _Page3State extends State<Page3> {
+  bool isNextPressed = false;
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -74,6 +76,9 @@ class _Page3State extends State<Page3> {
                     validator: (val) {
                       return null;
                     },
+                    onChanged: (value) {
+                      setState(() {});
+                    },
                     decoration: const InputDecoration(
                         isDense: true,
                         border: InputBorder.none,
@@ -81,7 +86,26 @@ class _Page3State extends State<Page3> {
                         hintStyle: TextStyle()),
                   ),
                 ),
-                const SizedBox(height: kToolbarHeight * 0.4),
+                const SizedBox(height: kToolbarHeight * 0.2),
+                if (isNextPressed &&
+                    Provider.of<DriverData>(context)
+                        .vehicleModel
+                        .text
+                        .trim()
+                        .isEmpty) ...[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: kToolbarHeight * 0.4),
+                    child: Text(
+                      'لطفا مدل خودرو را وارد کنید',
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.error,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ),
+                ],
+                const SizedBox(height: kToolbarHeight * 0.2),
                 Divider(
                   color: Theme.of(context).hintColor.withAlpha(60),
                 ),
@@ -115,6 +139,9 @@ class _Page3State extends State<Page3> {
                     validator: (val) {
                       return null;
                     },
+                    onChanged: (value) {
+                      setState(() {});
+                    },
                     decoration: const InputDecoration(
                         isDense: true,
                         border: InputBorder.none,
@@ -122,7 +149,26 @@ class _Page3State extends State<Page3> {
                         hintStyle: TextStyle()),
                   ),
                 ),
-                const SizedBox(height: kToolbarHeight * 0.4),
+                const SizedBox(height: kToolbarHeight * 0.2),
+                if (isNextPressed &&
+                    Provider.of<DriverData>(context)
+                        .vehicleColor
+                        .text
+                        .trim()
+                        .isEmpty) ...[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: kToolbarHeight * 0.4),
+                    child: Text(
+                      'لطفا رنگ خودرو را وارد کنید',
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.error,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ),
+                ],
+                const SizedBox(height: kToolbarHeight * 0.2),
                 Divider(
                   color: Theme.of(context).hintColor.withAlpha(60),
                 ),
@@ -156,6 +202,9 @@ class _Page3State extends State<Page3> {
                     validator: (val) {
                       return null;
                     },
+                    onChanged: (value) {
+                      setState(() {});
+                    },
                     decoration: const InputDecoration(
                         isDense: true,
                         border: InputBorder.none,
@@ -163,6 +212,25 @@ class _Page3State extends State<Page3> {
                         hintStyle: TextStyle()),
                   ),
                 ),
+                const SizedBox(height: kToolbarHeight * 0.2),
+                if (isNextPressed &&
+                    Provider.of<DriverData>(context)
+                        .vehiclePelak
+                        .text
+                        .trim()
+                        .isEmpty) ...[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: kToolbarHeight * 0.4),
+                    child: Text(
+                      'لطفا پلاک خودرو را وارد کنید',
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.error,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ),
+                ],
                 const SizedBox(height: kToolbarHeight),
                 Padding(
                   padding: const EdgeInsets.symmetric(
@@ -204,6 +272,29 @@ class _Page3State extends State<Page3> {
                           child: InkWell(
                             borderRadius: BorderRadius.circular(12),
                             onTap: () async {
+                              setState(() {
+                                isNextPressed = true;
+                              });
+                              if (Provider.of<DriverData>(context,
+                                          listen: false)
+                                      .vehicleModel
+                                      .text
+                                      .trim()
+                                      .isEmpty ||
+                                  Provider.of<DriverData>(context,
+                                          listen: false)
+                                      .vehicleColor
+                                      .text
+                                      .trim()
+                                      .isEmpty ||
+                                  Provider.of<DriverData>(context,
+                                          listen: false)
+                                      .vehiclePelak
+                                      .text
+                                      .trim()
+                                      .isEmpty) {
+                                return;
+                              }
                               Provider.of<DriverData>(context, listen: false)
                                   .setpageIndex(4);
                             },

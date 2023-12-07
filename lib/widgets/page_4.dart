@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:transportationdriver/providers/driver_data.dart';
@@ -11,6 +12,8 @@ class Page4 extends StatefulWidget {
 }
 
 class _Page4State extends State<Page4> {
+  bool isNextPressed = false;
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -76,6 +79,9 @@ class _Page4State extends State<Page4> {
                     validator: (val) {
                       return null;
                     },
+                    onChanged: (value) {
+                      setState(() {});
+                    },
                     decoration: const InputDecoration(
                         isDense: true,
                         border: InputBorder.none,
@@ -83,7 +89,26 @@ class _Page4State extends State<Page4> {
                         hintStyle: TextStyle()),
                   ),
                 ),
-                const SizedBox(height: kToolbarHeight * 0.4),
+                const SizedBox(height: kToolbarHeight * 0.2),
+                if (isNextPressed &&
+                    Provider.of<DriverData>(context)
+                        .vehicleCartBackNo
+                        .text
+                        .trim()
+                        .isEmpty) ...[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: kToolbarHeight * 0.4),
+                    child: Text(
+                      'لطفا شماره پشت کارت خودرو را وارد کنید',
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.error,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ),
+                ],
+                const SizedBox(height: kToolbarHeight * 0.2),
                 Divider(
                   color: Theme.of(context).hintColor.withAlpha(60),
                 ),
@@ -102,10 +127,33 @@ class _Page4State extends State<Page4> {
                     Provider.of<DriverData>(context, listen: false)
                         .setvehicleCartFrontImage(cFile);
                   },
+                  currentImageUrl: Provider.of<DriverData>(context)
+                      .cDriverVehicle
+                      ?.vehicleCardImageFront,
                   selectedImage:
                       Provider.of<DriverData>(context).vehicleCartFrontImage,
                 ),
-                const SizedBox(height: kToolbarHeight * 0.4),
+                const SizedBox(height: kToolbarHeight * 0.2),
+                if (isNextPressed &&
+                    Provider.of<DriverData>(context).vehicleCartFrontImage ==
+                        null &&
+                    Provider.of<DriverData>(context)
+                            .cDriverVehicle
+                            ?.vehicleCardImageFront ==
+                        null) ...[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: kToolbarHeight * 0.4),
+                    child: Text(
+                      "لطفا عکس را انتخاب کنید",
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.error,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ),
+                ],
+                const SizedBox(height: kToolbarHeight * 0.2),
                 Divider(
                   color: Theme.of(context).hintColor.withAlpha(60),
                 ),
@@ -124,23 +172,46 @@ class _Page4State extends State<Page4> {
                     Provider.of<DriverData>(context, listen: false)
                         .setvehicleCartBackImage(cFile);
                   },
+                  currentImageUrl: Provider.of<DriverData>(context)
+                      .cDriverVehicle
+                      ?.vehicleCardImageBack,
                   selectedImage:
                       Provider.of<DriverData>(context).vehicleCartBackImage,
                 ),
-                const SizedBox(height: kToolbarHeight * 0.4),
+                const SizedBox(height: kToolbarHeight * 0.2),
+                if (isNextPressed &&
+                    Provider.of<DriverData>(context).vehicleCartBackImage ==
+                        null &&
+                    Provider.of<DriverData>(context)
+                            .cDriverVehicle
+                            ?.vehicleCardImageBack ==
+                        null) ...[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: kToolbarHeight * 0.4),
+                    child: Text(
+                      "لطفا عکس را انتخاب کنید",
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.error,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ),
+                ],
+                const SizedBox(height: kToolbarHeight * 0.2),
                 Divider(
                   color: Theme.of(context).hintColor.withAlpha(60),
                 ),
                 const SizedBox(height: kToolbarHeight * 0.2),
-                const Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: kToolbarHeight * 0.4),
-                  child: Text(
-                    "عکس از بیرون و داخل خودرو:",
-                    style: TextStyle(),
-                  ),
-                ),
-                const SizedBox(height: kToolbarHeight * 0.2),
+                // const Padding(
+                //   padding:
+                //       EdgeInsets.symmetric(horizontal: kToolbarHeight * 0.4),
+                //   child: Text(
+                //     "عکس از بیرون و داخل خودرو:",
+                //     style: TextStyle(),
+                //   ),
+                // ),
+                // const SizedBox(height: kToolbarHeight * 0.2),
                 const Padding(
                   padding:
                       EdgeInsets.symmetric(horizontal: kToolbarHeight * 0.4),
@@ -153,11 +224,30 @@ class _Page4State extends State<Page4> {
                 SelectImage(
                   onSelectImage: (cFile) {
                     Provider.of<DriverData>(context, listen: false)
-                        .setmelliBackImage(cFile);
+                        .setvehicleImage1(cFile);
                   },
-                  selectedImage:
-                      Provider.of<DriverData>(context).melliBackImage,
+                  currentImageUrl: Provider.of<DriverData>(context)
+                      .cDriverVehicle
+                      ?.vehicleImageFront,
+                  selectedImage: Provider.of<DriverData>(context).vehicleImage1,
                 ),
+                const SizedBox(height: kToolbarHeight * 0.2),
+                if (isNextPressed &&
+                    Provider.of<DriverData>(context).vehicleImage1 == null&&  Provider.of<DriverData>(context)
+                      .cDriverVehicle
+                      ?.vehicleImageFront==null) ...[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: kToolbarHeight * 0.4),
+                    child: Text(
+                      "لطفا عکس را انتخاب کنید",
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.error,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ),
+                ],
                 const SizedBox(height: kToolbarHeight * 0.2),
                 const Padding(
                   padding:
@@ -171,11 +261,30 @@ class _Page4State extends State<Page4> {
                 SelectImage(
                   onSelectImage: (cFile) {
                     Provider.of<DriverData>(context, listen: false)
-                        .setmelliBackImage(cFile);
+                        .setvehicleImage2(cFile);
                   },
-                  selectedImage:
-                      Provider.of<DriverData>(context).melliBackImage,
+                  currentImageUrl: Provider.of<DriverData>(context)
+                      .cDriverVehicle
+                      ?.vehicleImageBack,
+                  selectedImage: Provider.of<DriverData>(context).vehicleImage2,
                 ),
+                const SizedBox(height: kToolbarHeight * 0.2),
+                if (isNextPressed &&
+                    Provider.of<DriverData>(context).vehicleImage2 == null&&  Provider.of<DriverData>(context)
+                      .cDriverVehicle
+                      ?.vehicleImageBack==null) ...[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: kToolbarHeight * 0.4),
+                    child: Text(
+                      "لطفا عکس را انتخاب کنید",
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.error,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ),
+                ],
                 const SizedBox(height: kToolbarHeight * 0.2),
                 const Padding(
                   padding:
@@ -189,11 +298,30 @@ class _Page4State extends State<Page4> {
                 SelectImage(
                   onSelectImage: (cFile) {
                     Provider.of<DriverData>(context, listen: false)
-                        .setmelliBackImage(cFile);
+                        .setvehicleImage3(cFile);
                   },
-                  selectedImage:
-                      Provider.of<DriverData>(context).melliBackImage,
+                  currentImageUrl: Provider.of<DriverData>(context)
+                      .cDriverVehicle
+                      ?.vehicleImageIn,
+                  selectedImage: Provider.of<DriverData>(context).vehicleImage3,
                 ),
+                const SizedBox(height: kToolbarHeight * 0.2),
+                if (isNextPressed &&
+                    Provider.of<DriverData>(context).vehicleImage3 == null&&  Provider.of<DriverData>(context)
+                      .cDriverVehicle
+                      ?.vehicleImageIn==null) ...[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: kToolbarHeight * 0.4),
+                    child: Text(
+                      "لطفا عکس را انتخاب کنید",
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.error,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ),
+                ],
                 const SizedBox(height: kToolbarHeight),
                 Padding(
                   padding: const EdgeInsets.symmetric(
@@ -235,18 +363,67 @@ class _Page4State extends State<Page4> {
                           child: InkWell(
                             borderRadius: BorderRadius.circular(12),
                             onTap: () async {
-                              Provider.of<DriverData>(context, listen: false)
-                                  .setpageIndex(5);
+                              setState(() {
+                                isNextPressed = true;
+                              });
+                              if (Provider.of<DriverData>(context, listen: false)
+                                      .vehicleCartBackNo
+                                      .text
+                                      .trim()
+                                      .isEmpty ||
+                                 ( Provider.of<DriverData>(context,
+                                              listen: false)
+                                          .vehicleCartFrontImage ==
+                                      null&&  Provider.of<DriverData>(context,listen: false)
+                      .cDriverVehicle
+                      ?.vehicleCardImageFront==null) ||
+                                  (Provider.of<DriverData>(context,
+                                              listen: false)
+                                          .vehicleCartBackImage ==
+                                      null&&  Provider.of<DriverData>(context,listen: false)
+                      .cDriverVehicle
+                      ?.vehicleCardImageBack==null) ||
+                                 ( Provider.of<DriverData>(context,
+                                              listen: false)
+                                          .vehicleImage1 ==
+                                      null&&  Provider.of<DriverData>(context,listen: false)
+                      .cDriverVehicle
+                      ?.vehicleImageFront==null) ||
+                                  (Provider.of<DriverData>(context,
+                                              listen: false)
+                                          .vehicleImage2 ==
+                                      null&&  Provider.of<DriverData>(context,listen: false)
+                      .cDriverVehicle
+                      ?.vehicleImageBack==null) ||
+                                (  Provider.of<DriverData>(context,
+                                              listen: false)
+                                          .vehicleImage3 ==
+                                      null&&  Provider.of<DriverData>(context,listen: false)
+                      .cDriverVehicle
+                      ?.vehicleImageIn==null)) {
+                                return;
+                              }
+                              await Provider.of<DriverData>(context,
+                                      listen: false)
+                                  .createDriver();
                             },
                             child: Container(
                               alignment: Alignment.center,
                               height: kTextTabBarHeight * 1.1,
-                              child: Text(
-                                "تایید و ادامه",
-                                style: TextStyle(
-                                  color: Theme.of(context).colorScheme.primary,
-                                ),
-                              ),
+                              child: Provider.of<DriverData>(context)
+                                      .isUpdatingProfile
+                                  ? CupertinoActivityIndicator(
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                    )
+                                  : Text(
+                                      "تایید و ثبت نهایی",
+                                      style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                      ),
+                                    ),
                             ),
                           ),
                         ),

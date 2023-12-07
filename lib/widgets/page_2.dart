@@ -12,6 +12,8 @@ class Page2 extends StatefulWidget {
 }
 
 class _Page2State extends State<Page2> {
+  bool isNextPressed = false;
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -73,6 +75,9 @@ class _Page2State extends State<Page2> {
                     textInputAction: TextInputAction.next,
                     // autofocus: true,
                     keyboardType: TextInputType.name,
+                    onChanged: (value) {
+                      setState(() {});
+                    },
                     autovalidateMode: AutovalidateMode.always,
                     validator: (val) {
                       return null;
@@ -84,7 +89,26 @@ class _Page2State extends State<Page2> {
                         hintStyle: TextStyle()),
                   ),
                 ),
-                const SizedBox(height: kToolbarHeight * 0.4),
+                const SizedBox(height: kToolbarHeight * 0.2),
+                if (isNextPressed &&
+                    Provider.of<DriverData>(context)
+                        .govahiCodeController
+                        .text
+                        .trim()
+                        .isEmpty) ...[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: kToolbarHeight * 0.4),
+                    child: Text(
+                      'لطفا شماره گواهینامه را وارد کنید',
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.error,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ),
+                ],
+                const SizedBox(height: kToolbarHeight * 0.2),
                 Divider(
                   color: Theme.of(context).hintColor.withAlpha(60),
                 ),
@@ -94,7 +118,7 @@ class _Page2State extends State<Page2> {
                       EdgeInsets.symmetric(horizontal: kToolbarHeight * 0.4),
                   child: Row(
                     children: [
-                      Text('مدت اعتبار گواهینامه:'),
+                      Text('تاریخ اعتبار گواهینامه:'),
                     ],
                   ),
                 ),
@@ -114,7 +138,7 @@ class _Page2State extends State<Page2> {
                             context: context,
                             initialDate: Jalali.now(),
                             firstDate: Jalali.now(),
-                            lastDate: Jalali.now().addDays(7),
+                            lastDate: Jalali.now().addYears(10),
                             builder: (context, child) {
                               return Theme(data: ThemeData(), child: child!);
                             },
@@ -134,7 +158,23 @@ class _Page2State extends State<Page2> {
                     ],
                   ),
                 ),
-                const SizedBox(height: kToolbarHeight * 0.4),
+                const SizedBox(height: kToolbarHeight * 0.2),
+                if (isNextPressed &&
+                    Provider.of<DriverData>(context).govahiExpDateString ==
+                        null) ...[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: kToolbarHeight * 0.4),
+                    child: Text(
+                      "لطفا اعتبار گواهینامه را انتخاب کنید",
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.error,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ),
+                ],
+                const SizedBox(height: kToolbarHeight * 0.2),
                 Divider(
                   color: Theme.of(context).hintColor.withAlpha(60),
                 ),
@@ -153,10 +193,32 @@ class _Page2State extends State<Page2> {
                     Provider.of<DriverData>(context, listen: false)
                         .setgovahiFrontImage(cFile);
                   },
+                  currentImageUrl: Provider.of<DriverData>(context)
+                      .cDriverProfile
+                      ?.carLicenseImageFront,
                   selectedImage:
                       Provider.of<DriverData>(context).govahiFrontImage,
                 ),
-                const SizedBox(height: kToolbarHeight * 0.4),
+                const SizedBox(height: kToolbarHeight * 0.2),
+                if (isNextPressed &&
+                    Provider.of<DriverData>(context).govahiFrontImage == null &&
+                    Provider.of<DriverData>(context)
+                            .cDriverProfile
+                            ?.carLicenseImageFront ==
+                        null) ...[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: kToolbarHeight * 0.4),
+                    child: Text(
+                      "لطفا عکس را انتخاب کنید",
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.error,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ),
+                ],
+                const SizedBox(height: kToolbarHeight * 0.2),
                 Divider(
                   color: Theme.of(context).hintColor.withAlpha(60),
                 ),
@@ -175,9 +237,31 @@ class _Page2State extends State<Page2> {
                     Provider.of<DriverData>(context, listen: false)
                         .setgovahiBackImage(cFile);
                   },
+                  currentImageUrl: Provider.of<DriverData>(context)
+                      .cDriverProfile
+                      ?.carLicenseImageBack,
                   selectedImage:
                       Provider.of<DriverData>(context).govahiBackImage,
                 ),
+                const SizedBox(height: kToolbarHeight * 0.2),
+                if (isNextPressed &&
+                    Provider.of<DriverData>(context).govahiBackImage == null &&
+                    Provider.of<DriverData>(context)
+                            .cDriverProfile
+                            ?.carLicenseImageFront ==
+                        null) ...[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: kToolbarHeight * 0.4),
+                    child: Text(
+                      "لطفا عکس را انتخاب کنید",
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.error,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ),
+                ],
                 const SizedBox(height: kToolbarHeight),
                 Padding(
                   padding: const EdgeInsets.symmetric(
@@ -219,6 +303,34 @@ class _Page2State extends State<Page2> {
                           child: InkWell(
                             borderRadius: BorderRadius.circular(12),
                             onTap: () async {
+                              setState(() {
+                                isNextPressed = true;
+                              });
+                              if (Provider.of<DriverData>(context, listen: false)
+                                      .govahiCodeController
+                                      .text
+                                      .trim()
+                                      .isEmpty ||
+                                  Provider.of<DriverData>(context, listen: false)
+                                          .govahiExpDate ==
+                                      null ||
+                                  (Provider.of<DriverData>(context, listen: false)
+                                              .govahiFrontImage ==
+                                          null &&
+                                      Provider.of<DriverData>(context, listen: false)
+                                              .cDriverProfile
+                                              ?.carLicenseImageFront ==
+                                          null) ||
+                                  (Provider.of<DriverData>(context, listen: false)
+                                              .govahiBackImage ==
+                                          null &&
+                                      Provider.of<DriverData>(context,
+                                                  listen: false)
+                                              .cDriverProfile
+                                              ?.carLicenseImageBack ==
+                                          null)) {
+                                return;
+                              }
                               Provider.of<DriverData>(context, listen: false)
                                   .setpageIndex(3);
                             },

@@ -27,16 +27,25 @@ class _DriverProfileScreenState extends State<DriverProfileScreen> {
   @override
   Widget build(BuildContext context) {
     var currentIndex = Provider.of<DriverData>(context).pageIndex;
+    if (Provider.of<DriverData>(context).isDataComplete &&
+        !Provider.of<DriverData>(context).isEditRequested) {
+      currentIndex = 5;
+    }
     return Directionality(
       textDirection: TextDirection.rtl,
-      child: Scaffold(
-        appBar: AppBar(),
-        body: Column(
-          children: [
-            Expanded(
-              child: pagesList[currentIndex],
+      child: Container(
+        color: Theme.of(context).colorScheme.background,
+        child: SafeArea(
+          child: Scaffold(
+            // appBar: AppBar(),
+            body: Column(
+              children: [
+                Expanded(
+                  child: pagesList[currentIndex],
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );

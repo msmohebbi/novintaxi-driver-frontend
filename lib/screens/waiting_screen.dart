@@ -65,6 +65,8 @@ class _WaitingScreenState extends State<WaitingScreen> {
                         borderRadius: BorderRadius.circular(12),
                         onTap: () {
                           Provider.of<DriverData>(context, listen: false)
+                              .changeisEditRequested(true);
+                          Provider.of<DriverData>(context, listen: false)
                               .setpageIndex(0);
                         },
                         child: const Padding(

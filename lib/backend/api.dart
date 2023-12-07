@@ -152,13 +152,13 @@ class AppAPI {
                 }
               : {},
         );
+        print(utf8.decode(response.bodyBytes));
         if (response.statusCode == 401) {
           isFinish = false;
           await Auth().checkAndFixAccesToken(true);
         } else {
           isFinish = true;
-          log(utf8.decode(response.bodyBytes));
-          log("create $urlPath ${response.statusCode}");
+          print("create $urlPath ${response.statusCode}");
           if (response.statusCode == 201) {
             return json.decode((utf8.decode(response.bodyBytes)));
           }
@@ -192,7 +192,7 @@ class AppAPI {
           isFinish = true;
           var response = await htp.Response.fromStream(res);
           // log(utf8.decode(response.bodyBytes));
-          log("create $urlPath ${res.statusCode}");
+          print("create $urlPath ${res.statusCode}");
           if (res.statusCode == 201) {
             return json.decode((utf8.decode(response.bodyBytes)));
           }

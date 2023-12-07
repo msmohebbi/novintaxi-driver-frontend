@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:persian_datetime_picker/persian_datetime_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:transportationdriver/backend/api.dart';
 import 'package:transportationdriver/backend/api_endpoints.dart';
 import 'package:transportationdriver/models/driver_model.dart';
@@ -16,11 +17,23 @@ class DriverData with ChangeNotifier {
   }
 
   initilizeDriverData() async {
+    await checkDriverData();
+    _isInitialized = true;
+    notifyListeners();
+  }
+
+  Future<void> checkDriverData() async {
+    // await changeisEditRequested(false);
     await getDriver();
     await getDriverProfile();
     await getDriverVehicle();
-    _isInitialized = true;
-    notifyListeners();
+    await initializeisEditRequested();
+    if (cDriver != null && cDriverProfile != null && cDriverVehicle != null) {
+      _isDataComplete = true;
+      if (cDriver?.isVerify ?? false) {
+        _isVerify = true;
+      }
+    }
   }
 
   clearDriverData() {
@@ -43,6 +56,40 @@ class DriverData with ChangeNotifier {
 
   bool _isUpdatingProfile = false;
   bool get isUpdatingProfile => _isUpdatingProfile;
+
+  bool get isEditRequested => _isEditRequested;
+  bool _isEditRequested = false;
+  initializeisEditRequested() async {
+    var prefs = await SharedPreferences.getInstance();
+    _isEditRequested = prefs.getBool('isEditRequested') ?? false;
+    print(isEditRequested);
+    if (isEditRequested) {
+      nameController.text = cDriver?.name ?? '';
+      _selectedSexualTypes = cDriver?.gender;
+      addressController.text = cDriverProfile?.address ?? '';
+      postalController.text = cDriverProfile?.postalCode ?? '';
+      melliCodeController.text = cDriver?.nationalId ?? '';
+      govahiCodeController.text = cDriverProfile?.carLicenseId ?? '';
+      _govahiExpDate = cDriverProfile?.carLicenseExpireDate;
+      vehicleModel.text = cDriverVehicle?.vehicleName ?? '';
+      vehicleColor.text = cDriverVehicle?.vehicleColor ?? '';
+      vehiclePelak.text = cDriverVehicle?.vehicleLicense ?? '';
+      vehicleCartBackNo.text = cDriverVehicle?.vin ?? '';
+    }
+    notifyListeners();
+  }
+
+  changeisEditRequested(bool newVal) async {
+    var prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('isEditRequested', newVal);
+    initializeisEditRequested();
+  }
+
+  bool get isDataComplete => _isDataComplete;
+  bool _isDataComplete = false;
+
+  bool get isVerify => _isVerify;
+  bool _isVerify = false;
 
   AppLocation? _originLocation;
   AppLocation? get originLocation => _originLocation;
@@ -232,15 +279,16 @@ class DriverData with ChangeNotifier {
     // 1st Request
     var driver = AppDriver(
       id: 1,
-      user: '1',
+      user: 1,
       name: nameController.text.trim(),
       nationalId: melliCodeController.text.trim(),
       gender: selectedSexualTypes!,
     );
     var driverDataMap = driver.toMap();
-    var driverFileMap = {
-      'personal_image': personalImage!,
-    };
+    Map<String, File> driverFileMap = {};
+    if (personalImage != null) {
+      driverFileMap['personal_image'] = personalImage!;
+    }
     await AppAPI().create(
       EndPoints.drivers,
       driverDataMap,
@@ -249,7 +297,7 @@ class DriverData with ChangeNotifier {
     // 2nd Request
     var driverProfile = AppDriverProfile(
       id: 1,
-      driver: driver,
+      driver: driver.id,
       nationalCardImageFront: '',
       nationalCardImageBack: '',
       address: addressController.text.trim(),
@@ -260,12 +308,20 @@ class DriverData with ChangeNotifier {
       carLicenseExpireDate: govahiExpDate!,
     );
     var driverProfileDataMap = driverProfile.toMap();
-    var driverProfileFileMap = {
-      "national_card_image": melliFrontImage!,
-      "national_card_image_back": melliBackImage!,
-      "car_license_image": govahiFrontImage!,
-      "car_license_image_back": govahiBackImage!,
-    };
+    Map<String, File> driverProfileFileMap = {};
+    if (melliFrontImage != null) {
+      driverFileMap['national_card_image'] = melliFrontImage!;
+    }
+    if (melliBackImage != null) {
+      driverFileMap['national_card_image'] = melliBackImage!;
+    }
+    if (govahiFrontImage != null) {
+      driverFileMap['car_license_image'] = govahiFrontImage!;
+    }
+    if (govahiBackImage != null) {
+      driverFileMap['car_license_image_back'] = govahiBackImage!;
+    }
+
     await AppAPI().create(
       EndPoints.driverProfiles,
       driverProfileDataMap,
@@ -274,25 +330,36 @@ class DriverData with ChangeNotifier {
     // 3nd Request
     var driverVehicle = AppDriverVehicle(
       id: 1,
-      driver: driver,
+      driver: driver.id,
       vehicleName: vehicleModel.text.trim(),
       vehicleColor: vehicleColor.text.trim(),
       vehicleLicense: vehiclePelak.text.trim(),
       vin: vehicleCartBackNo.text.trim(),
     );
+    Map<String, File> driverVehicleFileMap = {};
+    if (vehicleCartFrontImage != null) {
+      driverFileMap['vehicle_card_image'] = vehicleCartFrontImage!;
+    }
+    if (vehicleCartBackImage != null) {
+      driverFileMap['vehicle_card_image_back'] = vehicleCartBackImage!;
+    }
+    if (vehicleImage1 != null) {
+      driverFileMap['vehicle_image'] = vehicleImage1!;
+    }
+    if (vehicleImage2 != null) {
+      driverFileMap['vehicle_image_back'] = vehicleImage2!;
+    }
+    if (vehicleImage3 != null) {
+      driverFileMap['vehicle_image_in'] = vehicleImage3!;
+    }
     var driverVehicleDataMap = driverVehicle.toMap();
-    var driverVehicleFileMap = {
-      "vehicle_card_image": vehicleCartFrontImage!,
-      "vehicle_card_image_back": vehicleCartBackImage!,
-      "vehicle_image": vehicleImage1!,
-      "vehicle_image_back": vehicleImage2!,
-      "vehicle_image_in": vehicleImage3!,
-    };
     await AppAPI().create(
       EndPoints.driverVehicles,
       driverVehicleDataMap,
       driverVehicleFileMap,
     );
+    await checkDriverData();
+    await changeisEditRequested(false);
     _isUpdatingProfile = false;
     notifyListeners();
   }

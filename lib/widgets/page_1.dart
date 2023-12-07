@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:transportationdriver/providers/driver_data.dart';
 import 'package:transportationdriver/widgets/select_image.dart';
@@ -11,6 +12,8 @@ class Page1 extends StatefulWidget {
 }
 
 class _Page1State extends State<Page1> {
+  bool isNextPressed = false;
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -69,13 +72,21 @@ class _Page1State extends State<Page1> {
                   child: TextFormField(
                     controller:
                         Provider.of<DriverData>(context).melliCodeController,
-                    textInputAction: TextInputAction.next,
+                    keyboardType: const TextInputType.numberWithOptions(
+                      decimal: false,
+                      signed: false,
+                    ),
                     // autofocus: true,
-                    keyboardType: TextInputType.name,
+                    onChanged: (value) {
+                      setState(() {});
+                    },
                     autovalidateMode: AutovalidateMode.always,
                     validator: (val) {
                       return null;
                     },
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                    ],
                     decoration: const InputDecoration(
                         isDense: true,
                         border: InputBorder.none,
@@ -83,7 +94,27 @@ class _Page1State extends State<Page1> {
                         hintStyle: TextStyle()),
                   ),
                 ),
-                const SizedBox(height: kToolbarHeight * 0.4),
+                const SizedBox(height: kToolbarHeight * 0.2),
+                if (isNextPressed &&
+                    Provider.of<DriverData>(context)
+                            .melliCodeController
+                            .text
+                            .trim()
+                            .length !=
+                        10) ...[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: kToolbarHeight * 0.4),
+                    child: Text(
+                      'لطفا کد ملی صحیح وارد کنید',
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.error,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ),
+                ],
+                const SizedBox(height: kToolbarHeight * 0.2),
                 Divider(
                   color: Theme.of(context).hintColor.withAlpha(60),
                 ),
@@ -102,10 +133,32 @@ class _Page1State extends State<Page1> {
                     Provider.of<DriverData>(context, listen: false)
                         .setmelliFrontImage(cFile);
                   },
+                  currentImageUrl: Provider.of<DriverData>(context)
+                      .cDriverProfile
+                      ?.nationalCardImageFront,
                   selectedImage:
                       Provider.of<DriverData>(context).melliFrontImage,
                 ),
-                const SizedBox(height: kToolbarHeight * 0.4),
+                const SizedBox(height: kToolbarHeight * 0.2),
+                if (isNextPressed &&
+                    Provider.of<DriverData>(context).melliFrontImage == null &&
+                    Provider.of<DriverData>(context)
+                            .cDriverProfile
+                            ?.nationalCardImageFront ==
+                        null) ...[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: kToolbarHeight * 0.4),
+                    child: Text(
+                      "لطفا عکس را انتخاب کنید",
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.error,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ),
+                ],
+                const SizedBox(height: kToolbarHeight * 0.2),
                 Divider(
                   color: Theme.of(context).hintColor.withAlpha(60),
                 ),
@@ -124,9 +177,31 @@ class _Page1State extends State<Page1> {
                     Provider.of<DriverData>(context, listen: false)
                         .setmelliBackImage(cFile);
                   },
+                  currentImageUrl: Provider.of<DriverData>(context)
+                      .cDriverProfile
+                      ?.nationalCardImageBack,
                   selectedImage:
                       Provider.of<DriverData>(context).melliBackImage,
                 ),
+                const SizedBox(height: kToolbarHeight * 0.2),
+                if (isNextPressed &&
+                    Provider.of<DriverData>(context).melliBackImage == null &&
+                    Provider.of<DriverData>(context)
+                            .cDriverProfile
+                            ?.nationalCardImageBack ==
+                        null) ...[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: kToolbarHeight * 0.4),
+                    child: Text(
+                      "لطفا عکس را انتخاب کنید",
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.error,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ),
+                ],
                 const SizedBox(height: kToolbarHeight),
                 Padding(
                   padding: const EdgeInsets.symmetric(
@@ -168,6 +243,36 @@ class _Page1State extends State<Page1> {
                           child: InkWell(
                             borderRadius: BorderRadius.circular(12),
                             onTap: () async {
+                              setState(() {
+                                isNextPressed = true;
+                              });
+                              if ((Provider.of<DriverData>(context,
+                                                  listen: false)
+                                              .melliFrontImage ==
+                                          null &&
+                                      Provider.of<DriverData>(context,
+                                                  listen: false)
+                                              .cDriverProfile
+                                              ?.nationalCardImageFront ==
+                                          null) ||
+                                  (Provider.of<DriverData>(context,
+                                                  listen: false)
+                                              .melliBackImage ==
+                                          null &&
+                                      Provider.of<DriverData>(context,
+                                                  listen: false)
+                                              .cDriverProfile
+                                              ?.nationalCardImageBack ==
+                                          null) ||
+                                  Provider.of<DriverData>(context,
+                                              listen: false)
+                                          .melliCodeController
+                                          .text
+                                          .trim()
+                                          .length !=
+                                      10) {
+                                return;
+                              }
                               Provider.of<DriverData>(context, listen: false)
                                   .setpageIndex(2);
                             },

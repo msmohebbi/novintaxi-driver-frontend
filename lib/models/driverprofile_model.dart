@@ -1,5 +1,3 @@
-import 'package:transportationdriver/models/driver_model.dart';
-
 class AppDriverProfile {
   AppDriverProfile({
     required this.id,
@@ -14,7 +12,7 @@ class AppDriverProfile {
     required this.carLicenseImageBack,
   });
   int id;
-  AppDriver driver;
+  int driver;
   String nationalCardImageFront;
   String nationalCardImageBack;
   String address;
@@ -37,7 +35,6 @@ class AppDriverProfile {
   Map<String, dynamic> toMap() {
     return {
       "id": id,
-      "driver": driver.id,
       "address": address,
       "post_code": postalCode,
       "car_license_id": carLicenseId,
