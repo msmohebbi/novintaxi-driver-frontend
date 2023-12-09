@@ -28,6 +28,9 @@ class DriverTransportData with ChangeNotifier {
   bool _isInitialized = false;
   bool get isInitialized => _isInitialized;
 
+  int? get isConfirmingId => _isConfirmingId;
+  int? _isConfirmingId;
+
   bool get isUpdating => _isUpdating;
   bool _isUpdating = false;
 
@@ -78,6 +81,8 @@ class DriverTransportData with ChangeNotifier {
   }
 
   Future<void> confirmTransport(AppTransport cTransport) async {
+    _isConfirmingId = cTransport.id;
+    notifyListeners();
     await AppAPI().update(
       '${EndPoints.transports}/${cTransport.id}/driver_confirm',
       null,
@@ -87,6 +92,7 @@ class DriverTransportData with ChangeNotifier {
     );
     await getTransports();
     await getDriverTransports();
+    _isConfirmingId = null;
     notifyListeners();
   }
 
@@ -126,15 +132,16 @@ class DriverTransportData with ChangeNotifier {
     _isCanceling = true;
     notifyListeners();
     if (cDriverTransport.statusId < 3) {
-      await AppAPI().update(
-        '${EndPoints.driverTransports}/${cDriverTransport.id}/cancel',
-        null,
-        {},
-        null,
-        false,
-      );
+      //   await AppAPI().update(
+      //     '${EndPoints.driverTransports}/${cDriverTransport.id}/cancel',
+      //     null,
+      //     {},
+      //     null,
+      //     false,
+      //   );
+      await Future.delayed(const Duration(seconds: 5));
+      await getDriverTransports();
     }
-    await getDriverTransports();
     _isCanceling = false;
     notifyListeners();
   }

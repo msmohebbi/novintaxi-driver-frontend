@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' as intl;
@@ -192,17 +193,30 @@ class _TransportCompactState extends State<TransportCompact> {
                       Provider.of<DriverTransportData>(context, listen: false)
                           .confirmTransport(widget.cTransport);
                     },
-                    child: const Padding(
-                      padding: EdgeInsets.symmetric(
-                          vertical: kToolbarHeight * 0.2,
-                          horizontal: kToolbarHeight * 0.4),
-                      child: Text(
-                        'تایید سفر',
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
-                    )),
+                    child: Provider.of<DriverTransportData>(context)
+                                .isConfirmingId ==
+                            widget.cTransport.id
+                        ? const Padding(
+                            padding: EdgeInsets.symmetric(
+                              vertical: kToolbarHeight * 0.2,
+                              horizontal: kToolbarHeight * 0.75,
+                            ),
+                            child: CupertinoActivityIndicator(
+                              color: Colors.white,
+                            ),
+                          )
+                        : const Padding(
+                            padding: EdgeInsets.symmetric(
+                              vertical: kToolbarHeight * 0.2,
+                              horizontal: kToolbarHeight * 0.4,
+                            ),
+                            child: Text(
+                              'تایید سفر',
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
+                          )),
               ),
             ],
           ),

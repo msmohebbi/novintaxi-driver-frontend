@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:transportationdriver/models/driver_transport_model.dart';
 import 'package:maps_launcher/maps_launcher.dart';
 import 'package:transportationdriver/providers/driver_transport_data.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class TransportActiveCompact extends StatefulWidget {
   final AppDriverTransport cDriverTransport;
@@ -84,6 +85,57 @@ class _TransportActiveCompactState extends State<TransportActiveCompact> {
                     ],
                   ],
                 ),
+                const SizedBox(height: kToolbarHeight * 0.3),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    if (widget.cDriverTransport.navigatorButtonString !=
+                        null) ...[
+                      const SizedBox(width: kToolbarHeight * 0.2),
+                      Material(
+                        color: Theme.of(context).hintColor.withAlpha(100),
+                        borderRadius: BorderRadius.circular(12),
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(12),
+                          onTap: () {
+                            if (widget.cDriverTransport.statusId == 0) {
+                              MapsLauncher.launchCoordinates(
+                                widget.cDriverTransport.transport.ods!.first
+                                    .location.lat,
+                                widget.cDriverTransport.transport.ods!.first
+                                    .location.lng,
+                              );
+                            } else {
+                              MapsLauncher.launchCoordinates(
+                                widget.cDriverTransport.transport.ods!.last
+                                    .location.lat,
+                                widget.cDriverTransport.transport.ods!.last
+                                    .location.lng,
+                              );
+                            }
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: kToolbarHeight * 0.2,
+                              horizontal: kToolbarHeight * 0.4,
+                            ),
+                            child: Text(
+                              widget.cDriverTransport.navigatorButtonString!,
+                              style: TextStyle(
+                                color: Theme.of(context).primaryColor,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+                const SizedBox(height: kToolbarHeight * 0.2),
+                Divider(
+                  height: 1,
+                  color: Theme.of(context).colorScheme.primary.withAlpha(180),
+                ),
                 const SizedBox(height: kToolbarHeight * 0.2),
                 Row(
                   children: [
@@ -156,28 +208,68 @@ class _TransportActiveCompactState extends State<TransportActiveCompact> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Material(
-                  color: Colors.teal,
+                  color: Colors.green[400],
                   borderRadius: BorderRadius.circular(12),
                   child: InkWell(
                       borderRadius: BorderRadius.circular(12),
                       onTap: () {
-                        // Provider.of<DriverTransportData>(context)
-                        //     .updateDriverTransport(widget.cDriverTransport);
+                        launchUrl(
+                          Uri.parse(
+                              "tel://${widget.cDriverTransport.transport.passengerPhone}"),
+                        );
                       },
                       child: const Padding(
                         padding: EdgeInsets.symmetric(
-                            vertical: kToolbarHeight * 0.1,
-                            horizontal: kToolbarHeight * 0.4),
+                          vertical: kToolbarHeight * 0.1,
+                          horizontal: kToolbarHeight * 0.4,
+                        ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Icon(
-                              Icons.call,
+                              CupertinoIcons.phone_arrow_up_right,
+                              color: Colors.white,
+                              size: 20,
+                            ),
+                            SizedBox(width: kToolbarHeight * 0.2),
+                            Text(
+                              'تماس',
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
+                      )),
+                ),
+                const SizedBox(
+                  width: kToolbarHeight * 0.2,
+                ),
+                Material(
+                  color: Colors.orange[400],
+                  borderRadius: BorderRadius.circular(12),
+                  child: InkWell(
+                      borderRadius: BorderRadius.circular(12),
+                      onTap: () {
+                        launchUrl(
+                          Uri.parse(
+                              "sms://${widget.cDriverTransport.transport.passengerPhone}"),
+                        );
+                      },
+                      child: const Padding(
+                        padding: EdgeInsets.symmetric(
+                            vertical: kToolbarHeight * 0.1,
+                            horizontal: kToolbarHeight * 0.2),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              CupertinoIcons.bubble_left_bubble_right,
                               color: Colors.white,
                             ),
-                            SizedBox(width: kToolbarHeight * 0.1),
+                            SizedBox(width: kToolbarHeight * 0.2),
                             Text(
-                              'تماس با مشتری',
+                              'ارسال پیام',
                               style: TextStyle(
                                 color: Colors.white,
                               ),
@@ -199,39 +291,33 @@ class _TransportActiveCompactState extends State<TransportActiveCompact> {
               vertical: kToolbarHeight * 0.2,
             ),
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primary.withAlpha(50),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+                // color: Theme.of(context).colorScheme.primary.withAlpha(50),
+                ),
+            child: Column(
               children: [
-                const Text(
-                  'وضعیت فعلی:',
-                  style: TextStyle(
-                      // fontWeight: FontWeight.bold,
-                      ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      'وضعیت فعلی:',
+                      style: TextStyle(
+                          // fontWeight: FontWeight.bold,
+                          ),
+                    ),
+                    const SizedBox(
+                      width: kToolbarHeight * 0.1,
+                    ),
+                    Text(
+                      widget.cDriverTransport.status,
+                    ),
+                  ],
                 ),
-                const SizedBox(
-                  width: kToolbarHeight * 0.1,
-                ),
-                Text(
-                  widget.cDriverTransport.status,
-                ),
-              ],
-            ),
-          ),
-          Divider(
-            height: 1,
-            color: Theme.of(context).colorScheme.primary.withAlpha(180),
-          ),
-          if (widget.cDriverTransport.actionButtonString != null) ...[
-            const SizedBox(height: kToolbarHeight * 0.3),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Material(
-                  color: Colors.teal,
-                  borderRadius: BorderRadius.circular(12),
-                  child: InkWell(
+                if (widget.cDriverTransport.actionButtonString != null) ...[
+                  const SizedBox(height: kToolbarHeight * 0.2),
+                  Material(
+                    color: Theme.of(context).colorScheme.primary,
+                    borderRadius: BorderRadius.circular(12),
+                    child: InkWell(
                       borderRadius: BorderRadius.circular(12),
                       onTap: () {
                         Provider.of<DriverTransportData>(context, listen: false)
@@ -239,12 +325,14 @@ class _TransportActiveCompactState extends State<TransportActiveCompact> {
                       },
                       child:
                           Provider.of<DriverTransportData>(context).isUpdating
-                              ? const Padding(
-                                  padding: EdgeInsets.symmetric(
+                              ? Padding(
+                                  padding: const EdgeInsets.symmetric(
                                     vertical: kToolbarHeight * 0.2,
                                     horizontal: kToolbarHeight * 0.8,
                                   ),
-                                  child: CupertinoActivityIndicator(),
+                                  child: CupertinoActivityIndicator(
+                                    color: Theme.of(context).primaryColor,
+                                  ),
                                 )
                               : Padding(
                                   padding: const EdgeInsets.symmetric(
@@ -253,15 +341,21 @@ class _TransportActiveCompactState extends State<TransportActiveCompact> {
                                   ),
                                   child: Text(
                                     widget.cDriverTransport.actionButtonString!,
-                                    style: const TextStyle(
-                                      color: Colors.white,
+                                    style: TextStyle(
+                                      color: Theme.of(context).primaryColor,
                                     ),
                                   ),
-                                )),
-                ),
+                                ),
+                    ),
+                  ),
+                ],
               ],
             ),
-          ],
+          ),
+          Divider(
+            height: 1,
+            color: Theme.of(context).colorScheme.primary.withAlpha(180),
+          ),
           const SizedBox(height: kToolbarHeight * 0.3),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -269,58 +363,109 @@ class _TransportActiveCompactState extends State<TransportActiveCompact> {
               if (!widget.cDriverTransport.isCanceled &&
                   widget.cDriverTransport.dateEnded == null) ...[
                 Material(
-                  color: Theme.of(context).hintColor.withAlpha(100),
+                  color: Theme.of(context).colorScheme.error,
                   borderRadius: BorderRadius.circular(12),
                   child: InkWell(
-                      borderRadius: BorderRadius.circular(12),
-                      onTap: () {
-                        Provider.of<DriverTransportData>(context, listen: false)
-                            .cancelDriverTransport(widget.cDriverTransport);
-                      },
-                      child: const Padding(
-                        padding: EdgeInsets.symmetric(
-                            vertical: kToolbarHeight * 0.2,
-                            horizontal: kToolbarHeight * 0.4),
-                        child: Text('لغو سفر'),
-                      )),
-                ),
-              ],
-              if (widget.cDriverTransport.navigatorButtonString != null) ...[
-                const SizedBox(width: kToolbarHeight * 0.3),
-                Material(
-                  color: Colors.teal,
-                  borderRadius: BorderRadius.circular(12),
-                  child: InkWell(
-                      borderRadius: BorderRadius.circular(12),
-                      onTap: () {
-                        if (widget.cDriverTransport.statusId == 0) {
-                          MapsLauncher.launchCoordinates(
-                            widget.cDriverTransport.transport.ods!.first
-                                .location.lat,
-                            widget.cDriverTransport.transport.ods!.first
-                                .location.lng,
+                    borderRadius: BorderRadius.circular(12),
+                    onTap: () {
+                      showCupertinoDialog(
+                        barrierDismissible: true,
+                        context: context,
+                        builder: (context) {
+                          return Directionality(
+                            textDirection: TextDirection.rtl,
+                            child: CupertinoAlertDialog(
+                              title: const Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    'شما درحال لغو سفر خود هستید، \n آیا مطمئن هستید؟',
+                                    style: TextStyle(
+                                      height: 2,
+                                      fontSize: 13,
+                                      fontFamily: 'IRANYekan',
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  ),
+                                  SizedBox(height: kToolbarHeight * 0.1),
+                                  Text(
+                                    '(در هر روز فقط امکان لغو ۳ سفر را دارید)',
+                                    style: TextStyle(
+                                      height: 2,
+                                      fontSize: 12,
+                                      fontFamily: 'IRANYekan',
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              actions: [
+                                IconButton(
+                                  onPressed: () async {
+                                    Provider.of<DriverTransportData>(context,
+                                            listen: false)
+                                        .cancelDriverTransport(
+                                            widget.cDriverTransport);
+
+                                    if (mounted) {
+                                      Navigator.of(context).pop();
+                                    }
+                                  },
+                                  icon: Text(
+                                    'لغو سفر',
+                                    style: TextStyle(
+                                      color:
+                                          Theme.of(context).colorScheme.error,
+                                      height: 2,
+                                      fontSize: 13,
+                                      fontFamily: 'IRANYekan',
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  ),
+                                ),
+                                IconButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  icon: const Text(
+                                    'بیخیال',
+                                    style: TextStyle(
+                                      height: 2,
+                                      fontSize: 13,
+                                      fontFamily: 'IRANYekan',
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                           );
-                        } else {
-                          MapsLauncher.launchCoordinates(
-                            widget.cDriverTransport.transport.ods!.last.location
-                                .lat,
-                            widget.cDriverTransport.transport.ods!.last.location
-                                .lng,
-                          );
-                        }
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: kToolbarHeight * 0.2,
-                          horizontal: kToolbarHeight * 0.4,
-                        ),
-                        child: Text(
-                          widget.cDriverTransport.navigatorButtonString!,
-                          style: const TextStyle(
-                            color: Colors.white,
+                        },
+                      );
+                    },
+                    child: Provider.of<DriverTransportData>(context).isCanceling
+                        ? const Padding(
+                            padding: EdgeInsets.symmetric(
+                              vertical: kToolbarHeight * 0.2,
+                              horizontal: kToolbarHeight * 0.65,
+                            ),
+                            child: CupertinoActivityIndicator(
+                              color: Colors.white,
+                            ),
+                          )
+                        : const Padding(
+                            padding: EdgeInsets.symmetric(
+                              vertical: kToolbarHeight * 0.2,
+                              horizontal: kToolbarHeight * 0.4,
+                            ),
+                            child: Text(
+                              'لغو سفر',
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
                           ),
-                        ),
-                      )),
+                  ),
                 ),
               ],
               const SizedBox(height: kToolbarHeight * 0.2),
