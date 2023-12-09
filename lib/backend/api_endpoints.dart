@@ -5,7 +5,7 @@ class EndPoints {
   // =================================================
   static const String images = "api/images";
   static const String notification = "notification";
-  static const String driverTransports = "transport/drivertransports";
+  static const String driverTransports = "transport/driver_transports";
   static const String transports = "transport/transports";
   static const String transportODs = "transport/transportods/";
   static const String carts = "cart/carts";

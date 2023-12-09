@@ -65,6 +65,7 @@ class TransportData with ChangeNotifier {
         "partial": true,
       },
       null,
+      false,
     );
     _cTransport = AppTransport.fromMap(newTransport);
     _selectedVehicle = allVehicles
@@ -250,6 +251,7 @@ class TransportData with ChangeNotifier {
       cTransport!.id,
       cTransport!.toMap(),
       null,
+      false,
     );
     if (newTransportData.isNotEmpty) {
       _cTransport = AppTransport.fromMap(newTransportData);
@@ -272,6 +274,7 @@ class TransportData with ChangeNotifier {
       null,
       {},
       null,
+      false,
     );
     if (newTransportData.isNotEmpty) {
       _cTransport = AppTransport.fromMap(newTransportData);
@@ -291,6 +294,7 @@ class TransportData with ChangeNotifier {
       null,
       {},
       null,
+      false,
     );
     if (newTransportData.isNotEmpty) {
       _cTransport = AppTransport.fromMap(newTransportData);

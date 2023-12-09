@@ -309,6 +309,7 @@ class DriverData with ChangeNotifier {
         cDriver!.id,
         driverDataMap,
         driverFileMap.isNotEmpty ? driverFileMap : null,
+        true,
       );
     } else {
       await AppAPI().create(
@@ -350,6 +351,7 @@ class DriverData with ChangeNotifier {
         cDriverProfile!.id,
         driverProfileDataMap,
         driverProfileFileMap.isNotEmpty ? driverProfileFileMap : null,
+        true,
       );
     } else {
       await AppAPI().create(
@@ -390,6 +392,7 @@ class DriverData with ChangeNotifier {
         cDriverVehicle!.id,
         driverVehicleDataMap,
         driverVehicleFileMap.isNotEmpty ? driverVehicleFileMap : null,
+        true,
       );
     } else {
       await AppAPI().create(

@@ -28,11 +28,24 @@ class DriverTransportData with ChangeNotifier {
   bool _isInitialized = false;
   bool get isInitialized => _isInitialized;
 
+  bool get isUpdating => _isUpdating;
+  bool _isUpdating = false;
+
+  bool get isCanceling => _isCanceling;
+  bool _isCanceling = false;
+
   List<AppTransport> get allTransports => _allTransports;
   List<AppTransport> _allTransports = [];
 
   List<AppDriverTransport> get driverTransports => _driverTransports;
   List<AppDriverTransport> _driverTransports = [];
+  List<AppDriverTransport> get activedriverTransports => _driverTransports
+      .where((element) => element.dateEnded == null && !element.isCanceled)
+      .toList();
+  List<AppDriverTransport> get donedriverTransports =>
+      _driverTransports.where((element) => element.dateEnded != null).toList();
+  List<AppDriverTransport> get canceleddriverTransports =>
+      _driverTransports.where((element) => element.isCanceled).toList();
 
   List<String> get ignoredTransports => _ignoredTransports;
   List<String> _ignoredTransports = [];
@@ -66,12 +79,63 @@ class DriverTransportData with ChangeNotifier {
 
   Future<void> confirmTransport(AppTransport cTransport) async {
     await AppAPI().update(
-      '${EndPoints.transports}/driver_confirm',
-      cTransport.id,
+      '${EndPoints.transports}/${cTransport.id}/driver_confirm',
+      null,
       {},
       null,
+      false,
     );
+    await getTransports();
     await getDriverTransports();
+    notifyListeners();
+  }
+
+  Future<void> updateDriverTransport(
+      AppDriverTransport cDriverTransport) async {
+    if (isUpdating) {
+      return;
+    }
+    _isUpdating = true;
+    notifyListeners();
+    if (cDriverTransport.statusId < 3) {
+      String? cEndPoint;
+      var endpointList = [
+        'arrive',
+        'start',
+        'end',
+      ];
+      cEndPoint = endpointList[cDriverTransport.statusId];
+      await AppAPI().update(
+        '${EndPoints.driverTransports}/${cDriverTransport.id}/$cEndPoint',
+        null,
+        {},
+        null,
+        false,
+      );
+    }
+    await getDriverTransports();
+    _isUpdating = false;
+    notifyListeners();
+  }
+
+  Future<void> cancelDriverTransport(
+      AppDriverTransport cDriverTransport) async {
+    if (_isCanceling || _isUpdating) {
+      return;
+    }
+    _isCanceling = true;
+    notifyListeners();
+    if (cDriverTransport.statusId < 3) {
+      await AppAPI().update(
+        '${EndPoints.driverTransports}/${cDriverTransport.id}/cancel',
+        null,
+        {},
+        null,
+        false,
+      );
+    }
+    await getDriverTransports();
+    _isCanceling = false;
     notifyListeners();
   }
 

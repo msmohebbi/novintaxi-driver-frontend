@@ -69,10 +69,12 @@ class NotificationData with ChangeNotifier {
         _allNotifications.firstWhere((element) => element.id == notificatonId);
     if (oldNotif.isRead == false) {
       var fetchedRes = await AppAPI().update(
-          "${EndPoints.notification}/usernotifications/$notificationChoices/read",
-          null,
-          {},
-          null);
+        "${EndPoints.notification}/usernotifications/$notificationChoices/read",
+        null,
+        {},
+        null,
+        false,
+      );
       if (fetchedRes.isNotEmpty) {
         var indexx = _allNotifications.indexOf(oldNotif);
         _allNotifications.removeWhere((element) => element.id == notificatonId);

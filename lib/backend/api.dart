@@ -202,10 +202,16 @@ class AppAPI {
     return {};
   }
 
-  Future<Map<String, dynamic>> update(String urlPath, int? id,
-      Map<String, dynamic> dataMap, Map<String, File>? filesMap) async {
+  Future<Map<String, dynamic>> update(
+    String urlPath,
+    int? id,
+    Map<String, dynamic> dataMap,
+    Map<String, File>? filesMap,
+    bool isPatch,
+  ) async {
     var prefs = await SharedPreferences.getInstance();
     Uri url = Uri.parse("$_baseUrl/$urlPath/${id != null ? '$id/' : ''}");
+    print(url);
     bool isFinish = false;
     int maxTry = 2;
     int currentTries = 0;
@@ -214,25 +220,41 @@ class AppAPI {
       currentTries += 1;
       var hasAccess = await checkAccess();
       var accessToken = prefs.getString("access");
-      var res = await htp.patch(
-        url,
-        body: json.encode(dataMap),
-        headers: hasAccess
-            ? {
-                "Authorization": "JWT $accessToken",
-                'Content-Type': 'application/json'
-              }
-            : {
-                'Content-Type': 'application/json',
-              },
-      );
+      late htp.Response res;
+      if (isPatch) {
+        res = await htp.patch(
+          url,
+          body: json.encode(dataMap),
+          headers: hasAccess
+              ? {
+                  "Authorization": "JWT $accessToken",
+                  'Content-Type': 'application/json'
+                }
+              : {
+                  'Content-Type': 'application/json',
+                },
+        );
+      } else {
+        res = await htp.put(
+          url,
+          body: json.encode(dataMap),
+          headers: hasAccess
+              ? {
+                  "Authorization": "JWT $accessToken",
+                  'Content-Type': 'application/json'
+                }
+              : {
+                  'Content-Type': 'application/json',
+                },
+        );
+      }
       if (res.statusCode == 401) {
         isFinish = false;
         await Auth().checkAndFixAccesToken(true);
       } else {
         isFinish = true;
         print("update $urlPath ${res.statusCode}");
-        // log("update $urlPath ${res.body}");
+        print("update $urlPath ${res.body}");
         if (res.statusCode == 201 || res.statusCode == 200) {
           finalMap = json.decode(utf8.decode(res.bodyBytes));
           // return {

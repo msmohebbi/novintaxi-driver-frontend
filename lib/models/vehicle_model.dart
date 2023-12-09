@@ -16,7 +16,7 @@ class AppVehicle {
         name = newItem["name"],
         coefficient = newItem["coefficient"],
         image = newItem["image"],
-        order = newItem["order"] {}
+        order = newItem["order"];
   Map<String, dynamic> toMap() {
     return {
       "id": id,
