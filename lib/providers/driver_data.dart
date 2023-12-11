@@ -62,7 +62,6 @@ class DriverData with ChangeNotifier {
   initializeisEditRequested() async {
     var prefs = await SharedPreferences.getInstance();
     _isEditRequested = prefs.getBool('isEditRequested') ?? false;
-    print(isEditRequested);
     if (isEditRequested) {
       setDriverFieldsDefaultValue();
     }

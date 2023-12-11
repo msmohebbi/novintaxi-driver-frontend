@@ -175,7 +175,10 @@ class _TransportCompactState extends State<TransportCompact> {
                 borderRadius: BorderRadius.circular(12),
                 child: InkWell(
                     borderRadius: BorderRadius.circular(12),
-                    onTap: () {},
+                    onTap: () {
+                      Provider.of<DriverTransportData>(context, listen: false)
+                          .ignoreTransport(widget.cTransport);
+                    },
                     child: const Padding(
                       padding: EdgeInsets.symmetric(
                           vertical: kToolbarHeight * 0.2,
@@ -190,8 +193,77 @@ class _TransportCompactState extends State<TransportCompact> {
                 child: InkWell(
                     borderRadius: BorderRadius.circular(12),
                     onTap: () {
-                      Provider.of<DriverTransportData>(context, listen: false)
-                          .confirmTransport(widget.cTransport);
+                      showCupertinoDialog(
+                        barrierDismissible: true,
+                        context: context,
+                        builder: (context) {
+                          return Directionality(
+                            textDirection: TextDirection.rtl,
+                            child: CupertinoAlertDialog(
+                              title: const Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    'شما در حال تایید سفر هستید',
+                                    style: TextStyle(
+                                      height: 2,
+                                      fontSize: 13,
+                                      fontFamily: 'IRANYekan',
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  ),
+                                  SizedBox(height: kToolbarHeight * 0.1),
+                                  Text(
+                                    'آیا مطمئن هستید؟',
+                                    style: TextStyle(
+                                      height: 2,
+                                      fontSize: 12,
+                                      fontFamily: 'IRANYekan',
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              actions: [
+                                IconButton(
+                                  onPressed: () async {
+                                    Provider.of<DriverTransportData>(context,
+                                            listen: false)
+                                        .confirmTransport(widget.cTransport);
+                                    if (mounted) {
+                                      Navigator.of(context).pop();
+                                    }
+                                  },
+                                  icon: const Text(
+                                    'تایید سفر',
+                                    style: TextStyle(
+                                      color: Colors.teal,
+                                      height: 2,
+                                      fontSize: 13,
+                                      fontFamily: 'IRANYekan',
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  ),
+                                ),
+                                IconButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  icon: const Text(
+                                    'بیخیال',
+                                    style: TextStyle(
+                                      height: 2,
+                                      fontSize: 13,
+                                      fontFamily: 'IRANYekan',
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      );
                     },
                     child: Provider.of<DriverTransportData>(context)
                                 .isConfirmingId ==

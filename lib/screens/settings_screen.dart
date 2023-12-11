@@ -6,6 +6,7 @@ import 'package:transportationdriver/screens/license_view_screen.dart';
 import 'package:transportationdriver/screens/profile_view_screen.dart';
 import 'package:transportationdriver/screens/revenue_screen.dart';
 import 'package:transportationdriver/screens/vehicle_view_screen.dart';
+import 'package:transportationdriver/widgets/about_dialog.dart';
 
 import '../providers/settings_data.dart';
 
@@ -394,7 +395,29 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 Material(
                   color: Theme.of(context).hintColor.withAlpha(50),
                   child: InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      showCupertinoDialog(
+                        barrierDismissible: true,
+                        context: context,
+                        builder: (context) {
+                          return const Directionality(
+                            textDirection: TextDirection.rtl,
+                            child: CupertinoAlertDialog(
+                              content: AppAboutDialog(),
+                              title: Text(
+                                'درباره ما',
+                                style: TextStyle(
+                                  height: 2,
+                                  fontSize: 13,
+                                  fontFamily: 'IRANYekan',
+                                  fontWeight: FontWeight.normal,
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    },
                     child: const Padding(
                       padding: EdgeInsets.symmetric(
                         vertical: kToolbarHeight * 0.3,

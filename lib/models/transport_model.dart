@@ -135,7 +135,8 @@ class AppTransport {
         back = newOrder["back"],
         type = newOrder["type"],
         price = newOrder["price"],
-        commision = newOrder["commision"],
+        // TODO
+        commision = newOrder["commision"] ?? 0,
         time = newOrder["time"],
         meter = newOrder["meter"],
         adult = newOrder["adult"],

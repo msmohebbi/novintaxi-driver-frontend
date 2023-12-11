@@ -41,7 +41,6 @@ class AppAPI {
       currentTries += 1;
       var hasAccess = await checkAccess();
       var accessToken = prefs.getString("access");
-      // print(accessToken);
       var res = await htp.get(
         url,
         headers: hasAccess ? {"Authorization": "JWT $accessToken"} : {},
@@ -80,8 +79,8 @@ class AppAPI {
         url,
         headers: hasAccess ? {"Authorization": "JWT $accessToken"} : {},
       );
-      print(url.toString());
-      print("get  $urlPath  ${res.statusCode}");
+      // print(url.toString());
+      log("get  $urlPath  ${res.statusCode}");
 
       if (res.statusCode == 401) {
         isFinish = false;
@@ -152,13 +151,13 @@ class AppAPI {
                 }
               : {},
         );
-        print(utf8.decode(response.bodyBytes));
+        // log(utf8.decode(response.bodyBytes));
         if (response.statusCode == 401) {
           isFinish = false;
           await Auth().checkAndFixAccesToken(true);
         } else {
           isFinish = true;
-          print("create $urlPath ${response.statusCode}");
+          log("create $urlPath ${response.statusCode}");
           if (response.statusCode == 201) {
             return json.decode((utf8.decode(response.bodyBytes)));
           }
@@ -192,7 +191,7 @@ class AppAPI {
           isFinish = true;
           var response = await htp.Response.fromStream(res);
           // log(utf8.decode(response.bodyBytes));
-          print("create $urlPath ${res.statusCode}");
+          log("create $urlPath ${res.statusCode}");
           if (res.statusCode == 201) {
             return json.decode((utf8.decode(response.bodyBytes)));
           }
@@ -211,7 +210,6 @@ class AppAPI {
   ) async {
     var prefs = await SharedPreferences.getInstance();
     Uri url = Uri.parse("$_baseUrl/$urlPath/${id != null ? '$id/' : ''}");
-    print(url);
     bool isFinish = false;
     int maxTry = 2;
     int currentTries = 0;
@@ -253,8 +251,8 @@ class AppAPI {
         await Auth().checkAndFixAccesToken(true);
       } else {
         isFinish = true;
-        print("update $urlPath ${res.statusCode}");
-        print("update $urlPath ${res.body}");
+        log("update $urlPath ${res.statusCode}");
+        // log("update $urlPath ${res.body}");
         if (res.statusCode == 201 || res.statusCode == 200) {
           finalMap = json.decode(utf8.decode(res.bodyBytes));
           // return {
@@ -268,7 +266,6 @@ class AppAPI {
       }
 
       if (filesMap != null) {
-        print(filesMap);
         var request = htp.MultipartRequest('PATCH', url)
           ..headers.addAll(
             hasAccess
@@ -295,7 +292,7 @@ class AppAPI {
           await Auth().checkAndFixAccesToken(true);
         } else {
           isFinish = true;
-          print("patch update file $urlPath ${res.statusCode}");
+          log("patch update file $urlPath ${res.statusCode}");
           if (resFile.statusCode == 201) {
             var response = await htp.Response.fromStream(resFile);
             return {
