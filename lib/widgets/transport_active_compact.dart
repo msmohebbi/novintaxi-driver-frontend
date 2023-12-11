@@ -290,7 +290,7 @@ class _TransportActiveCompactState extends State<TransportActiveCompact> {
             padding: const EdgeInsets.symmetric(
               vertical: kToolbarHeight * 0.2,
             ),
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
                 // color: Theme.of(context).colorScheme.primary.withAlpha(50),
                 ),
             child: Column(

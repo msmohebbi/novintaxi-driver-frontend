@@ -10,11 +10,14 @@ class SelectImage extends StatefulWidget {
   final File? selectedImage;
   final String? currentImageUrl;
 
+  final bool isReadOnly;
+
   const SelectImage({
     super.key,
     required this.onSelectImage,
     this.currentImageUrl,
     this.selectedImage,
+    this.isReadOnly = false,
   });
 
   @override
@@ -61,96 +64,102 @@ class _SelectImageState extends State<SelectImage> {
           ),
           const SizedBox(height: kToolbarHeight * 0.2),
         ],
-        const SizedBox(height: kToolbarHeight * 0.2),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: kToolbarHeight * 0.2),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Material(
-                borderRadius: BorderRadius.circular(12),
-                child: InkWell(
+        if (!widget.isReadOnly) ...[
+          const SizedBox(height: kToolbarHeight * 0.2),
+          Padding(
+            padding:
+                const EdgeInsets.symmetric(horizontal: kToolbarHeight * 0.2),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Material(
                   borderRadius: BorderRadius.circular(12),
-                  onTap: () async {
-                    var pickedFile = await ImagePicker().pickImage(
-                      source: ImageSource.gallery,
-                      imageQuality: 50,
-                    );
-                    if (pickedFile != null) {
-                      setState(() {
-                        tempFile = File(pickedFile.path);
-                      });
-                      widget.onSelectImage(tempFile!);
-                    }
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: kToolbarHeight * 0.4,
-                      vertical: kToolbarHeight * 0.2,
-                    ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(
-                        color: Theme.of(context).hintColor.withAlpha(60),
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(12),
+                    onTap: () async {
+                      if (widget.isReadOnly) {
+                        return;
+                      }
+                      var pickedFile = await ImagePicker().pickImage(
+                        source: ImageSource.gallery,
+                        imageQuality: 50,
+                      );
+                      if (pickedFile != null) {
+                        setState(() {
+                          tempFile = File(pickedFile.path);
+                        });
+                        widget.onSelectImage(tempFile!);
+                      }
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: kToolbarHeight * 0.4,
+                        vertical: kToolbarHeight * 0.2,
                       ),
-                    ),
-                    child: const Row(
-                      children: [
-                        Text(
-                          'انتخاب از گالری',
-                          style: TextStyle(
-                            fontSize: 13,
-                          ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: Theme.of(context).hintColor.withAlpha(60),
                         ),
-                      ],
+                      ),
+                      child: const Row(
+                        children: [
+                          Text(
+                            'انتخاب از گالری',
+                            style: TextStyle(
+                              fontSize: 13,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(width: kToolbarHeight * 0.3),
-              Material(
-                borderRadius: BorderRadius.circular(12),
-                child: InkWell(
+                const SizedBox(width: kToolbarHeight * 0.3),
+                Material(
                   borderRadius: BorderRadius.circular(12),
-                  onTap: () async {
-                    var pickedFile = await ImagePicker().pickImage(
-                      source: ImageSource.camera,
-                      imageQuality: 50,
-                    );
-                    if (pickedFile != null) {
-                      setState(() {
-                        tempFile = File(pickedFile.path);
-                      });
-                      widget.onSelectImage(tempFile!);
-                    }
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: kToolbarHeight * 0.4,
-                      vertical: kToolbarHeight * 0.2,
-                    ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(
-                        color: Theme.of(context).hintColor.withAlpha(60),
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(12),
+                    onTap: () async {
+                      var pickedFile = await ImagePicker().pickImage(
+                        source: ImageSource.camera,
+                        imageQuality: 50,
+                      );
+                      if (pickedFile != null) {
+                        setState(() {
+                          tempFile = File(pickedFile.path);
+                        });
+                        widget.onSelectImage(tempFile!);
+                      }
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: kToolbarHeight * 0.4,
+                        vertical: kToolbarHeight * 0.2,
                       ),
-                    ),
-                    child: const Row(
-                      children: [
-                        Text(
-                          'عکس گرفتن',
-                          style: TextStyle(
-                            fontSize: 13,
-                          ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: Theme.of(context).hintColor.withAlpha(60),
                         ),
-                      ],
+                      ),
+                      child: const Row(
+                        children: [
+                          Text(
+                            'عکس گرفتن',
+                            style: TextStyle(
+                              fontSize: 13,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
+        ],
       ],
     );
   }

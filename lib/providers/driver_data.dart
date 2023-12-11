@@ -64,18 +64,23 @@ class DriverData with ChangeNotifier {
     _isEditRequested = prefs.getBool('isEditRequested') ?? false;
     print(isEditRequested);
     if (isEditRequested) {
-      nameController.text = cDriver?.name ?? '';
-      _selectedSexualTypes = cDriver?.gender;
-      addressController.text = cDriverProfile?.address ?? '';
-      postalController.text = cDriverProfile?.postalCode ?? '';
-      melliCodeController.text = cDriver?.nationalId ?? '';
-      govahiCodeController.text = cDriverProfile?.carLicenseId ?? '';
-      _govahiExpDate = cDriverProfile?.carLicenseExpireDate;
-      vehicleModel.text = cDriverVehicle?.vehicleName ?? '';
-      vehicleColor.text = cDriverVehicle?.vehicleColor ?? '';
-      vehiclePelak.text = cDriverVehicle?.vehicleLicense ?? '';
-      vehicleCartBackNo.text = cDriverVehicle?.vin ?? '';
+      setDriverFieldsDefaultValue();
     }
+    notifyListeners();
+  }
+
+  setDriverFieldsDefaultValue() {
+    nameController.text = cDriver?.name ?? '';
+    _selectedSexualTypes = cDriver?.gender;
+    addressController.text = cDriverProfile?.address ?? '';
+    postalController.text = cDriverProfile?.postalCode ?? '';
+    melliCodeController.text = cDriver?.nationalId ?? '';
+    govahiCodeController.text = cDriverProfile?.carLicenseId ?? '';
+    _govahiExpDate = cDriverProfile?.carLicenseExpireDate;
+    vehicleModel.text = cDriverVehicle?.vehicleName ?? '';
+    vehicleColor.text = cDriverVehicle?.vehicleColor ?? '';
+    vehiclePelak.text = cDriverVehicle?.vehicleLicense ?? '';
+    vehicleCartBackNo.text = cDriverVehicle?.vin ?? '';
     notifyListeners();
   }
 

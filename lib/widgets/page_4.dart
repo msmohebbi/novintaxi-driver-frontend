@@ -5,8 +5,12 @@ import 'package:transportationdriver/providers/driver_data.dart';
 import 'package:transportationdriver/widgets/select_image.dart';
 
 class Page4 extends StatefulWidget {
-  const Page4({super.key});
+  final bool isScreen;
 
+  const Page4({
+    super.key,
+    this.isScreen = false,
+  });
   @override
   State<Page4> createState() => _Page4State();
 }
@@ -19,23 +23,25 @@ class _Page4State extends State<Page4> {
     return SingleChildScrollView(
       child: Column(
         children: [
-          const SizedBox(height: kToolbarHeight * 0.2),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: kToolbarHeight * 0.5,
-                  vertical: kToolbarHeight * 0.2,
+          if (!widget.isScreen) ...[
+            const SizedBox(height: kToolbarHeight * 0.2),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: kToolbarHeight * 0.5,
+                    vertical: kToolbarHeight * 0.2,
+                  ),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                  child: const Text('فرم مشخصات خودرو'),
                 ),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-                child: const Text('فرم مشخصات خودرو'),
-              ),
-            ],
-          ),
+              ],
+            ),
+          ],
           const SizedBox(height: kToolbarHeight * 0.2),
           Container(
             margin: const EdgeInsets.all(kToolbarHeight * 0.2),
@@ -70,6 +76,7 @@ class _Page4State extends State<Page4> {
                   margin: const EdgeInsets.symmetric(
                       horizontal: kToolbarHeight * 0.4),
                   child: TextFormField(
+                    readOnly: widget.isScreen,
                     controller:
                         Provider.of<DriverData>(context).vehicleCartBackNo,
                     textInputAction: TextInputAction.next,
@@ -132,6 +139,7 @@ class _Page4State extends State<Page4> {
                       ?.vehicleCardImageFront,
                   selectedImage:
                       Provider.of<DriverData>(context).vehicleCartFrontImage,
+                  isReadOnly: widget.isScreen,
                 ),
                 const SizedBox(height: kToolbarHeight * 0.2),
                 if (isNextPressed &&
@@ -177,6 +185,7 @@ class _Page4State extends State<Page4> {
                       ?.vehicleCardImageBack,
                   selectedImage:
                       Provider.of<DriverData>(context).vehicleCartBackImage,
+                  isReadOnly: widget.isScreen,
                 ),
                 const SizedBox(height: kToolbarHeight * 0.2),
                 if (isNextPressed &&
@@ -230,12 +239,15 @@ class _Page4State extends State<Page4> {
                       .cDriverVehicle
                       ?.vehicleImageFront,
                   selectedImage: Provider.of<DriverData>(context).vehicleImage1,
+                  isReadOnly: widget.isScreen,
                 ),
                 const SizedBox(height: kToolbarHeight * 0.2),
                 if (isNextPressed &&
-                    Provider.of<DriverData>(context).vehicleImage1 == null&&  Provider.of<DriverData>(context)
-                      .cDriverVehicle
-                      ?.vehicleImageFront==null) ...[
+                    Provider.of<DriverData>(context).vehicleImage1 == null &&
+                    Provider.of<DriverData>(context)
+                            .cDriverVehicle
+                            ?.vehicleImageFront ==
+                        null) ...[
                   Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: kToolbarHeight * 0.4),
@@ -267,12 +279,15 @@ class _Page4State extends State<Page4> {
                       .cDriverVehicle
                       ?.vehicleImageBack,
                   selectedImage: Provider.of<DriverData>(context).vehicleImage2,
+                  isReadOnly: widget.isScreen,
                 ),
                 const SizedBox(height: kToolbarHeight * 0.2),
                 if (isNextPressed &&
-                    Provider.of<DriverData>(context).vehicleImage2 == null&&  Provider.of<DriverData>(context)
-                      .cDriverVehicle
-                      ?.vehicleImageBack==null) ...[
+                    Provider.of<DriverData>(context).vehicleImage2 == null &&
+                    Provider.of<DriverData>(context)
+                            .cDriverVehicle
+                            ?.vehicleImageBack ==
+                        null) ...[
                   Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: kToolbarHeight * 0.4),
@@ -304,12 +319,15 @@ class _Page4State extends State<Page4> {
                       .cDriverVehicle
                       ?.vehicleImageIn,
                   selectedImage: Provider.of<DriverData>(context).vehicleImage3,
+                  isReadOnly: widget.isScreen,
                 ),
                 const SizedBox(height: kToolbarHeight * 0.2),
                 if (isNextPressed &&
-                    Provider.of<DriverData>(context).vehicleImage3 == null&&  Provider.of<DriverData>(context)
-                      .cDriverVehicle
-                      ?.vehicleImageIn==null) ...[
+                    Provider.of<DriverData>(context).vehicleImage3 == null &&
+                    Provider.of<DriverData>(context)
+                            .cDriverVehicle
+                            ?.vehicleImageIn ==
+                        null) ...[
                   Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: kToolbarHeight * 0.4),
@@ -322,6 +340,8 @@ class _Page4State extends State<Page4> {
                     ),
                   ),
                 ],
+          if (!widget.isScreen) ...[
+
                 const SizedBox(height: kToolbarHeight),
                 Padding(
                   padding: const EdgeInsets.symmetric(
@@ -371,36 +391,26 @@ class _Page4State extends State<Page4> {
                                       .text
                                       .trim()
                                       .isEmpty ||
-                                 ( Provider.of<DriverData>(context,
-                                              listen: false)
-                                          .vehicleCartFrontImage ==
-                                      null&&  Provider.of<DriverData>(context,listen: false)
-                      .cDriverVehicle
-                      ?.vehicleCardImageFront==null) ||
-                                  (Provider.of<DriverData>(context,
-                                              listen: false)
-                                          .vehicleCartBackImage ==
-                                      null&&  Provider.of<DriverData>(context,listen: false)
-                      .cDriverVehicle
-                      ?.vehicleCardImageBack==null) ||
-                                 ( Provider.of<DriverData>(context,
-                                              listen: false)
-                                          .vehicleImage1 ==
-                                      null&&  Provider.of<DriverData>(context,listen: false)
-                      .cDriverVehicle
-                      ?.vehicleImageFront==null) ||
-                                  (Provider.of<DriverData>(context,
-                                              listen: false)
-                                          .vehicleImage2 ==
-                                      null&&  Provider.of<DriverData>(context,listen: false)
-                      .cDriverVehicle
-                      ?.vehicleImageBack==null) ||
-                                (  Provider.of<DriverData>(context,
-                                              listen: false)
-                                          .vehicleImage3 ==
-                                      null&&  Provider.of<DriverData>(context,listen: false)
-                      .cDriverVehicle
-                      ?.vehicleImageIn==null)) {
+                                  (Provider.of<DriverData>(context, listen: false).vehicleCartFrontImage == null &&
+                                      Provider.of<DriverData>(context, listen: false)
+                                              .cDriverVehicle
+                                              ?.vehicleCardImageFront ==
+                                          null) ||
+                                  (Provider.of<DriverData>(context, listen: false).vehicleCartBackImage == null &&
+                                      Provider.of<DriverData>(context, listen: false)
+                                              .cDriverVehicle
+                                              ?.vehicleCardImageBack ==
+                                          null) ||
+                                  (Provider.of<DriverData>(context, listen: false).vehicleImage1 == null &&
+                                      Provider.of<DriverData>(context, listen: false)
+                                              .cDriverVehicle
+                                              ?.vehicleImageFront ==
+                                          null) ||
+                                  (Provider.of<DriverData>(context, listen: false).vehicleImage2 == null &&
+                                      Provider.of<DriverData>(context, listen: false).cDriverVehicle?.vehicleImageBack ==
+                                          null) ||
+                                  (Provider.of<DriverData>(context, listen: false).vehicleImage3 == null &&
+                                      Provider.of<DriverData>(context, listen: false).cDriverVehicle?.vehicleImageIn == null)) {
                                 return;
                               }
                               await Provider.of<DriverData>(context,
@@ -430,7 +440,7 @@ class _Page4State extends State<Page4> {
                       ),
                     ],
                   ),
-                ),
+                ),],
                 const SizedBox(height: kToolbarHeight * 0.5),
               ],
             ),

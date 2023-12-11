@@ -2,6 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:transportationdriver/providers/auth_data.dart';
+import 'package:transportationdriver/screens/license_view_screen.dart';
+import 'package:transportationdriver/screens/profile_view_screen.dart';
+import 'package:transportationdriver/screens/vehicle_view_screen.dart';
 
 import '../providers/settings_data.dart';
 
@@ -119,7 +122,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       topLeft: Radius.circular(12),
                       topRight: Radius.circular(12),
                     ),
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.of(context)
+                          .pushNamed(ProfileViewScreen.routeName);
+                    },
                     child: const Padding(
                       padding: EdgeInsets.symmetric(
                         vertical: kToolbarHeight * 0.3,
@@ -142,7 +148,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 Material(
                   color: Theme.of(context).colorScheme.primary.withAlpha(50),
                   child: InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.of(context)
+                          .pushNamed(VehicleViewScreen.routeName);
+                    },
                     child: const Padding(
                       padding: EdgeInsets.symmetric(
                         vertical: kToolbarHeight * 0.3,
@@ -173,7 +182,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       bottomLeft: Radius.circular(12),
                       bottomRight: Radius.circular(12),
                     ),
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.of(context)
+                          .pushNamed(LicenseViewScreen.routeName);
+                    },
                     child: const Padding(
                       padding: EdgeInsets.symmetric(
                         vertical: kToolbarHeight * 0.3,

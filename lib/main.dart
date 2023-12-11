@@ -17,8 +17,11 @@ import 'package:transportationdriver/providers/message_data.dart';
 import 'package:transportationdriver/screens/chat_screen.dart';
 import 'package:transportationdriver/screens/driver_profile_screen.dart';
 import 'package:transportationdriver/screens/faq_screen.dart';
+import 'package:transportationdriver/screens/license_view_screen.dart';
 import 'package:transportationdriver/screens/loading_screen.dart';
 import 'package:transportationdriver/screens/main_screen.dart';
+import 'package:transportationdriver/screens/profile_view_screen.dart';
+import 'package:transportationdriver/screens/vehicle_view_screen.dart';
 import 'screens/auth/auth_screen.dart';
 import 'screens/search_driver_screen.dart';
 import 'package:url_strategy/url_strategy.dart';
@@ -163,6 +166,15 @@ class MyMaterial extends StatelessWidget {
         "/search": (ctx) => checkAuth(const SearchDriverScreen()),
         "/faqs": (ctx) => checkAuth(const FAQScreen()),
         "/support": (ctx) => checkAuth(const ChatScreen()),
+        ProfileViewScreen.routeName: (ctx) => checkAuth(
+              const ProfileViewScreen(),
+            ),
+        VehicleViewScreen.routeName: (ctx) => checkAuth(
+              const VehicleViewScreen(),
+            ),
+        LicenseViewScreen.routeName: (ctx) => checkAuth(
+              const LicenseViewScreen(),
+            ),
       },
       // onGenerateRoute: (route) {},
       home: Provider.of<AuthData>(context).accessToken != ""
