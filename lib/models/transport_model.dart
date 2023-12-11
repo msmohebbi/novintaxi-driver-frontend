@@ -10,6 +10,7 @@ class AppTransport {
     required this.back,
     required this.type,
     required this.price,
+    required this.commision,
     required this.time,
     required this.meter,
     required this.adult,
@@ -19,6 +20,7 @@ class AppTransport {
     required this.vehicle,
     required this.dateSchedule,
     required this.detail,
+    required this.geometery,
     required this.date,
     required this.followingCode,
     required this.passengerName,
@@ -41,6 +43,7 @@ class AppTransport {
   }
 
   int price;
+  int commision;
   double time;
   double meter;
   String get meterKMString {
@@ -69,6 +72,7 @@ class AppTransport {
   bool invoice;
   bool isCanceled;
   String? detail;
+  String? geometery;
   int? dateSchedule;
   List<AppTransportOD>? ods;
 
@@ -104,6 +108,7 @@ class AppTransport {
       "back": back,
       "type": type,
       "price": price,
+      "commision": commision,
       "time": time,
       "meter": meter,
       "adult": adult,
@@ -130,6 +135,7 @@ class AppTransport {
         back = newOrder["back"],
         type = newOrder["type"],
         price = newOrder["price"],
+        commision = newOrder["commision"],
         time = newOrder["time"],
         meter = newOrder["meter"],
         adult = newOrder["adult"],
@@ -139,6 +145,7 @@ class AppTransport {
         vehicle = newOrder["vehicle"],
         dateSchedule = newOrder["date_schedule"],
         detail = newOrder["detail"],
+        geometery = newOrder["geometery"],
         date = newOrder["date"],
         status = newOrder["status"],
         animal = newOrder["animal"],

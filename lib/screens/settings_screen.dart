@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:transportationdriver/providers/auth_data.dart';
 import 'package:transportationdriver/screens/license_view_screen.dart';
 import 'package:transportationdriver/screens/profile_view_screen.dart';
+import 'package:transportationdriver/screens/revenue_screen.dart';
 import 'package:transportationdriver/screens/vehicle_view_screen.dart';
 
 import '../providers/settings_data.dart';
@@ -67,7 +68,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
             borderRadius: BorderRadius.circular(12),
             child: InkWell(
               borderRadius: BorderRadius.circular(12),
-              onTap: () {},
+              onTap: () {
+                Navigator.of(context).pushNamed(RevenueScreen.routeName);
+              },
               child: Container(
                 alignment: Alignment.center,
                 decoration: BoxDecoration(

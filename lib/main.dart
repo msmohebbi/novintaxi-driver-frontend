@@ -21,6 +21,7 @@ import 'package:transportationdriver/screens/license_view_screen.dart';
 import 'package:transportationdriver/screens/loading_screen.dart';
 import 'package:transportationdriver/screens/main_screen.dart';
 import 'package:transportationdriver/screens/profile_view_screen.dart';
+import 'package:transportationdriver/screens/revenue_screen.dart';
 import 'package:transportationdriver/screens/vehicle_view_screen.dart';
 import 'screens/auth/auth_screen.dart';
 import 'screens/search_driver_screen.dart';
@@ -174,6 +175,9 @@ class MyMaterial extends StatelessWidget {
             ),
         LicenseViewScreen.routeName: (ctx) => checkAuth(
               const LicenseViewScreen(),
+            ),
+        RevenueScreen.routeName: (ctx) => checkAuth(
+              const RevenueScreen(),
             ),
       },
       // onGenerateRoute: (route) {},
