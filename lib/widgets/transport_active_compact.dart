@@ -341,7 +341,7 @@ class _TransportActiveCompactState extends State<TransportActiveCompact> {
                       onTap: () {
                         launchUrl(
                           Uri.parse(
-                              "tel://${widget.cDriverTransport.transport.passengerPhone}"),
+                              "tel:${widget.cDriverTransport.transport.passengerPhone}"),
                         );
                       },
                       child: Container(
@@ -379,7 +379,7 @@ class _TransportActiveCompactState extends State<TransportActiveCompact> {
                       onTap: () {
                         launchUrl(
                           Uri.parse(
-                              "sms://${widget.cDriverTransport.transport.passengerPhone}"),
+                              "sms:${widget.cDriverTransport.transport.passengerPhone}"),
                         );
                       },
                       child: Container(

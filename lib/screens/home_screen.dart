@@ -111,11 +111,30 @@ class HomeScreenState extends State<HomeScreen> {
               const SizedBox(height: kToolbarHeight * 0.2),
               if (Provider.of<DriverData>(context).cDriver?.isAvailable ==
                   true) ...[
-                ...Provider.of<DriverTransportData>(context).allTransports.map(
-                  (e) {
-                    return TransportCompact(cTransport: e);
-                  },
-                ),
+                if (Provider.of<DriverTransportData>(context)
+                    .allTransports
+                    .isEmpty) ...[
+                  SizedBox(
+                    height:
+                        MediaQuery.of(context).size.height - kToolbarHeight * 4,
+                    child: const Center(
+                      child: Text(
+                        'در حال حاضر سفری برای شما درخواست نشده است!',
+                        style: TextStyle(
+                          fontSize: 12,
+                        ),
+                      ),
+                    ),
+                  )
+                ] else ...[
+                  ...Provider.of<DriverTransportData>(context)
+                      .allTransports
+                      .map(
+                    (e) {
+                      return TransportCompact(cTransport: e);
+                    },
+                  ),
+                ]
               ] else ...[
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.5,

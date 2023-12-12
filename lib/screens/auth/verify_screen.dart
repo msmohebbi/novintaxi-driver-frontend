@@ -139,9 +139,23 @@ class VerifyScreenState extends State<VerifyScreen> {
         if (loginData.toString().contains("No active account")) {
           errorString = "کد تایید اشتباه است";
         }
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(errorString),
+              backgroundColor: Theme.of(context).colorScheme.error,
+            ),
+          );
+          setState(() {
+            isVerifing = false;
+          });
+        }
+      }
+    } catch (_) {
+      if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(errorString),
+            content: const Text("از اتصال دستگاه خود به اینترنت مطمئن شوید"),
             backgroundColor: Theme.of(context).colorScheme.error,
           ),
         );
@@ -149,16 +163,6 @@ class VerifyScreenState extends State<VerifyScreen> {
           isVerifing = false;
         });
       }
-    } catch (_) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Text("از اتصال دستگاه خود به اینترنت مطمئن شوید"),
-          backgroundColor: Theme.of(context).colorScheme.error,
-        ),
-      );
-      setState(() {
-        isVerifing = false;
-      });
     }
   }
 

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:transportationdriver/backend/api.dart';
@@ -9,6 +11,17 @@ class DriverTransportData with ChangeNotifier {
   DriverTransportData() {
     initializeDriverTransportData();
     notifyListeners();
+    _timer = Timer.periodic(const Duration(seconds: 30), (timer) {
+      if (activedriverTransports.isNotEmpty) {
+        getDriverTransports();
+      }
+      getTransports();
+    });
+  }
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
   }
 
   Future<void> initializeDriverTransportData() async {
@@ -16,6 +29,7 @@ class DriverTransportData with ChangeNotifier {
     await getIgnoredTransports();
     await getTransports();
     _isInitialized = true;
+    notifyListeners();
   }
 
   clearDriverTransportData() {
@@ -24,6 +38,18 @@ class DriverTransportData with ChangeNotifier {
     _driverTransports = [];
     _ignoredTransports = [];
   }
+
+  Future<bool> ensureInitialize() async {
+    while (true) {
+      if (isInitialized) {
+        return true;
+      } else {
+        await Future.delayed(const Duration(milliseconds: 300));
+      }
+    }
+  }
+
+  Timer? _timer;
 
   bool _isInitialized = false;
   bool get isInitialized => _isInitialized;
@@ -103,9 +129,10 @@ class DriverTransportData with ChangeNotifier {
     }
     _isUpdating = true;
     notifyListeners();
-    if (cDriverTransport.statusId < 3) {
+    if (cDriverTransport.statusId < 4 && cDriverTransport.statusId > 0) {
       String? cEndPoint;
       var endpointList = [
+        '',
         'arrive',
         'start',
         'end',

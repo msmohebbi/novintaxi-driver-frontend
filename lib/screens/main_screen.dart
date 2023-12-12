@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:transportationdriver/providers/driver_transport_data.dart';
 import 'package:transportationdriver/providers/notification_data.dart';
 import 'package:transportationdriver/screens/history_screen.dart';
 
@@ -21,6 +22,17 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
+    Provider.of<DriverTransportData>(context, listen: false)
+        .ensureInitialize()
+        .then((value) {
+      if (mounted) {
+        if (Provider.of<DriverTransportData>(context, listen: false)
+            .activedriverTransports
+            .isNotEmpty) {
+          Provider.of<SettingData>(context, listen: false).setbnbIndex(1);
+        }
+      }
+    });
     super.initState();
   }
 

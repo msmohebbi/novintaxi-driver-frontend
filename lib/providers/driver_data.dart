@@ -49,6 +49,16 @@ class DriverData with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<bool> ensureInitialize() async {
+    while (true) {
+      if (isInitialized) {
+        return true;
+      } else {
+        await Future.delayed(const Duration(milliseconds: 300));
+      }
+    }
+  }
+
   bool _isInitialized = false;
   bool get isInitialized => _isInitialized;
 
