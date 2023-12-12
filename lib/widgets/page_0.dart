@@ -1,6 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:transportationdriver/providers/auth_data.dart';
 import 'package:transportationdriver/providers/driver_data.dart';
 import 'package:transportationdriver/widgets/select_image.dart';
 
@@ -407,24 +409,71 @@ class _Page0State extends State<Page0> {
                     child: Row(
                       children: [
                         Expanded(
-                          flex: 2,
+                          flex: 3,
                           child: Material(
-                            color: Theme.of(context).cardColor,
+                            color: Theme.of(context).colorScheme.error,
                             borderRadius: BorderRadius.circular(12),
                             child: InkWell(
                               borderRadius: BorderRadius.circular(12),
                               onTap: () async {
-                                Provider.of<DriverData>(context, listen: false)
-                                    .setpageIndex(0);
+                                showCupertinoDialog(
+                                  barrierDismissible: true,
+                                  context: context,
+                                  builder: (context) {
+                                    return Directionality(
+                                      textDirection: TextDirection.rtl,
+                                      child: CupertinoAlertDialog(
+                                        title: const Text(
+                                          'شما درحال خروج از حساب کاربری خود هستید، \n آیا مطمئن هستید',
+                                          style: TextStyle(
+                                            height: 2,
+                                            fontSize: 13,
+                                            fontFamily: 'IRANYekan',
+                                            fontWeight: FontWeight.normal,
+                                          ),
+                                        ),
+                                        actions: [
+                                          IconButton(
+                                            onPressed: () async {
+                                              await Provider.of<AuthData>(
+                                                      context,
+                                                      listen: false)
+                                                  .signOut();
+
+                                              if (mounted) {
+                                                Navigator.of(context).pop();
+                                              }
+                                            },
+                                            icon: Icon(
+                                              Icons.check,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .error,
+                                            ),
+                                          ),
+                                          IconButton(
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            icon: const Icon(
+                                              Icons.close,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                );
                               },
                               child: Container(
                                 alignment: Alignment.center,
                                 height: kTextTabBarHeight * 1.1,
                                 child: Text(
-                                  "بازگشت",
+                                  "خروج از حساب کاربری",
                                   style: TextStyle(
-                                    color:
-                                        Theme.of(context).colorScheme.onPrimary,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .background,
                                   ),
                                 ),
                               ),

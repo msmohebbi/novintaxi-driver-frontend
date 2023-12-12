@@ -2,7 +2,6 @@
 
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_map_animations/flutter_map_animations.dart';
@@ -12,8 +11,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:transportationdriver/models/location_model.dart';
 import 'package:transportationdriver/models/transport_model.dart';
-
-import '../widgets/app_drawer.dart';
 
 class OpenMapsScreen extends StatefulWidget {
   final AppTransport cTransport;
@@ -47,7 +44,6 @@ class OpenMapsScreenState extends State<OpenMapsScreen>
         await checkZoom(
           [originLocation!.latLng, targetLocation!.latLng],
         );
-        log(widget.cTransport.geometery ?? 'no geo');
         if (widget.cTransport.geometery != null) {
           await Future.delayed(const Duration(milliseconds: 200));
 
@@ -65,14 +61,6 @@ class OpenMapsScreenState extends State<OpenMapsScreen>
               ),
             );
           });
-          print("-------------------");
-          log('message');
-          log(polyLines.toString());
-          log('message');
-          print("-------------------");
-          setState(
-            () {},
-          );
         }
       },
     );
@@ -166,140 +154,155 @@ class OpenMapsScreenState extends State<OpenMapsScreen>
       textDirection: TextDirection.rtl,
       child: SafeArea(
         child: Scaffold(
-          drawer: const AppDrawer(),
-          body: Builder(builder: (context) {
-            return Stack(
-              alignment: Alignment.center,
-              children: [
-                FlutterMap(
-                  mapController: mapController.mapController,
-                  options: MapOptions(
-                    minZoom: 6,
-                    maxZoom: 18,
-                    initialCenter: kStartPoint.center!,
-                    initialZoom: kStartPoint.zoom!,
-                    onTap: (newTap, newLatLng) async {},
-                  ),
-                  children: [
-                    TileLayer(
-                      // attributionAlignment: Alignment.bottomCenter,
-                      urlTemplate:
-                          'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                      tileBuilder: (context, tileWidget, tile) {
-                        return tileWidget;
-                      },
-                    ),
-                    PolylineLayer(
-                      polylines: polyLines,
-                    ),
-                    MarkerLayer(
-                      markers: [
-                        if (originLocation != null) ...[
-                          Marker(
-                            alignment: Alignment.topCenter,
-                            height: kToolbarHeight,
-                            width: kToolbarHeight,
-                            point: originLocation!.latLng,
-                            child: Stack(
-                              children: [
-                                Icon(
-                                  CupertinoIcons.bubble_middle_bottom_fill,
-                                  size: kToolbarHeight,
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .primary
-                                      .withAlpha(180),
-                                ),
-                                const Positioned.fill(
-                                  child: Align(
-                                    alignment: Alignment.center,
-                                    child: FittedBox(
-                                      child: Padding(
-                                        padding: EdgeInsets.only(
-                                          bottom: kToolbarHeight * 0.2,
-                                        ),
-                                        child: Text('مبدا'),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          )
-                        ],
-                        if (targetLocation != null) ...[
-                          Marker(
-                            height: kToolbarHeight,
-                            width: kToolbarHeight,
-                            point: targetLocation!.latLng,
-                            alignment: Alignment.topCenter,
-                            child: Stack(
-                              children: [
-                                Icon(
-                                  CupertinoIcons.bubble_middle_bottom_fill,
-                                  size: kToolbarHeight,
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .primary
-                                      .withAlpha(180),
-                                ),
-                                const Positioned.fill(
-                                  child: Align(
-                                    alignment: Alignment.center,
-                                    child: FittedBox(
-                                      child: Padding(
-                                        padding: EdgeInsets.only(
-                                          bottom: kToolbarHeight * 0.2,
-                                        ),
-                                        child: Text('مقصد'),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                        if (currentLatLng != null) ...[
-                          Marker(
-                            height: kToolbarHeight,
-                            width: kToolbarHeight,
-                            point: currentLatLng!,
-                            alignment: Alignment.topCenter,
-                            child: const Stack(
-                              children: [
-                                Icon(
-                                  CupertinoIcons.bubble_middle_bottom_fill,
-                                  size: kToolbarHeight,
-                                  color: Colors.teal,
-                                ),
-                                Positioned.fill(
-                                  child: Align(
-                                    alignment: Alignment.center,
-                                    child: FittedBox(
-                                      child: Padding(
-                                        padding: EdgeInsets.only(
-                                          bottom: kToolbarHeight * 0.2,
-                                        ),
-                                        child: Icon(
-                                          CupertinoIcons.car_detailed,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ],
-                    ),
-                  ],
+          appBar: AppBar(
+            backgroundColor: Theme.of(context).colorScheme.background,
+            elevation: 2,
+            shadowColor: Theme.of(context).hintColor.withAlpha(100),
+            centerTitle: true,
+            leading: IconButton(
+              icon: const Icon(CupertinoIcons.back),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            title: const Text(
+              "خلاصه سفر",
+              style: TextStyle(
+                fontSize: 16,
+              ),
+            ),
+          ),
+          body: Stack(
+            alignment: Alignment.center,
+            children: [
+              FlutterMap(
+                mapController: mapController.mapController,
+                options: MapOptions(
+                  minZoom: 6,
+                  maxZoom: 18,
+                  initialCenter: kStartPoint.center!,
+                  initialZoom: kStartPoint.zoom!,
+                  onTap: (newTap, newLatLng) async {},
                 ),
-              ],
-            );
-          }),
+                children: [
+                  TileLayer(
+                    // attributionAlignment: Alignment.bottomCenter,
+                    urlTemplate:
+                        'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                    tileBuilder: (context, tileWidget, tile) {
+                      return tileWidget;
+                    },
+                  ),
+                  PolylineLayer(
+                    polylines: polyLines,
+                  ),
+                  MarkerLayer(
+                    markers: [
+                      if (originLocation != null) ...[
+                        Marker(
+                          alignment: Alignment.topCenter,
+                          height: kToolbarHeight,
+                          width: kToolbarHeight,
+                          point: originLocation!.latLng,
+                          child: Stack(
+                            children: [
+                              Icon(
+                                CupertinoIcons.bubble_middle_bottom_fill,
+                                size: kToolbarHeight,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .primary
+                                    .withAlpha(180),
+                              ),
+                              const Positioned.fill(
+                                child: Align(
+                                  alignment: Alignment.center,
+                                  child: FittedBox(
+                                    child: Padding(
+                                      padding: EdgeInsets.only(
+                                        bottom: kToolbarHeight * 0.2,
+                                      ),
+                                      child: Text('مبدا'),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                      if (targetLocation != null) ...[
+                        Marker(
+                          height: kToolbarHeight,
+                          width: kToolbarHeight,
+                          point: targetLocation!.latLng,
+                          alignment: Alignment.topCenter,
+                          child: Stack(
+                            children: [
+                              Icon(
+                                CupertinoIcons.bubble_middle_bottom_fill,
+                                size: kToolbarHeight,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .primary
+                                    .withAlpha(180),
+                              ),
+                              const Positioned.fill(
+                                child: Align(
+                                  alignment: Alignment.center,
+                                  child: FittedBox(
+                                    child: Padding(
+                                      padding: EdgeInsets.only(
+                                        bottom: kToolbarHeight * 0.2,
+                                      ),
+                                      child: Text('مقصد'),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                      if (currentLatLng != null) ...[
+                        Marker(
+                          height: kToolbarHeight,
+                          width: kToolbarHeight,
+                          point: currentLatLng!,
+                          alignment: Alignment.topCenter,
+                          child: const Stack(
+                            children: [
+                              Icon(
+                                CupertinoIcons.bubble_middle_bottom_fill,
+                                size: kToolbarHeight,
+                                color: Colors.teal,
+                              ),
+                              Positioned.fill(
+                                child: Align(
+                                  alignment: Alignment.center,
+                                  child: FittedBox(
+                                    child: Padding(
+                                      padding: EdgeInsets.only(
+                                        bottom: kToolbarHeight * 0.2,
+                                      ),
+                                      child: Icon(
+                                        CupertinoIcons.car_detailed,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerDocked,
           floatingActionButton: Container(

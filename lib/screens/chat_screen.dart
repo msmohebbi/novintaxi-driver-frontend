@@ -165,7 +165,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                       padding: const EdgeInsets.all(10),
                                       color: Theme.of(context)
                                           .colorScheme
-                                          .secondary
+                                          .primary
                                           .withAlpha(40),
                                       child: Column(
                                         crossAxisAlignment:

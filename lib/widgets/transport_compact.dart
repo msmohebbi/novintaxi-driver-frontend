@@ -56,7 +56,7 @@ class _TransportCompactState extends State<TransportCompact> {
                 Row(
                   children: [
                     const Text(
-                      'مبدا:',
+                      'مسیر:',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                       ),
@@ -65,20 +65,15 @@ class _TransportCompactState extends State<TransportCompact> {
                       const SizedBox(
                         width: kToolbarHeight * 0.1,
                       ),
-                      Text(widget.cTransport.ods?.first.location.city ?? ''),
-                    ],
-                  ],
-                ),
-                const SizedBox(height: kToolbarHeight * 0.2),
-                Row(
-                  children: [
-                    const Text(
-                      'مقصد:',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
+                      Text(
+                        widget.cTransport.ods?.first.location.city ?? '',
                       ),
-                    ),
+                    ],
                     if (widget.cTransport.ods?.isNotEmpty ?? false) ...[
+                      const SizedBox(
+                        width: kToolbarHeight * 0.1,
+                      ),
+                      const Icon(Icons.arrow_circle_left_outlined),
                       const SizedBox(
                         width: kToolbarHeight * 0.1,
                       ),
@@ -104,34 +99,86 @@ class _TransportCompactState extends State<TransportCompact> {
                   ],
                 ),
                 const SizedBox(height: kToolbarHeight * 0.2),
-                widget.cTransport.dateSchedule != null
-                    ? Row(
-                        children: [
-                          const Text(
-                            'ساعت سفر:',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(
-                            width: kToolbarHeight * 0.1,
-                          ),
-                          Text(
-                            widget.cTransport.dateScheduleDateString!
-                                .toString(),
-                          ),
-                          const SizedBox(
-                            width: kToolbarHeight * 0.1,
-                          ),
-                          Text(
-                            widget.cTransport.dateScheduleTimeString
-                                    ?.format(context)
-                                    .withPersianNumbers() ??
-                                '',
-                          ),
-                        ],
-                      )
-                    : Container(),
+                if (widget.cTransport.dateSchedule != null) ...[
+                  Row(
+                    children: [
+                      const Text(
+                        'ساعت سفر:',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(
+                        width: kToolbarHeight * 0.1,
+                      ),
+                      Text(
+                        widget.cTransport.dateScheduleDateString!.toString(),
+                      ),
+                      const SizedBox(
+                        width: kToolbarHeight * 0.1,
+                      ),
+                      Text(
+                        widget.cTransport.dateScheduleTimeString
+                                ?.format(context)
+                                .withPersianNumbers() ??
+                            '',
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: kToolbarHeight * 0.2),
+                ],
+                Row(
+                  children: [
+                    const Text(
+                      'مدت زمان:',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    if (widget.cTransport.ods?.isNotEmpty ?? false) ...[
+                      const SizedBox(
+                        width: kToolbarHeight * 0.1,
+                      ),
+                      Text(widget.cTransport.timeString),
+                    ],
+                  ],
+                ),
+                const SizedBox(height: kToolbarHeight * 0.2),
+                Row(
+                  children: [
+                    const Text(
+                      'مسافت:',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    if (widget.cTransport.ods?.isNotEmpty ?? false) ...[
+                      const SizedBox(
+                        width: kToolbarHeight * 0.1,
+                      ),
+                      Text('${widget.cTransport.meterKMString} کیلومتر'),
+                    ],
+                  ],
+                ),
+                const SizedBox(height: kToolbarHeight * 0.2),
+                Row(
+                  children: [
+                    const Text(
+                      'تعداد مسافر:',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    if (widget.cTransport.ods?.isNotEmpty ?? false) ...[
+                      const SizedBox(
+                        width: kToolbarHeight * 0.1,
+                      ),
+                      Text(
+                        widget.cTransport.passengersCountString,
+                      ),
+                    ],
+                  ],
+                ),
               ],
             ),
           ),
@@ -191,12 +238,12 @@ class _TransportCompactState extends State<TransportCompact> {
               ),
               const SizedBox(width: kToolbarHeight * 0.3),
               Material(
-                color: Colors.teal,
+                color: Theme.of(context).colorScheme.primary,
                 borderRadius: BorderRadius.circular(12),
                 child: InkWell(
                     borderRadius: BorderRadius.circular(12),
-                    onTap: () {
-                      showCupertinoDialog(
+                    onTap: () async {
+                      await showCupertinoDialog(
                         barrierDismissible: true,
                         context: context,
                         builder: (context) {
@@ -272,6 +319,10 @@ class _TransportCompactState extends State<TransportCompact> {
                           );
                         },
                       );
+                      if (mounted) {
+                        Provider.of<SettingData>(context, listen: false)
+                            .setbnbIndex(1);
+                      }
                     },
                     child: Provider.of<DriverTransportData>(context)
                                 .isConfirmingId ==
@@ -293,7 +344,7 @@ class _TransportCompactState extends State<TransportCompact> {
                             child: Text(
                               'تایید سفر',
                               style: TextStyle(
-                                color: Colors.white,
+                                color: Colors.black,
                               ),
                             ),
                           )),

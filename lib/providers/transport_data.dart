@@ -6,7 +6,6 @@ import '../models/vehicle_type_model.dart';
 
 import '../backend/api.dart';
 import '../backend/api_endpoints.dart';
-import '../models/user_location_model.dart';
 
 class TransportData with ChangeNotifier {
   TransportData() {
@@ -18,7 +17,6 @@ class TransportData with ChangeNotifier {
 
   clearTransportData() {
     _isInitialized = false;
-    _userLocations = [];
     _allVehicles = [];
   }
 
@@ -314,30 +312,6 @@ class TransportData with ChangeNotifier {
     for (var newAppVehicleType in listofmap) {
       _allVehicles.add(AppVehicleType.fromMap(newAppVehicleType));
     }
-    notifyListeners();
-  }
-
-// ---------------------------------- User Locations ------------------------
-  List<AppUserLocation> _userLocations = [];
-  List<AppUserLocation> get userLocations => _userLocations;
-
-  getUserLocations() async {
-    var listofmap = await AppAPI()
-        .getWithoutPaginate(urlPath: "${EndPoints.transports}/userlocations");
-    _userLocations.clear();
-    for (var newUserLocation in listofmap) {
-      _userLocations.add(AppUserLocation.fromMap(newUserLocation));
-    }
-    notifyListeners();
-  }
-
-  Future<void> addUserLocation(AppUserLocation newUserLocation) async {
-    await AppAPI().create(
-      "${EndPoints.transports}/userlocations",
-      newUserLocation.toMap(),
-      null,
-    );
-    await getUserLocations();
     notifyListeners();
   }
 }

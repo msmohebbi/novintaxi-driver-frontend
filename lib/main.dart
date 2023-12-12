@@ -183,7 +183,7 @@ class MyMaterial extends StatelessWidget {
       home: Provider.of<AuthData>(context).accessToken != ""
           ? !Provider.of<DriverData>(context).isInitialized
               ? const LoadingScreen()
-              : Provider.of<DriverData>(context).isVerify
+              : Provider.of<DriverData>(context).cDriver?.isVerify ?? false
                   ? const MainScreen()
                   : const DriverProfileScreen()
           : const AuthScreen(),

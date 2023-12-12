@@ -183,7 +183,7 @@ class _TransportActiveCompactState extends State<TransportActiveCompact> {
                         child: InkWell(
                           borderRadius: BorderRadius.circular(12),
                           onTap: () {
-                            if (widget.cDriverTransport.statusId == 0) {
+                            if (widget.cDriverTransport.statusId == 1) {
                               MapsLauncher.launchCoordinates(
                                 widget.cDriverTransport.transport.ods!.first
                                     .location.lat,
@@ -305,28 +305,31 @@ class _TransportActiveCompactState extends State<TransportActiveCompact> {
                     ],
                   )
                 ],
-                const SizedBox(height: kToolbarHeight * 0.2),
-                Row(
-                  children: [
-                    const Text(
-                      'نام مسافر:',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
+                if (widget.cDriverTransport.statusId > 0) ...[
+                  const SizedBox(height: kToolbarHeight * 0.2),
+                  Row(
+                    children: [
+                      const Text(
+                        'نام مسافر:',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                    const SizedBox(
-                      width: kToolbarHeight * 0.1,
-                    ),
-                    Text(
-                      widget.cDriverTransport.transport.passengerName ?? '',
-                    ),
-                  ],
-                ),
+                      const SizedBox(
+                        width: kToolbarHeight * 0.1,
+                      ),
+                      Text(
+                        widget.cDriverTransport.transport.passengerName ?? '',
+                      ),
+                    ],
+                  ),
+                ],
               ],
             ),
           ),
           const SizedBox(height: kToolbarHeight * 0.2),
-          if (widget.cDriverTransport.statusId < 3) ...[
+          if (widget.cDriverTransport.statusId < 3 &&
+              widget.cDriverTransport.statusId > 0) ...[
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -438,8 +441,69 @@ class _TransportActiveCompactState extends State<TransportActiveCompact> {
                   child: InkWell(
                     borderRadius: BorderRadius.circular(12),
                     onTap: () {
-                      Provider.of<DriverTransportData>(context, listen: false)
-                          .updateDriverTransport(widget.cDriverTransport);
+                      showCupertinoDialog(
+                        barrierDismissible: true,
+                        context: context,
+                        builder: (context) {
+                          return Directionality(
+                            textDirection: TextDirection.rtl,
+                            child: CupertinoAlertDialog(
+                              title: const Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    'شما درحال تغییر وضغیت سفر خود هستید، \n آیا مطمئن هستید؟',
+                                    style: TextStyle(
+                                      height: 2,
+                                      fontSize: 13,
+                                      fontFamily: 'IRANYekan',
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              actions: [
+                                IconButton(
+                                  onPressed: () async {
+                                    Provider.of<DriverTransportData>(context,
+                                            listen: false)
+                                        .updateDriverTransport(
+                                            widget.cDriverTransport);
+                                    if (mounted) {
+                                      Navigator.of(context).pop();
+                                    }
+                                  },
+                                  icon: Text(
+                                    'تغییر وضغیت',
+                                    style: TextStyle(
+                                      color:
+                                          Theme.of(context).colorScheme.error,
+                                      height: 2,
+                                      fontSize: 13,
+                                      fontFamily: 'IRANYekan',
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  ),
+                                ),
+                                IconButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  icon: const Text(
+                                    'بیخیال',
+                                    style: TextStyle(
+                                      height: 2,
+                                      fontSize: 13,
+                                      fontFamily: 'IRANYekan',
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      );
                     },
                     child: Provider.of<DriverTransportData>(context).isUpdating
                         ? Padding(
@@ -458,8 +522,8 @@ class _TransportActiveCompactState extends State<TransportActiveCompact> {
                             ),
                             child: Text(
                               widget.cDriverTransport.actionButtonString!,
-                              style: TextStyle(
-                                color: Theme.of(context).primaryColor,
+                              style: const TextStyle(
+                                color: Colors.black,
                               ),
                             ),
                           ),

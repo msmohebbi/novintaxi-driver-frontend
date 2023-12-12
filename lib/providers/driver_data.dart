@@ -30,10 +30,8 @@ class DriverData with ChangeNotifier {
     await initializeisEditRequested();
     if (cDriver != null && cDriverProfile != null && cDriverVehicle != null) {
       _isDataComplete = true;
-      if (cDriver?.isVerify ?? false) {
-        _isVerify = true;
-      }
     }
+    notifyListeners();
   }
 
   clearDriverData() {
@@ -53,6 +51,9 @@ class DriverData with ChangeNotifier {
 
   bool _isInitialized = false;
   bool get isInitialized => _isInitialized;
+
+  bool _isChangeAvailable = false;
+  bool get isChangeAvailable => _isChangeAvailable;
 
   bool _isUpdatingProfile = false;
   bool get isUpdatingProfile => _isUpdatingProfile;
@@ -91,9 +92,6 @@ class DriverData with ChangeNotifier {
 
   bool get isDataComplete => _isDataComplete;
   bool _isDataComplete = false;
-
-  bool get isVerify => _isVerify;
-  bool _isVerify = false;
 
   AppLocation? _originLocation;
   AppLocation? get originLocation => _originLocation;
@@ -409,6 +407,24 @@ class DriverData with ChangeNotifier {
     await changeisEditRequested(false);
     clearImages();
     _isUpdatingProfile = false;
+    notifyListeners();
+  }
+
+  changeIsAvailabe() async {
+    _isChangeAvailable = true;
+    notifyListeners();
+    var newTransportData = await AppAPI().update(
+      '${EndPoints.drivers}/${cDriver?.id}/change_available',
+      null,
+      {},
+      null,
+      false,
+    );
+    if (newTransportData.isNotEmpty) {
+      _cDriver = AppDriver.fromMap(newTransportData);
+    }
+
+    _isChangeAvailable = false;
     notifyListeners();
   }
 }

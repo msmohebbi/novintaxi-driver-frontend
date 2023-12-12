@@ -1,7 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:transportationdriver/providers/auth_data.dart';
+import 'package:transportationdriver/providers/driver_data.dart';
 import 'package:transportationdriver/screens/license_view_screen.dart';
 import 'package:transportationdriver/screens/profile_view_screen.dart';
 import 'package:transportationdriver/screens/revenue_screen.dart';
@@ -57,6 +59,63 @@ class _SettingsScreenState extends State<SettingsScreen> {
             children: [
               Text('تنظیمات کاربری'),
             ],
+          ),
+        ),
+        const SizedBox(height: kToolbarHeight * 0.2),
+        Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: kToolbarHeight * 0.2,
+          ),
+          child: Material(
+            color: Theme.of(context).colorScheme.background,
+            borderRadius: BorderRadius.circular(12),
+            child: InkWell(
+              borderRadius: BorderRadius.circular(12),
+              onTap: () {
+                // Navigator.of(context).pushNamed(RevenueScreen.routeName);
+              },
+              child: Container(
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: Theme.of(context).colorScheme.primary.withAlpha(180),
+                  ),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: kToolbarHeight * 0.2,
+                    horizontal: kToolbarHeight * 0.4,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      if (Provider.of<DriverData>(context)
+                              .cDriver
+                              ?.personalImage !=
+                          null) ...[
+                        ClipOval(
+                          child: SizedBox(
+                            width: kToolbarHeight * 0.6,
+                            height: kToolbarHeight * 0.6,
+                            child: CachedNetworkImage(
+                              imageUrl: Provider.of<DriverData>(context)
+                                  .cDriver!
+                                  .personalImage,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: kToolbarHeight * 0.2),
+                      ],
+                      Text(
+                        Provider.of<DriverData>(context).cDriver?.name ?? '',
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
           ),
         ),
         const SizedBox(height: kToolbarHeight * 0.2),
@@ -250,7 +309,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           const Text('حالت شب'),
                           CupertinoSwitch(
                               activeColor:
-                                  Theme.of(context).colorScheme.secondary,
+                                  Theme.of(context).colorScheme.primary,
                               value: Provider.of<SettingData>(context).isDark,
                               onChanged: (_) {
                                 Provider.of<SettingData>(context, listen: false)

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:transportationdriver/providers/notification_data.dart';
 import 'package:transportationdriver/screens/history_screen.dart';
 
 import '../providers/settings_data.dart';
@@ -21,7 +22,6 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
-    // Provider.of<AllOrdersData>(context, listen: false);
   }
 
   var homeScreen = const HomeScreen();
@@ -33,6 +33,7 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Provider.of<NotificationData>(context, listen: false);
     int bnbIndex = Provider.of<SettingData>(context).bnbIndex;
     var widthPixFixed = MediaQuery.of(context).size.width;
     var heightPixFixed = MediaQuery.of(context).size.height;

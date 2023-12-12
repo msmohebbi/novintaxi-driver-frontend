@@ -1,12 +1,20 @@
 // ignore_for_file: use_build_context_synchronously, unnecessary_string_escapes
 
 import 'dart:async';
+import 'dart:io';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:pinput/pinput.dart';
 import 'package:provider/provider.dart';
+import 'package:transportationdriver/backend/api.dart';
+import 'package:transportationdriver/backend/api_endpoints.dart';
+import 'package:transportationdriver/providers/profile_data.dart';
 import '../../backend/auth.dart';
 import '../../providers/auth_data.dart';
 
@@ -81,6 +89,49 @@ class VerifyScreenState extends State<VerifyScreen> {
         // if (isChangePass) {
         await Provider.of<AuthData>(context, listen: false)
             .saveCredentials(loginData["refresh"]!, loginData["access"]!);
+        await Provider.of<ProfileData>(context, listen: false).getProfile();
+        FirebaseMessaging messaging = FirebaseMessaging.instance;
+        var packageInfo = await PackageInfo.fromPlatform();
+        if (kIsWeb) {
+          var value = await messaging.getToken();
+          await AppAPI().create(
+            "${EndPoints.notification}/notification_firebases",
+            {
+              "platform": "web",
+              "firebase_code": value,
+              "app_version": packageInfo.version,
+              "app_build": packageInfo.buildNumber,
+            },
+            null,
+          );
+        } else {
+          var isGranted = await Permission.notification.isGranted;
+          if (!isGranted) {
+            await Permission.notification.request().then((value) => null);
+            isGranted = await Permission.notification.isGranted;
+          }
+          if (isGranted) {
+            // FirebaseMessaging.instance.getNotificationSettings();
+            // Permission.notification.request();
+            await messaging.getToken().then((value) => AppAPI().create(
+                  "${EndPoints.notification}/notification_firebases",
+                  {
+                    "platform": kIsWeb
+                        ? "web"
+                        : Platform.isAndroid
+                            ? "android"
+                            : Platform.isIOS
+                                ? "ios"
+                                : "other",
+                    "firebase_code": value,
+                    "app_version": packageInfo.version,
+                    "app_build": packageInfo.buildNumber,
+                  },
+                  null,
+                ));
+          }
+        }
+
         Navigator.of(context).pushReplacementNamed("/");
         return;
         // }

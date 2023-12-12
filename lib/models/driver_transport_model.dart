@@ -6,6 +6,7 @@ class AppDriverTransport {
     required this.transport,
     required this.driver,
     required this.dateConfirmed,
+    required this.datePaid,
     required this.dateArrived,
     required this.dateStarted,
     required this.dateEnded,
@@ -16,6 +17,7 @@ class AppDriverTransport {
   AppTransport transport;
   int driver;
   int dateConfirmed;
+  int? datePaid;
   int? dateArrived;
   int? dateStarted;
   int? dateEnded;
@@ -23,12 +25,14 @@ class AppDriverTransport {
   bool isCanceled;
   int get statusId {
     if (isCanceled) {
-      return 4;
+      return 5;
     } else if (dateEnded != null) {
-      return 3;
+      return 4;
     } else if (dateStarted != null) {
-      return 2;
+      return 3;
     } else if (dateArrived != null) {
+      return 2;
+    } else if (datePaid != null) {
       return 1;
     } else {
       return 0;
@@ -37,6 +41,7 @@ class AppDriverTransport {
 
   String get status {
     var statusList = [
+      'در انتظار تایید و پرداخت کاربر',
       'در انتظار رسیدن به مبدا',
       'منتظر مسافر',
       'سفر شروع شده',
@@ -48,6 +53,7 @@ class AppDriverTransport {
 
   String? get actionButtonString {
     var statusList = [
+      null,
       'به مبدا رسیدم',
       'شروع سفر',
       'پایان سفر',
@@ -59,6 +65,7 @@ class AppDriverTransport {
 
   String? get navigatorButtonString {
     var statusList = [
+      null,
       'مسیریابی تا مبدا',
       'مسیریابی سفر',
       'مسیریابی سفر',
@@ -73,6 +80,7 @@ class AppDriverTransport {
         transport = AppTransport.fromMap(newOrder["transport"]),
         driver = newOrder["driver"],
         dateConfirmed = newOrder["date_confirmed"],
+        datePaid = newOrder["date_paid"],
         dateArrived = newOrder["date_arrived"],
         dateStarted = newOrder["date_started"],
         dateEnded = newOrder["date_ended"],

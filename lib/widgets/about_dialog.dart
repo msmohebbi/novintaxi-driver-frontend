@@ -71,7 +71,7 @@ class _AppAboutDialogState extends State<AppAboutDialog> {
                   Wrap(
                     children: [
                       Text(
-                        "مدیر مسوول :  ",
+                        "مدیر مسئول :  ",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             // decorationStyle: TextDecorationStyle.dashed,
@@ -145,7 +145,7 @@ class _AppAboutDialogState extends State<AppAboutDialog> {
                   Wrap(
                     children: [
                       Text(
-                        "برنامه نویسی سرور :  ",
+                        "برنامه نویسی بک اند :  ",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             // decorationStyle: TextDecorationStyle.dashed,
@@ -154,15 +154,15 @@ class _AppAboutDialogState extends State<AppAboutDialog> {
                       ),
                       InkWell(
                         onTap: () {
-                          // var url = Uri(
-                          //   scheme: "https",
-                          //   host: "www.linkedin.com",
-                          //   path: "in/msmohebbi/",
-                          // );
-                          // launchUrl(
-                          //   url,
-                          //   mode: LaunchMode.externalApplication,
-                          // );
+                          var url = Uri(
+                            scheme: "https",
+                            host: "www.linkedin.com",
+                            path: "in/vahid-kamrani-7379b0212/",
+                          );
+                          launchUrl(
+                            url,
+                            mode: LaunchMode.externalApplication,
+                          );
                         },
                         child: Text(
                           "وحید کامرانی",
@@ -237,7 +237,7 @@ class _AppAboutDialogState extends State<AppAboutDialog> {
                               borderRadius: BorderRadius.circular(12),
                               child: Container(
                                 padding: const EdgeInsets.all(8),
-                                color: Theme.of(context).colorScheme.secondary,
+                                color: Theme.of(context).colorScheme.primary,
                                 child: const Text(
                                   "دانلود اپلیکیشن",
                                   style: TextStyle(
