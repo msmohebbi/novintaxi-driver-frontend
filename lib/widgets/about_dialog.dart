@@ -80,15 +80,15 @@ class _AppAboutDialogState extends State<AppAboutDialog> {
                       ),
                       InkWell(
                         onTap: () {
-                          var url = Uri(
-                            scheme: "https",
-                            host: "www.instagram.com",
-                            path: "mohammad._.moosavi/",
-                          );
-                          launchUrl(
-                            url,
-                            mode: LaunchMode.externalApplication,
-                          );
+                          // var url = Uri(
+                          //   scheme: "https",
+                          //   host: "www.instagram.com",
+                          //   path: "mohammad._.moosavi/",
+                          // );
+                          // launchUrl(
+                          //   url,
+                          //   mode: LaunchMode.externalApplication,
+                          // );
                         },
                         child: Text(
                           "سید مهدی علایی",

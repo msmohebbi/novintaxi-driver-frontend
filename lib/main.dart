@@ -37,7 +37,6 @@ import 'package:timeago/timeago.dart' as timeago;
 
 import 'providers/notification_data.dart';
 import 'providers/profile_data.dart';
-import 'screens/open_maps_screen.dart';
 
 void main() async {
   initializeDateFormatting('fa_IR', null);
@@ -163,7 +162,7 @@ class MyMaterial extends StatelessWidget {
         child: child!,
       ),
       routes: {
-        "/mapscreen": (ctx) => checkAuth(const OpenMapsScreen()),
+        // "/mapscreen": (ctx) => checkAuth(const OpenMapsScreen()),
         "/search": (ctx) => checkAuth(const SearchDriverScreen()),
         "/faqs": (ctx) => checkAuth(const FAQScreen()),
         "/support": (ctx) => checkAuth(const ChatScreen()),

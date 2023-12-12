@@ -1,61 +1,95 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:async';
+import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_map_animations/flutter_map_animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart' as gmap;
 import 'package:latlong2/latlong.dart';
-import 'package:maps_curved_line/maps_curved_line.dart';
-import 'package:provider/provider.dart';
-import '../models/location_model.dart';
-import '../providers/func_data.dart';
-import '../providers/transport_data.dart';
-import '../widgets/general_map_modal.dart';
+import 'package:transportationdriver/models/location_model.dart';
+import 'package:transportationdriver/models/transport_model.dart';
 
-import '../backend/map.dart';
-import '../providers/profile_data.dart';
 import '../widgets/app_drawer.dart';
 
 class OpenMapsScreen extends StatefulWidget {
-  const OpenMapsScreen({super.key});
+  final AppTransport cTransport;
+
+  const OpenMapsScreen({super.key, required this.cTransport});
   @override
   State<OpenMapsScreen> createState() => OpenMapsScreenState();
 }
 
-class OpenMapsScreenState extends State<OpenMapsScreen> {
+class OpenMapsScreenState extends State<OpenMapsScreen>
+    with TickerProviderStateMixin {
   @override
   void initState() {
-    centerLatLng = kStartPoint.center!;
+    mapController = AnimatedMapController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1200),
+      curve: Curves.easeInOut,
+    );
+    originLocation = widget.cTransport.ods?.firstOrNull?.location;
+    targetLocation = widget.cTransport.ods?.lastOrNull?.location;
 
-    mapController.mapEventStream.listen((event) {
-      setState(() {
-        centerLatLng = event.camera.center;
-      });
-    });
-    Provider.of<ProfileData>(context, listen: false);
+    WidgetsBinding.instance.addPostFrameCallback(
+      (timeStamp) async {
+        await Future.delayed(const Duration(milliseconds: 200));
+        await mapController.animateTo(dest: originLocation!.latLng, zoom: 11);
+        await mapController.animateTo(
+          dest: targetLocation!.latLng,
+          zoom: 11,
+        );
+        // await Future.delayed(const Duration(milliseconds: 200));
+        await checkZoom(
+          [originLocation!.latLng, targetLocation!.latLng],
+        );
+        log(widget.cTransport.geometery ?? 'no geo');
+        if (widget.cTransport.geometery != null) {
+          await Future.delayed(const Duration(milliseconds: 200));
 
+          polyLines.clear();
+          var geometry = json.decode(widget.cTransport.geometery!);
+          var legLatLngs = [];
+          legLatLngs
+              .addAll(geometry["coordinates"].map((e) => LatLng(e[1], e[0])));
+          setState(() {
+            polyLines.add(
+              Polyline(
+                color: Theme.of(context).colorScheme.error,
+                strokeWidth: 5,
+                points: [...legLatLngs],
+              ),
+            );
+          });
+          print("-------------------");
+          log('message');
+          log(polyLines.toString());
+          log('message');
+          print("-------------------");
+          setState(
+            () {},
+          );
+        }
+      },
+    );
     super.initState();
   }
 
   final kStartPoint = const MapPosition(
     center: LatLng(35.71529, 51.40434),
-    zoom: 13,
+    zoom: 8,
   );
-  var mapController = MapController();
 
-  var searchController = TextEditingController();
-  late LatLng centerLatLng;
-
-  bool isLoadingTargetData = false;
-  bool isRevGeoing = false;
-
-  List<dynamic> searchItems = [];
-  int searchItemsLength = 0;
-
+  AppLocation? originLocation;
+  AppLocation? targetLocation;
+  LatLng? currentLatLng;
   List<Polyline> polyLines = [];
+  late final AnimatedMapController mapController;
+  var isGPSing = false;
 
   Future<Position?> getCurrentLocation() async {
     bool serviceEnabled;
@@ -72,73 +106,62 @@ class OpenMapsScreenState extends State<OpenMapsScreen> {
       }
     }
     try {
+      setState(() {
+        isGPSing = true;
+      });
+
       var currLocation = await Geolocator.getCurrentPosition();
+      setState(() {
+        isGPSing = false;
+      });
 
       return currLocation;
     } catch (_) {
+      setState(() {
+        isGPSing = false;
+      });
       return null;
     }
   }
 
-  Future<void> serach() async {
-    if (isRevGeoing) {
-      return;
+  Future<void> checkZoom(List<LatLng> allLatLng) async {
+    double n = allLatLng[0].latitude;
+    double s = allLatLng[0].latitude;
+    double w = allLatLng[0].longitude;
+    double e = allLatLng[0].longitude;
+    for (var element in allLatLng) {
+      if (element.latitude > n) {
+        n = element.latitude;
+      }
+      if (element.latitude < s) {
+        s = element.latitude;
+      }
+      if (element.longitude > e) {
+        e = element.longitude;
+      }
+      if (element.longitude < w) {
+        w = element.longitude;
+      }
     }
-    setState(() {
-      isRevGeoing = true;
-    });
-    var newIems = await MapBackend().searchOnMap(searchController.text.trim());
+    var xx = CameraFit.bounds(
+      bounds: LatLngBounds(
+        LatLng(s, w),
+        LatLng(n, e),
+      ),
+      padding: const EdgeInsets.symmetric(
+        horizontal: kToolbarHeight * 2,
+        vertical: kToolbarHeight * 2,
+      ),
+    ).fit(mapController.mapController.camera);
 
-    setState(() {
-      searchItems = newIems;
-      searchItemsLength = searchItems.length;
-      isRevGeoing = false;
-    });
+    await mapController.animateTo(
+      dest: xx.center,
+      zoom: xx.zoom,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    var sizee = MediaQuery.of(context).size;
-    var widthPix = sizee.width > sizee.height ? sizee.height : sizee.width;
-    Future<void> checkZoom(
-        List<LatLng> allLatLng, double wSize, double hSized) async {
-      double n = allLatLng[0].latitude;
-      double s = allLatLng[0].latitude;
-      double w = allLatLng[0].longitude;
-      double e = allLatLng[0].longitude;
-      for (var element in allLatLng) {
-        if (element.latitude > n) {
-          n = element.latitude;
-        }
-        if (element.latitude < s) {
-          s = element.latitude;
-        }
-        if (element.longitude > e) {
-          e = element.longitude;
-        }
-        if (element.longitude < w) {
-          w = element.longitude;
-        }
-      }
-      var xx = CameraFit.bounds(
-        bounds: LatLngBounds(
-          LatLng(s, w),
-          LatLng(n, e),
-        ),
-        padding: EdgeInsets.symmetric(
-          horizontal: wSize * 0.3,
-          vertical: hSized * 0.3,
-        ),
-      ).fit(mapController.camera);
-
-      setState(() {
-        mapController.move(xx.center, xx.zoom);
-      });
-    }
-
-    var originLocation = Provider.of<TransportData>(context).originLocation;
-    var targetLocation = Provider.of<TransportData>(context).targetLocation;
-
     return Directionality(
       textDirection: TextDirection.rtl,
       child: SafeArea(
@@ -149,14 +172,13 @@ class OpenMapsScreenState extends State<OpenMapsScreen> {
               alignment: Alignment.center,
               children: [
                 FlutterMap(
-                  mapController: mapController,
+                  mapController: mapController.mapController,
                   options: MapOptions(
                     minZoom: 6,
                     maxZoom: 18,
-                    onTap: (newTap, newLatLng) async {},
-                    initialCenter: LatLng(kStartPoint.center!.latitude,
-                        kStartPoint.center!.longitude),
+                    initialCenter: kStartPoint.center!,
                     initialZoom: kStartPoint.zoom!,
+                    onTap: (newTap, newLatLng) async {},
                   ),
                   children: [
                     TileLayer(
@@ -174,16 +196,34 @@ class OpenMapsScreenState extends State<OpenMapsScreen> {
                       markers: [
                         if (originLocation != null) ...[
                           Marker(
+                            alignment: Alignment.topCenter,
                             height: kToolbarHeight,
                             width: kToolbarHeight,
-                            point: originLocation.latLng,
-                            child: Icon(
-                              Icons.location_on,
-                              size: kToolbarHeight,
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .error
-                                  .withAlpha(150),
+                            point: originLocation!.latLng,
+                            child: Stack(
+                              children: [
+                                Icon(
+                                  CupertinoIcons.bubble_middle_bottom_fill,
+                                  size: kToolbarHeight,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .primary
+                                      .withAlpha(180),
+                                ),
+                                const Positioned.fill(
+                                  child: Align(
+                                    alignment: Alignment.center,
+                                    child: FittedBox(
+                                      child: Padding(
+                                        padding: EdgeInsets.only(
+                                          bottom: kToolbarHeight * 0.2,
+                                        ),
+                                        child: Text('مبدا'),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           )
                         ],
@@ -191,368 +231,72 @@ class OpenMapsScreenState extends State<OpenMapsScreen> {
                           Marker(
                             height: kToolbarHeight,
                             width: kToolbarHeight,
-                            point: targetLocation.latLng,
-                            child: Icon(
-                              Icons.location_on,
-                              size: kToolbarHeight,
-                              color: Theme.of(context).colorScheme.error,
+                            point: targetLocation!.latLng,
+                            alignment: Alignment.topCenter,
+                            child: Stack(
+                              children: [
+                                Icon(
+                                  CupertinoIcons.bubble_middle_bottom_fill,
+                                  size: kToolbarHeight,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .primary
+                                      .withAlpha(180),
+                                ),
+                                const Positioned.fill(
+                                  child: Align(
+                                    alignment: Alignment.center,
+                                    child: FittedBox(
+                                      child: Padding(
+                                        padding: EdgeInsets.only(
+                                          bottom: kToolbarHeight * 0.2,
+                                        ),
+                                        child: Text('مقصد'),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                        ]
+                        ],
+                        if (currentLatLng != null) ...[
+                          Marker(
+                            height: kToolbarHeight,
+                            width: kToolbarHeight,
+                            point: currentLatLng!,
+                            alignment: Alignment.topCenter,
+                            child: const Stack(
+                              children: [
+                                Icon(
+                                  CupertinoIcons.bubble_middle_bottom_fill,
+                                  size: kToolbarHeight,
+                                  color: Colors.teal,
+                                ),
+                                Positioned.fill(
+                                  child: Align(
+                                    alignment: Alignment.center,
+                                    child: FittedBox(
+                                      child: Padding(
+                                        padding: EdgeInsets.only(
+                                          bottom: kToolbarHeight * 0.2,
+                                        ),
+                                        child: Icon(
+                                          CupertinoIcons.car_detailed,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ],
                     ),
                   ],
                 ),
-                if (targetLocation == null) ...[
-                  Container(
-                    height: kToolbarHeight * 2,
-                    width: kToolbarHeight,
-                    padding: const EdgeInsets.only(bottom: kToolbarHeight),
-                    alignment: Alignment.bottomCenter,
-                    child: Icon(
-                      Icons.location_on,
-                      size: kToolbarHeight,
-                      color: Theme.of(context).colorScheme.error,
-                    ),
-                  ),
-                ],
-                Positioned(
-                  top: 20,
-                  right: 0,
-                  width: widthPix,
-                  child: Column(
-                    children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(width: kToolbarHeight * 0.2),
-                          Flexible(
-                            flex: 1,
-                            child: Material(
-                              elevation: 5,
-                              borderRadius: BorderRadius.circular(20),
-                              color: Theme.of(context).colorScheme.background,
-                              child: InkWell(
-                                onTap: () {
-                                  Scaffold.of(context).openDrawer();
-                                },
-                                borderRadius: BorderRadius.circular(20),
-                                child: Container(
-                                  width: kToolbarHeight,
-                                  height: kToolbarHeight,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  child: const Padding(
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: kToolbarHeight * 0.25,
-                                    ),
-                                    child: Icon(Icons.menu),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: kToolbarHeight * 0.2),
-                          Expanded(
-                            flex: 4,
-                            child: Material(
-                              elevation: 5,
-                              borderRadius: BorderRadius.circular(20),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(20),
-                                child: Container(
-                                  constraints: const BoxConstraints(
-                                      minHeight: kToolbarHeight),
-                                  // height: kToolbarHeight,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .background,
-                                  ),
-                                  alignment: Alignment.center,
-                                  child: Column(
-                                    children: [
-                                      TextField(
-                                        style: TextStyle(
-                                          fontSize: 13,
-                                          color: Theme.of(context).primaryColor,
-                                        ),
-                                        onSubmitted: (newText) async {
-                                          await serach();
-                                        },
-                                        textInputAction: TextInputAction.search,
-                                        decoration: InputDecoration(
-                                          border: InputBorder.none,
-                                          contentPadding:
-                                              const EdgeInsets.all(12),
-                                          hintText:
-                                              "مکان مورد نظر را جستجو کنید ...",
-                                          hintStyle:
-                                              const TextStyle(fontSize: 12),
-                                          suffixIcon: Padding(
-                                            padding: const EdgeInsets.only(
-                                                left: kToolbarHeight * 0.2),
-                                            child: InkWell(
-                                              onTap: () async {
-                                                await serach();
-                                              },
-                                              child: isRevGeoing
-                                                  ? const CupertinoActivityIndicator()
-                                                  : const Icon(
-                                                      CupertinoIcons.search),
-                                            ),
-                                          ),
-                                        ),
-                                        controller: searchController,
-                                      ),
-                                      ConstrainedBox(
-                                        constraints: BoxConstraints(
-                                          maxHeight: MediaQuery.of(context)
-                                                  .size
-                                                  .height /
-                                              3,
-                                          // maxWidth: MediaQuery.of(context).size.height / 3,
-                                        ),
-                                        child: SingleChildScrollView(
-                                          child: Column(
-                                            children: [
-                                              ...searchItems.map(
-                                                (e) => ListTile(
-                                                  title: Text(
-                                                    e["title"] ?? '',
-                                                    style: const TextStyle(
-                                                      fontSize: 12,
-                                                    ),
-                                                  ),
-                                                  subtitle: Text(
-                                                    e["address"] ?? '',
-                                                    style: const TextStyle(
-                                                      fontSize: 12,
-                                                    ),
-                                                  ),
-                                                  trailing: const Icon(
-                                                      Icons.arrow_forward_ios),
-                                                  onTap: () {
-                                                    var newLatLng = LatLng(
-                                                      e["location"]["y"],
-                                                      e["location"]["x"],
-                                                    );
-                                                    setState(() {
-                                                      _goToThePlace(
-                                                        MapPosition(
-                                                          center: newLatLng,
-                                                          zoom: 16,
-                                                        ),
-                                                      );
-                                                      searchController.text =
-                                                          e["address"];
-                                                      searchItems = [];
-                                                      searchItemsLength = 0;
-                                                    });
-                                                  },
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: kToolbarHeight * 0.2),
-                        ],
-                      ),
-                      if (originLocation != null) ...[
-                        const SizedBox(height: kToolbarHeight * 0.1),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const SizedBox(width: kToolbarHeight * 0.2),
-                            Flexible(
-                              flex: 1,
-                              child: Material(
-                                elevation: 5,
-                                borderRadius: BorderRadius.circular(20),
-                                color: Theme.of(context).colorScheme.background,
-                                child: Container(
-                                  height: kToolbarHeight,
-                                  width: kToolbarHeight,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  alignment: Alignment.center,
-                                  child: const FittedBox(
-                                    child: Text(
-                                      "مبدا",
-                                      style: TextStyle(fontSize: 13),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: kToolbarHeight * 0.2),
-                            Expanded(
-                              flex: 4,
-                              child: Material(
-                                elevation: 5,
-                                borderRadius: BorderRadius.circular(20),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(20),
-                                  child: Container(
-                                    padding: const EdgeInsets.all(
-                                        kToolbarHeight * 0.2),
-                                    height: kToolbarHeight,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .background,
-                                    ),
-                                    // alignment: Alignment.center,
-                                    child: Flex(
-                                      direction: Axis.horizontal,
-                                      children: [
-                                        Expanded(
-                                          child: Text(
-                                            Provider.of<TransportData>(context)
-                                                    .originLocation
-                                                    ?.desc ??
-                                                '...',
-                                            softWrap: true,
-                                            maxLines: 1,
-                                            style: const TextStyle(
-                                              fontSize: 11,
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: kToolbarHeight * 0.1),
-                                          child: InkWell(
-                                            onTap: () {
-                                              Provider.of<TransportData>(
-                                                      context,
-                                                      listen: false)
-                                                  .settargetLocation(null);
-
-                                              polyLines = [];
-                                              Provider.of<TransportData>(
-                                                      context,
-                                                      listen: false)
-                                                  .setoriginLocation(null);
-                                            },
-                                            child: const Icon(Icons.close),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: kToolbarHeight * 0.2),
-                          ],
-                        ),
-                      ],
-                      if (targetLocation != null) ...[
-                        const SizedBox(height: kToolbarHeight * 0.1),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const SizedBox(width: kToolbarHeight * 0.2),
-                            Flexible(
-                              flex: 1,
-                              child: Material(
-                                elevation: 5,
-                                borderRadius: BorderRadius.circular(20),
-                                color: Theme.of(context).colorScheme.background,
-                                child: Container(
-                                  height: kToolbarHeight,
-                                  width: kToolbarHeight,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  alignment: Alignment.center,
-                                  child: const FittedBox(
-                                    child: Text(
-                                      "مقصد",
-                                      style: TextStyle(fontSize: 13),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: kToolbarHeight * 0.2),
-                            Expanded(
-                              flex: 4,
-                              child: Material(
-                                elevation: 5,
-                                borderRadius: BorderRadius.circular(20),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(20),
-                                  child: Container(
-                                    padding: const EdgeInsets.all(
-                                        kToolbarHeight * 0.2),
-                                    height: kToolbarHeight,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .background,
-                                    ),
-                                    // alignment: Alignment.center,
-                                    child: Flex(
-                                      direction: Axis.horizontal,
-                                      children: [
-                                        Expanded(
-                                          child: Text(
-                                            Provider.of<TransportData>(context)
-                                                    .targetLocation
-                                                    ?.desc ??
-                                                '...',
-                                            softWrap: true,
-                                            maxLines: 1,
-                                            style: const TextStyle(
-                                              fontSize: 11,
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: kToolbarHeight * 0.1),
-                                          child: InkWell(
-                                              onTap: () {
-                                                setState(() {
-                                                  Provider.of<TransportData>(
-                                                          context,
-                                                          listen: false)
-                                                      .settargetLocation(null);
-
-                                                  polyLines = [];
-                                                });
-                                              },
-                                              child: const Icon(Icons.close)),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: kToolbarHeight * 0.2),
-                          ],
-                        ),
-                      ],
-                    ],
-                  ),
-                )
               ],
             );
           }),
@@ -574,8 +318,9 @@ class OpenMapsScreenState extends State<OpenMapsScreen> {
                       heroTag: "zoom+",
                       onPressed: () {
                         setState(() {
-                          mapController.move(mapController.camera.center,
-                              mapController.camera.zoom + 1);
+                          mapController.mapController.move(
+                              mapController.mapController.camera.center,
+                              mapController.mapController.camera.zoom + 1);
                         });
                       },
                       backgroundColor: Theme.of(context).colorScheme.background,
@@ -589,8 +334,9 @@ class OpenMapsScreenState extends State<OpenMapsScreen> {
                       heroTag: "zoom-",
                       onPressed: () {
                         setState(() {
-                          mapController.move(mapController.camera.center,
-                              mapController.camera.zoom - 1);
+                          mapController.mapController.move(
+                              mapController.mapController.camera.center,
+                              mapController.mapController.camera.zoom - 1);
                         });
                       },
                       backgroundColor: Theme.of(context).colorScheme.background,
@@ -601,166 +347,28 @@ class OpenMapsScreenState extends State<OpenMapsScreen> {
                     ),
                   ],
                 ),
-                Material(
-                  elevation: 5,
-                  color: isLoadingTargetData
-                      ? Theme.of(context).colorScheme.primary
-                      : Theme.of(context).primaryColor,
-                  borderRadius: BorderRadius.circular(15),
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(15),
-                    onTap: () async {
-                      if (isLoadingTargetData) {
-                        return;
-                      }
-                      if (originLocation != null && targetLocation != null) {
-                        setState(() {
-                          isLoadingTargetData = true;
-                        });
-                        await Provider.of<TransportData>(context, listen: false)
-                            .createTransport();
-                        Provider.of<TransportData>(context, listen: false)
-                            .changeclientName(
-                                Provider.of<ProfileData>(context, listen: false)
-                                        .cUserProfile
-                                        ?.name ??
-                                    "");
-                        Provider.of<TransportData>(context, listen: false)
-                            .changeclientPhone(
-                                Provider.of<ProfileData>(context, listen: false)
-                                        .cUserProfile
-                                        ?.username ??
-                                    "");
-                        setState(() {
-                          isLoadingTargetData = false;
-                        });
-                        FuncData().showNotificationModal(
-                          const GeneralMapModal(),
-                          context,
-                        );
-                        return;
-                      }
-
-                      var isOrigin = originLocation == null;
-                      setState(() {
-                        polyLines.clear();
-                        isLoadingTargetData = true;
-                      });
-
-                      // Reverse Geocoding ---------------------------------------------------------------------------------------
-                      var revGeo = await MapBackend().reverseGeocoding(
-                          mapController.camera.center.latitude,
-                          mapController.camera.center.longitude);
-                      var newLocation = AppLocation.fromMap(revGeo);
-                      if (isOrigin) {
-                        Provider.of<TransportData>(context, listen: false)
-                            .setoriginLocation(newLocation);
-                        setState(() {
-                          isLoadingTargetData = false;
-                        });
-                        return;
-                      } else {
-                        if (originLocation.city == newLocation.city) {
-                          FuncData().showSnack(
-                            ctx: context,
-                            mainText: "مبدا و مقصد باید از دو شهر متفاوت باشند",
-                            buttonText: 'تایید',
-                            isError: true,
-                            buttonFunc: () =>
-                                ScaffoldMessenger.of(context).clearSnackBars(),
-                          );
-                          setState(() {
-                            isLoadingTargetData = false;
-                          });
-                          return;
-                        }
-                        Provider.of<TransportData>(context, listen: false)
-                            .settargetLocation(newLocation);
-                      }
-
-                      // straight PolyLine ----------------------------------------------------------------------------
-                      if (!isOrigin) {
-                        setState(() {
-                          polyLines.add(
-                            Polyline(
-                              isDotted: true,
-                              strokeWidth: 5,
-                              color: Colors.greenAccent,
-                              points: MapsCurvedLines.getPointsOnCurve(
-                                gmap.LatLng(
-                                    originLocation.lat, originLocation.lng),
-                                gmap.LatLng(
-                                    mapController.camera.center.latitude,
-                                    mapController.camera.center.longitude),
-                              )
-                                  .map(
-                                    (e) => LatLng(e.latitude, e.longitude),
-                                  )
-                                  .toList(),
-                            ),
-                          );
-                        });
-                        // check zoom level --------------------------------------------------------------------------------------
-                        var wid = MediaQuery.of(context).size.width;
-                        var hei = MediaQuery.of(context).size.height;
-
-                        checkZoom(
-                          [
-                            Provider.of<TransportData>(context, listen: false)
-                                .originLocation!
-                                .latLng,
-                            Provider.of<TransportData>(context, listen: false)
-                                .targetLocation!
-                                .latLng
-                          ],
-                          wid,
-                          hei,
-                        );
-                      }
-                      setState(() {
-                        isLoadingTargetData = false;
-                      });
-                    },
-                    child: Container(
-                      alignment: Alignment.center,
-                      height: kTextTabBarHeight * 1.1,
-                      width: widthPix * 0.5,
-                      child: isLoadingTargetData
-                          ? CupertinoActivityIndicator(
-                              color: Theme.of(context).colorScheme.background,
-                            )
-                          : Text(
-                              targetLocation != null
-                                  ? "تایید مبدا و مقصد"
-                                  : originLocation == null
-                                      ? "انتخاب مبدا"
-                                      : "انتخاب مقصد",
-                              style: TextStyle(
-                                  color: Theme.of(context).colorScheme.primary),
-                            ),
-                    ),
-                  ),
-                ),
                 FloatingActionButton(
                   backgroundColor: Theme.of(context).colorScheme.background,
                   heroTag: "gps",
                   onPressed: () async {
-                    setState(() {
-                      isLoadingTargetData = true;
-                    });
                     var currLocation = await getCurrentLocation();
                     if (currLocation != null) {
-                      var newLatLng =
-                          LatLng(currLocation.latitude, currLocation.longitude);
-
-                      await _goToThePlace(
-                          MapPosition(center: newLatLng, zoom: 16));
+                      setState(() {
+                        currentLatLng = LatLng(
+                            currLocation.latitude, currLocation.longitude);
+                      });
+                      checkZoom(
+                        [
+                          originLocation!.latLng,
+                          targetLocation!.latLng,
+                          if (currentLatLng != null) ...[currentLatLng!]
+                        ],
+                      );
                     }
-                    setState(() {
-                      isLoadingTargetData = false;
-                    });
                   },
-                  child: const Icon(Icons.gps_fixed),
+                  child: isGPSing
+                      ? const CupertinoActivityIndicator()
+                      : const Icon(Icons.gps_fixed),
                 ),
               ],
             ),
@@ -768,10 +376,5 @@ class OpenMapsScreenState extends State<OpenMapsScreen> {
         ),
       ),
     );
-  }
-
-  Future<void> _goToThePlace(MapPosition newCameraPos) async {
-    // final MapController controller = await controller.future;
-    mapController.move(newCameraPos.center!, newCameraPos.zoom!);
   }
 }

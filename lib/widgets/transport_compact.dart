@@ -2,10 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' as intl;
+import 'package:persian/persian.dart';
 import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:transportationdriver/models/transport_model.dart';
 import 'package:transportationdriver/providers/driver_transport_data.dart';
+import 'package:transportationdriver/providers/settings_data.dart';
 
 class TransportCompact extends StatefulWidget {
   final AppTransport cTransport;
@@ -123,7 +125,8 @@ class _TransportCompactState extends State<TransportCompact> {
                           ),
                           Text(
                             widget.cTransport.dateScheduleTimeString
-                                    ?.format(context) ??
+                                    ?.format(context)
+                                    .withPersianNumbers() ??
                                 '',
                           ),
                         ],
@@ -204,7 +207,7 @@ class _TransportCompactState extends State<TransportCompact> {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Text(
-                                    'شما در حال تایید سفر هستید',
+                                    'شما در حال تایید و شروع سفر جدید هستید',
                                     style: TextStyle(
                                       height: 2,
                                       fontSize: 13,
@@ -229,7 +232,12 @@ class _TransportCompactState extends State<TransportCompact> {
                                   onPressed: () async {
                                     Provider.of<DriverTransportData>(context,
                                             listen: false)
-                                        .confirmTransport(widget.cTransport);
+                                        .confirmTransport(widget.cTransport)
+                                        .then((value) {
+                                      Provider.of<SettingData>(context,
+                                              listen: false)
+                                          .setbnbIndex(1);
+                                    });
                                     if (mounted) {
                                       Navigator.of(context).pop();
                                     }

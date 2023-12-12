@@ -74,7 +74,7 @@ class DriverTransportData with ChangeNotifier {
     _driverTransports = [];
     for (var newAppTransport in listofmap) {
       var newElement = AppDriverTransport.fromMap(newAppTransport);
-
+      // log(newAppTransport['transport']?['geometry']?.toString() ?? 'nooo');
       _driverTransports.add(newElement);
     }
     notifyListeners();
@@ -132,14 +132,13 @@ class DriverTransportData with ChangeNotifier {
     _isCanceling = true;
     notifyListeners();
     if (cDriverTransport.statusId < 3) {
-      //   await AppAPI().update(
-      //     '${EndPoints.driverTransports}/${cDriverTransport.id}/cancel',
-      //     null,
-      //     {},
-      //     null,
-      //     false,
-      //   );
-      await Future.delayed(const Duration(seconds: 5));
+      await AppAPI().update(
+        '${EndPoints.driverTransports}/${cDriverTransport.id}/cancel',
+        null,
+        {},
+        null,
+        false,
+      );
       await getDriverTransports();
     }
     _isCanceling = false;

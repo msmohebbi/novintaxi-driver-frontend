@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:persian/persian.dart';
 import 'package:persian_datetime_picker/persian_datetime_picker.dart';
 import '../models/transport_od_model.dart';
 import 'package:intl/intl.dart' as intl;
@@ -44,7 +45,37 @@ class AppTransport {
 
   int price;
   int commision;
+
+  int get revenue {
+    return price - commision;
+  }
+
+  String get revenueString {
+    var rialFormat = intl.NumberFormat.currency(
+      // customPattern: "###",
+      locale: "fa_IR",
+      decimalDigits: 0,
+      symbol: "",
+      customPattern: kIsWeb ? "####################" : null,
+    );
+    return rialFormat.format(revenue);
+  }
+
   double time;
+  String get timeString {
+    var farsiFormat = intl.NumberFormat.currency(
+      customPattern: "###",
+      locale: "fa_IR",
+      decimalDigits: 0,
+      symbol: "",
+    );
+    var hours = time ~/ 3600;
+    var hoursString = farsiFormat.format(hours);
+    var minutes = (time ~/ 60) % 60;
+    var minutesString = farsiFormat.format(minutes);
+    return '$hoursString ساعت و $minutesString دقیقه';
+  }
+
   double meter;
   String get meterKMString {
     var rialFormat = intl.NumberFormat.currency(
@@ -55,6 +86,19 @@ class AppTransport {
       customPattern: kIsWeb ? "####################" : null,
     );
     return rialFormat.format(meter ~/ 1000);
+  }
+
+  String get passengersCountString {
+    var farsiFormat = intl.NumberFormat.currency(
+      locale: "fa_IR",
+      decimalDigits: 0,
+      symbol: "",
+      customPattern: "####################",
+    );
+    var adultString = farsiFormat.format(adult);
+    var childString = farsiFormat.format(child);
+
+    return '$adultString بزرگسال و $childString کودک';
   }
 
   int adult;
@@ -80,7 +124,7 @@ class AppTransport {
     if (dateSchedule != null) {
       Jalali? jalali = Jalali.fromDateTime(
           DateTime.fromMillisecondsSinceEpoch(dateSchedule!));
-      return jalali.formatFullDate();
+      return jalali.formatFullDate().withPersianNumbers();
     }
     return null;
   }
@@ -146,7 +190,7 @@ class AppTransport {
         vehicle = newOrder["vehicle"],
         dateSchedule = newOrder["date_schedule"],
         detail = newOrder["detail"],
-        geometery = newOrder["geometery"],
+        geometery = newOrder["geometry"],
         date = newOrder["date"],
         status = newOrder["status"],
         animal = newOrder["animal"],

@@ -1,8 +1,6 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:transportationdriver/providers/driver_transport_data.dart';
-import 'package:intl/intl.dart' as intl;
 import 'package:timeago/timeago.dart' as timeago;
 
 class RevenueScreen extends StatefulWidget {
@@ -16,13 +14,6 @@ class RevenueScreen extends StatefulWidget {
 class _RevenueScreenState extends State<RevenueScreen> {
   @override
   Widget build(BuildContext context) {
-    var rialFormat = intl.NumberFormat.currency(
-      // customPattern: "###",
-      locale: "fa_IR",
-      decimalDigits: 0,
-      symbol: "",
-      customPattern: kIsWeb ? "####################" : null,
-    );
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
@@ -35,7 +26,6 @@ class _RevenueScreenState extends State<RevenueScreen> {
         body: ListView(children: [
           ...Provider.of<DriverTransportData>(context).donedriverTransports.map(
             (e) {
-              var revenue = e.transport.price - e.transport.commision;
               return Padding(
                 padding: const EdgeInsets.symmetric(
                   vertical: kToolbarHeight * 0.1,
@@ -51,7 +41,7 @@ class _RevenueScreenState extends State<RevenueScreen> {
                     padding: const EdgeInsets.symmetric(
                         vertical: kToolbarHeight * 0.1),
                     child: Text(
-                      '${rialFormat.format(revenue)} ریال',
+                      '${e.transport.revenueString} تومان',
                       style: const TextStyle(fontSize: 14),
                     ),
                   ),

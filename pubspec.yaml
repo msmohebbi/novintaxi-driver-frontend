@@ -70,6 +70,8 @@ dependencies:
   maps_launcher: ^2.2.0
   url_launcher: ^6.2.2
   package_info_plus: ^5.0.1
+  flutter_map_animations: ^0.5.3
+  persian: ^1.2.0
   
 dev_dependencies:
   flutter_test:

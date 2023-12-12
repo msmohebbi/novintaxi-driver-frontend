@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:persian/persian.dart';
 import 'package:provider/provider.dart';
 
 import 'package:transportationdriver/models/driver_transport_model.dart';
 import 'package:maps_launcher/maps_launcher.dart';
 import 'package:transportationdriver/providers/driver_transport_data.dart';
+import 'package:transportationdriver/screens/open_maps_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class TransportActiveCompact extends StatefulWidget {
@@ -47,7 +49,7 @@ class _TransportActiveCompactState extends State<TransportActiveCompact> {
                 Row(
                   children: [
                     const Text(
-                      'مبدا:',
+                      'مسیر:',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                       ),
@@ -63,19 +65,12 @@ class _TransportActiveCompactState extends State<TransportActiveCompact> {
                             '',
                       ),
                     ],
-                  ],
-                ),
-                const SizedBox(height: kToolbarHeight * 0.2),
-                Row(
-                  children: [
-                    const Text(
-                      'مقصد:',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
                     if (widget.cDriverTransport.transport.ods?.isNotEmpty ??
                         false) ...[
+                      const SizedBox(
+                        width: kToolbarHeight * 0.1,
+                      ),
+                      const Icon(Icons.arrow_circle_left_outlined),
                       const SizedBox(
                         width: kToolbarHeight * 0.1,
                       ),
@@ -85,12 +80,102 @@ class _TransportActiveCompactState extends State<TransportActiveCompact> {
                     ],
                   ],
                 ),
+                const SizedBox(height: kToolbarHeight * 0.2),
+                Row(
+                  children: [
+                    const Text(
+                      'مدت زمان:',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    if (widget.cDriverTransport.transport.ods?.isNotEmpty ??
+                        false) ...[
+                      const SizedBox(
+                        width: kToolbarHeight * 0.1,
+                      ),
+                      Text(widget.cDriverTransport.transport.timeString),
+                    ],
+                  ],
+                ),
+                const SizedBox(height: kToolbarHeight * 0.2),
+                Row(
+                  children: [
+                    const Text(
+                      'مسافت:',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    if (widget.cDriverTransport.transport.ods?.isNotEmpty ??
+                        false) ...[
+                      const SizedBox(
+                        width: kToolbarHeight * 0.1,
+                      ),
+                      Text(
+                          '${widget.cDriverTransport.transport.meterKMString} کیلومتر'),
+                    ],
+                  ],
+                ),
+                const SizedBox(height: kToolbarHeight * 0.3),
+                Row(
+                  children: [
+                    const Text(
+                      'درآمد:',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    if (widget.cDriverTransport.transport.ods?.isNotEmpty ??
+                        false) ...[
+                      const SizedBox(
+                        width: kToolbarHeight * 0.1,
+                      ),
+                      Text(
+                          '${widget.cDriverTransport.transport.revenueString} تومان'),
+                    ],
+                  ],
+                ),
                 const SizedBox(height: kToolbarHeight * 0.3),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     if (widget.cDriverTransport.navigatorButtonString !=
                         null) ...[
+                      Material(
+                        color: Theme.of(context).hintColor.withAlpha(100),
+                        borderRadius: BorderRadius.circular(12),
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(12),
+                          onTap: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) {
+                                return OpenMapsScreen(
+                                    cTransport:
+                                        widget.cDriverTransport.transport);
+                              },
+                            ));
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: kToolbarHeight * 0.15,
+                              horizontal: kToolbarHeight * 0.2,
+                            ),
+                            child: Row(
+                              children: [
+                                const Icon(CupertinoIcons.map),
+                                const SizedBox(width: kToolbarHeight * 0.1),
+                                Text(
+                                  'خلاصه سفر',
+                                  style: TextStyle(
+                                    color: Theme.of(context).primaryColor,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
                       const SizedBox(width: kToolbarHeight * 0.2),
                       Material(
                         color: Theme.of(context).hintColor.withAlpha(100),
@@ -116,14 +201,21 @@ class _TransportActiveCompactState extends State<TransportActiveCompact> {
                           },
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
-                              vertical: kToolbarHeight * 0.2,
-                              horizontal: kToolbarHeight * 0.4,
+                              vertical: kToolbarHeight * 0.15,
+                              horizontal: kToolbarHeight * 0.2,
                             ),
-                            child: Text(
-                              widget.cDriverTransport.navigatorButtonString!,
-                              style: TextStyle(
-                                color: Theme.of(context).primaryColor,
-                              ),
+                            child: Row(
+                              children: [
+                                const Icon(CupertinoIcons.location_circle),
+                                const SizedBox(width: kToolbarHeight * 0.1),
+                                Text(
+                                  widget
+                                      .cDriverTransport.navigatorButtonString!,
+                                  style: TextStyle(
+                                    color: Theme.of(context).primaryColor,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ),
@@ -131,12 +223,22 @@ class _TransportActiveCompactState extends State<TransportActiveCompact> {
                     ],
                   ],
                 ),
-                const SizedBox(height: kToolbarHeight * 0.2),
-                Divider(
-                  height: 1,
-                  color: Theme.of(context).colorScheme.primary.withAlpha(180),
-                ),
-                const SizedBox(height: kToolbarHeight * 0.2),
+              ],
+            ),
+          ),
+          const SizedBox(height: kToolbarHeight * 0.2),
+          Divider(
+            height: 1,
+            color: Theme.of(context).colorScheme.primary.withAlpha(180),
+          ),
+          const SizedBox(height: kToolbarHeight * 0.2),
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              // vertical: kToolbarHeight * 0.3,
+              horizontal: kToolbarHeight * 0.2,
+            ),
+            child: Column(
+              children: [
                 Row(
                   children: [
                     const Text(
@@ -153,36 +255,57 @@ class _TransportActiveCompactState extends State<TransportActiveCompact> {
                     ),
                   ],
                 ),
+                const SizedBox(height: kToolbarHeight * 0.3),
+                Row(
+                  children: [
+                    const Text(
+                      'تعداد مسافر:',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    if (widget.cDriverTransport.transport.ods?.isNotEmpty ??
+                        false) ...[
+                      const SizedBox(
+                        width: kToolbarHeight * 0.1,
+                      ),
+                      Text(
+                        widget.cDriverTransport.transport.passengersCountString,
+                      ),
+                    ],
+                  ],
+                ),
+                if (widget.cDriverTransport.transport.dateSchedule != null) ...[
+                  const SizedBox(height: kToolbarHeight * 0.2),
+                  Row(
+                    children: [
+                      const Text(
+                        'ساعت سفر:',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(
+                        width: kToolbarHeight * 0.1,
+                      ),
+                      Text(
+                        widget.cDriverTransport.transport
+                                .dateScheduleDateString ??
+                            '',
+                      ),
+                      const SizedBox(
+                        width: kToolbarHeight * 0.1,
+                      ),
+                      Text(
+                        widget.cDriverTransport.transport.dateScheduleTimeString
+                                ?.format(context)
+                                .withPersianNumbers() ??
+                            '',
+                      ),
+                    ],
+                  )
+                ],
                 const SizedBox(height: kToolbarHeight * 0.2),
-                widget.cDriverTransport.transport.dateSchedule != null
-                    ? Row(
-                        children: [
-                          const Text(
-                            'ساعت سفر:',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(
-                            width: kToolbarHeight * 0.1,
-                          ),
-                          Text(
-                            widget.cDriverTransport.transport
-                                .dateScheduleDateString!
-                                .toString(),
-                          ),
-                          const SizedBox(
-                            width: kToolbarHeight * 0.1,
-                          ),
-                          Text(
-                            widget.cDriverTransport.transport
-                                    .dateScheduleTimeString
-                                    ?.format(context) ??
-                                '',
-                          ),
-                        ],
-                      )
-                    : Container(),
                 Row(
                   children: [
                     const Text(
@@ -208,7 +331,7 @@ class _TransportActiveCompactState extends State<TransportActiveCompact> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Material(
-                  color: Colors.green[400],
+                  color: Theme.of(context).hintColor.withAlpha(100),
                   borderRadius: BorderRadius.circular(12),
                   child: InkWell(
                       borderRadius: BorderRadius.circular(12),
@@ -218,25 +341,25 @@ class _TransportActiveCompactState extends State<TransportActiveCompact> {
                               "tel://${widget.cDriverTransport.transport.passengerPhone}"),
                         );
                       },
-                      child: const Padding(
-                        padding: EdgeInsets.symmetric(
-                          vertical: kToolbarHeight * 0.1,
-                          horizontal: kToolbarHeight * 0.4,
+                      child: Container(
+                        width: kToolbarHeight * 2,
+                        padding: const EdgeInsets.symmetric(
+                          vertical: kToolbarHeight * 0.15,
+                          horizontal: kToolbarHeight * 0.1,
                         ),
+                        alignment: Alignment.center,
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Icon(
                               CupertinoIcons.phone_arrow_up_right,
-                              color: Colors.white,
+                              color: Colors.green[600],
                               size: 20,
                             ),
-                            SizedBox(width: kToolbarHeight * 0.2),
-                            Text(
+                            const SizedBox(width: kToolbarHeight * 0.2),
+                            const Text(
                               'تماس',
-                              style: TextStyle(
-                                color: Colors.white,
-                              ),
+                              style: TextStyle(),
                             ),
                           ],
                         ),
@@ -246,7 +369,7 @@ class _TransportActiveCompactState extends State<TransportActiveCompact> {
                   width: kToolbarHeight * 0.2,
                 ),
                 Material(
-                  color: Colors.orange[400],
+                  color: Theme.of(context).hintColor.withAlpha(100),
                   borderRadius: BorderRadius.circular(12),
                   child: InkWell(
                       borderRadius: BorderRadius.circular(12),
@@ -256,23 +379,24 @@ class _TransportActiveCompactState extends State<TransportActiveCompact> {
                               "sms://${widget.cDriverTransport.transport.passengerPhone}"),
                         );
                       },
-                      child: const Padding(
-                        padding: EdgeInsets.symmetric(
-                            vertical: kToolbarHeight * 0.1,
-                            horizontal: kToolbarHeight * 0.2),
+                      child: Container(
+                        width: kToolbarHeight * 2,
+                        padding: const EdgeInsets.symmetric(
+                          vertical: kToolbarHeight * 0.15,
+                          horizontal: kToolbarHeight * 0.1,
+                        ),
+                        alignment: Alignment.center,
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Icon(
                               CupertinoIcons.bubble_left_bubble_right,
-                              color: Colors.white,
+                              color: Colors.orange[800],
                             ),
-                            SizedBox(width: kToolbarHeight * 0.2),
-                            Text(
-                              'ارسال پیام',
-                              style: TextStyle(
-                                color: Colors.white,
-                              ),
+                            const SizedBox(width: kToolbarHeight * 0.2),
+                            const Text(
+                              'پیامک',
+                              style: TextStyle(),
                             ),
                           ],
                         ),
@@ -280,83 +404,76 @@ class _TransportActiveCompactState extends State<TransportActiveCompact> {
                 ),
               ],
             ),
-            const SizedBox(height: kToolbarHeight * 0.2),
           ],
+          const SizedBox(height: kToolbarHeight * 0.2),
           Divider(
             height: 1,
             color: Theme.of(context).colorScheme.primary.withAlpha(180),
           ),
-          Container(
-            padding: const EdgeInsets.symmetric(
-              vertical: kToolbarHeight * 0.2,
-            ),
-            decoration: const BoxDecoration(
-                // color: Theme.of(context).colorScheme.primary.withAlpha(50),
-                ),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text(
-                      'وضعیت فعلی:',
-                      style: TextStyle(
-                          // fontWeight: FontWeight.bold,
-                          ),
-                    ),
-                    const SizedBox(
-                      width: kToolbarHeight * 0.1,
-                    ),
-                    Text(
-                      widget.cDriverTransport.status,
-                    ),
-                  ],
-                ),
-                if (widget.cDriverTransport.actionButtonString != null) ...[
-                  const SizedBox(height: kToolbarHeight * 0.2),
-                  Material(
-                    color: Theme.of(context).colorScheme.primary,
-                    borderRadius: BorderRadius.circular(12),
-                    child: InkWell(
-                      borderRadius: BorderRadius.circular(12),
-                      onTap: () {
-                        Provider.of<DriverTransportData>(context, listen: false)
-                            .updateDriverTransport(widget.cDriverTransport);
-                      },
-                      child:
-                          Provider.of<DriverTransportData>(context).isUpdating
-                              ? Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: kToolbarHeight * 0.2,
-                                    horizontal: kToolbarHeight * 0.8,
-                                  ),
-                                  child: CupertinoActivityIndicator(
-                                    color: Theme.of(context).primaryColor,
-                                  ),
-                                )
-                              : Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: kToolbarHeight * 0.2,
-                                    horizontal: kToolbarHeight * 0.4,
-                                  ),
-                                  child: Text(
-                                    widget.cDriverTransport.actionButtonString!,
-                                    style: TextStyle(
-                                      color: Theme.of(context).primaryColor,
-                                    ),
-                                  ),
-                                ),
-                    ),
+          const SizedBox(height: kToolbarHeight * 0.2),
+          Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    'وضعیت فعلی:',
+                    style: TextStyle(
+                        // fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                  const SizedBox(
+                    width: kToolbarHeight * 0.1,
+                  ),
+                  Text(
+                    widget.cDriverTransport.status,
                   ),
                 ],
+              ),
+              if (widget.cDriverTransport.actionButtonString != null) ...[
+                const SizedBox(height: kToolbarHeight * 0.2),
+                Material(
+                  color: Theme.of(context).colorScheme.primary,
+                  borderRadius: BorderRadius.circular(12),
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(12),
+                    onTap: () {
+                      Provider.of<DriverTransportData>(context, listen: false)
+                          .updateDriverTransport(widget.cDriverTransport);
+                    },
+                    child: Provider.of<DriverTransportData>(context).isUpdating
+                        ? Padding(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: kToolbarHeight * 0.2,
+                              horizontal: kToolbarHeight * 0.8,
+                            ),
+                            child: CupertinoActivityIndicator(
+                              color: Theme.of(context).primaryColor,
+                            ),
+                          )
+                        : Padding(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: kToolbarHeight * 0.2,
+                              horizontal: kToolbarHeight * 0.4,
+                            ),
+                            child: Text(
+                              widget.cDriverTransport.actionButtonString!,
+                              style: TextStyle(
+                                color: Theme.of(context).primaryColor,
+                              ),
+                            ),
+                          ),
+                  ),
+                ),
               ],
-            ),
+            ],
           ),
+          const SizedBox(height: kToolbarHeight * 0.2),
           Divider(
             height: 1,
             color: Theme.of(context).colorScheme.primary.withAlpha(180),
           ),
-          const SizedBox(height: kToolbarHeight * 0.3),
+          const SizedBox(height: kToolbarHeight * 0.2),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
