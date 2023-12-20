@@ -20,6 +20,16 @@ class TransportData with ChangeNotifier {
     _allVehicles = [];
   }
 
+  Future<bool> ensureInitialize() async {
+    while (true) {
+      if (isInitialized) {
+        return true;
+      } else {
+        await Future.delayed(const Duration(milliseconds: 300));
+      }
+    }
+  }
+
   int _modalIndex = 0;
   int get modalIndex => _modalIndex;
   setModalIndex(int newIndex) {

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:novintaxidriver/providers/driver_transport_data.dart';
 import 'package:novintaxidriver/providers/notification_data.dart';
 import 'package:novintaxidriver/screens/history_screen.dart';
 
@@ -21,6 +22,17 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
+    Provider.of<DriverTransportData>(context, listen: false)
+        .ensureInitialize()
+        .then((value) {
+      if (mounted) {
+        if (Provider.of<DriverTransportData>(context, listen: false)
+            .activedriverTransports
+            .isNotEmpty) {
+          Provider.of<SettingData>(context, listen: false).setbnbIndex(1);
+        }
+      }
+    });
     super.initState();
   }
 
@@ -41,7 +53,8 @@ class _MainScreenState extends State<MainScreen> {
     // int fontDelta = 0;
     var heightPix = heightPixFixed;
     // bool isHorizontal = false;
-    if (widthPix > heightPix || MediaQuery.of(context).orientation == Orientation.landscape) {
+    if (widthPix > heightPix ||
+        MediaQuery.of(context).orientation == Orientation.landscape) {
       // fontDelta = 1;
       widthPix = heightPix;
       // isHorizontal = true;
@@ -89,7 +102,8 @@ class _MainScreenState extends State<MainScreen> {
                 showUnselectedLabels: false,
                 currentIndex: bnbIndex,
                 onTap: (newIndex) {
-                  Provider.of<SettingData>(context, listen: false).setbnbIndex(newIndex);
+                  Provider.of<SettingData>(context, listen: false)
+                      .setbnbIndex(newIndex);
                 },
                 items: [
                   BottomNavigationBarItem(
