@@ -1,4 +1,4 @@
-package com.pishranesh.transportationdriver
+package com.pishranesh.novintaxidriver
 
 import io.flutter.embedding.android.FlutterActivity
 

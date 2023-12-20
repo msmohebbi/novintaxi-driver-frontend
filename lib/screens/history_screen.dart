@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:transportationdriver/providers/driver_transport_data.dart';
-import 'package:transportationdriver/widgets/transport_active_compact.dart';
+import 'package:novintaxidriver/providers/driver_transport_data.dart';
+import 'package:novintaxidriver/widgets/transport_active_compact.dart';
 
 class HistoryScreen extends StatefulWidget {
   const HistoryScreen({super.key});
@@ -14,18 +14,14 @@ class HistoryScreenState extends State<HistoryScreen> {
   var historyIndex = 0;
   @override
   Widget build(BuildContext context) {
-    var activeTransports =
-        Provider.of<DriverTransportData>(context).activedriverTransports;
-    var doneTransports =
-        Provider.of<DriverTransportData>(context).donedriverTransports;
-    var canceledTransports =
-        Provider.of<DriverTransportData>(context).canceleddriverTransports;
+    var activeTransports = Provider.of<DriverTransportData>(context).activedriverTransports;
+    var doneTransports = Provider.of<DriverTransportData>(context).donedriverTransports;
+    var canceledTransports = Provider.of<DriverTransportData>(context).canceleddriverTransports;
     return Directionality(
       textDirection: TextDirection.rtl,
       child: RefreshIndicator(
         onRefresh: () async {
-          await Provider.of<DriverTransportData>(context, listen: false)
-              .getDriverTransports();
+          await Provider.of<DriverTransportData>(context, listen: false).getDriverTransports();
         },
         child: ListView(
           children: [
@@ -61,9 +57,7 @@ class HistoryScreenState extends State<HistoryScreen> {
                     horizontal: kToolbarHeight * 0.1,
                   ),
                   child: Material(
-                    color: historyIndex == 0
-                        ? Theme.of(context).colorScheme.primary.withAlpha(50)
-                        : null,
+                    color: historyIndex == 0 ? Theme.of(context).colorScheme.primary.withAlpha(50) : null,
                     borderRadius: BorderRadius.circular(12),
                     child: InkWell(
                       onTap: () {
@@ -80,12 +74,8 @@ class HistoryScreenState extends State<HistoryScreen> {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(
-                            color: historyIndex == 0
-                                ? Theme.of(context)
-                                    .colorScheme
-                                    .primary
-                                    .withAlpha(180)
-                                : Theme.of(context).hintColor.withAlpha(180),
+                            color:
+                                historyIndex == 0 ? Theme.of(context).colorScheme.primary.withAlpha(180) : Theme.of(context).hintColor.withAlpha(180),
                           ),
                         ),
                         child: const Text('در حال انجام'),
@@ -99,9 +89,7 @@ class HistoryScreenState extends State<HistoryScreen> {
                   ),
                   child: Material(
                     borderRadius: BorderRadius.circular(12),
-                    color: historyIndex == 1
-                        ? Theme.of(context).colorScheme.primary.withAlpha(50)
-                        : null,
+                    color: historyIndex == 1 ? Theme.of(context).colorScheme.primary.withAlpha(50) : null,
                     child: InkWell(
                       onTap: () {
                         setState(() {
@@ -117,12 +105,8 @@ class HistoryScreenState extends State<HistoryScreen> {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(
-                            color: historyIndex == 1
-                                ? Theme.of(context)
-                                    .colorScheme
-                                    .primary
-                                    .withAlpha(180)
-                                : Theme.of(context).hintColor.withAlpha(180),
+                            color:
+                                historyIndex == 1 ? Theme.of(context).colorScheme.primary.withAlpha(180) : Theme.of(context).hintColor.withAlpha(180),
                           ),
                         ),
                         child: const Text('انجام شده'),
@@ -136,9 +120,7 @@ class HistoryScreenState extends State<HistoryScreen> {
                   ),
                   child: Material(
                     borderRadius: BorderRadius.circular(12),
-                    color: historyIndex == 2
-                        ? Theme.of(context).colorScheme.primary.withAlpha(50)
-                        : null,
+                    color: historyIndex == 2 ? Theme.of(context).colorScheme.primary.withAlpha(50) : null,
                     child: InkWell(
                       onTap: () {
                         setState(() {
@@ -154,12 +136,8 @@ class HistoryScreenState extends State<HistoryScreen> {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(
-                            color: historyIndex == 2
-                                ? Theme.of(context)
-                                    .colorScheme
-                                    .primary
-                                    .withAlpha(180)
-                                : Theme.of(context).hintColor.withAlpha(180),
+                            color:
+                                historyIndex == 2 ? Theme.of(context).colorScheme.primary.withAlpha(180) : Theme.of(context).hintColor.withAlpha(180),
                           ),
                         ),
                         child: const Text('لغو شده'),

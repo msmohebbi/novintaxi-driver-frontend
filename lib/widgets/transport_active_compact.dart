@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:persian/persian.dart';
 import 'package:provider/provider.dart';
 
-import 'package:transportationdriver/models/driver_transport_model.dart';
+import 'package:novintaxidriver/models/driver_transport_model.dart';
 import 'package:maps_launcher/maps_launcher.dart';
-import 'package:transportationdriver/providers/driver_transport_data.dart';
-import 'package:transportationdriver/screens/open_maps_screen.dart';
+import 'package:novintaxidriver/providers/driver_transport_data.dart';
+import 'package:novintaxidriver/screens/open_maps_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class TransportActiveCompact extends StatefulWidget {
@@ -54,19 +54,15 @@ class _TransportActiveCompactState extends State<TransportActiveCompact> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    if (widget.cDriverTransport.transport.ods?.isNotEmpty ??
-                        false) ...[
+                    if (widget.cDriverTransport.transport.ods?.isNotEmpty ?? false) ...[
                       const SizedBox(
                         width: kToolbarHeight * 0.1,
                       ),
                       Text(
-                        widget.cDriverTransport.transport.ods?.first.location
-                                .city ??
-                            '',
+                        widget.cDriverTransport.transport.ods?.first.location.city ?? '',
                       ),
                     ],
-                    if (widget.cDriverTransport.transport.ods?.isNotEmpty ??
-                        false) ...[
+                    if (widget.cDriverTransport.transport.ods?.isNotEmpty ?? false) ...[
                       const SizedBox(
                         width: kToolbarHeight * 0.1,
                       ),
@@ -74,9 +70,7 @@ class _TransportActiveCompactState extends State<TransportActiveCompact> {
                       const SizedBox(
                         width: kToolbarHeight * 0.1,
                       ),
-                      Text(widget.cDriverTransport.transport.ods?.last.location
-                              .city ??
-                          ''),
+                      Text(widget.cDriverTransport.transport.ods?.last.location.city ?? ''),
                     ],
                   ],
                 ),
@@ -89,8 +83,7 @@ class _TransportActiveCompactState extends State<TransportActiveCompact> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    if (widget.cDriverTransport.transport.ods?.isNotEmpty ??
-                        false) ...[
+                    if (widget.cDriverTransport.transport.ods?.isNotEmpty ?? false) ...[
                       const SizedBox(
                         width: kToolbarHeight * 0.1,
                       ),
@@ -107,13 +100,11 @@ class _TransportActiveCompactState extends State<TransportActiveCompact> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    if (widget.cDriverTransport.transport.ods?.isNotEmpty ??
-                        false) ...[
+                    if (widget.cDriverTransport.transport.ods?.isNotEmpty ?? false) ...[
                       const SizedBox(
                         width: kToolbarHeight * 0.1,
                       ),
-                      Text(
-                          '${widget.cDriverTransport.transport.meterKMString} کیلومتر'),
+                      Text('${widget.cDriverTransport.transport.meterKMString} کیلومتر'),
                     ],
                   ],
                 ),
@@ -126,13 +117,11 @@ class _TransportActiveCompactState extends State<TransportActiveCompact> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    if (widget.cDriverTransport.transport.ods?.isNotEmpty ??
-                        false) ...[
+                    if (widget.cDriverTransport.transport.ods?.isNotEmpty ?? false) ...[
                       const SizedBox(
                         width: kToolbarHeight * 0.1,
                       ),
-                      Text(
-                          '${widget.cDriverTransport.transport.revenueString} تومان'),
+                      Text('${widget.cDriverTransport.transport.revenueString} تومان'),
                     ],
                   ],
                 ),
@@ -140,8 +129,7 @@ class _TransportActiveCompactState extends State<TransportActiveCompact> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    if (widget.cDriverTransport.navigatorButtonString !=
-                        null) ...[
+                    if (widget.cDriverTransport.navigatorButtonString != null) ...[
                       Material(
                         color: Theme.of(context).hintColor.withAlpha(100),
                         borderRadius: BorderRadius.circular(12),
@@ -150,9 +138,7 @@ class _TransportActiveCompactState extends State<TransportActiveCompact> {
                           onTap: () {
                             Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) {
-                                return OpenMapsScreen(
-                                    cTransport:
-                                        widget.cDriverTransport.transport);
+                                return OpenMapsScreen(cTransport: widget.cDriverTransport.transport);
                               },
                             ));
                           },
@@ -185,17 +171,13 @@ class _TransportActiveCompactState extends State<TransportActiveCompact> {
                           onTap: () {
                             if (widget.cDriverTransport.statusId == 1) {
                               MapsLauncher.launchCoordinates(
-                                widget.cDriverTransport.transport.ods!.first
-                                    .location.lat,
-                                widget.cDriverTransport.transport.ods!.first
-                                    .location.lng,
+                                widget.cDriverTransport.transport.ods!.first.location.lat,
+                                widget.cDriverTransport.transport.ods!.first.location.lng,
                               );
                             } else {
                               MapsLauncher.launchCoordinates(
-                                widget.cDriverTransport.transport.ods!.last
-                                    .location.lat,
-                                widget.cDriverTransport.transport.ods!.last
-                                    .location.lng,
+                                widget.cDriverTransport.transport.ods!.last.location.lat,
+                                widget.cDriverTransport.transport.ods!.last.location.lng,
                               );
                             }
                           },
@@ -209,8 +191,7 @@ class _TransportActiveCompactState extends State<TransportActiveCompact> {
                                 const Icon(CupertinoIcons.location_circle),
                                 const SizedBox(width: kToolbarHeight * 0.1),
                                 Text(
-                                  widget
-                                      .cDriverTransport.navigatorButtonString!,
+                                  widget.cDriverTransport.navigatorButtonString!,
                                   style: TextStyle(
                                     color: Theme.of(context).primaryColor,
                                   ),
@@ -264,8 +245,7 @@ class _TransportActiveCompactState extends State<TransportActiveCompact> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    if (widget.cDriverTransport.transport.ods?.isNotEmpty ??
-                        false) ...[
+                    if (widget.cDriverTransport.transport.ods?.isNotEmpty ?? false) ...[
                       const SizedBox(
                         width: kToolbarHeight * 0.1,
                       ),
@@ -289,18 +269,13 @@ class _TransportActiveCompactState extends State<TransportActiveCompact> {
                         width: kToolbarHeight * 0.1,
                       ),
                       Text(
-                        widget.cDriverTransport.transport
-                                .dateScheduleDateString ??
-                            '',
+                        widget.cDriverTransport.transport.dateScheduleDateString ?? '',
                       ),
                       const SizedBox(
                         width: kToolbarHeight * 0.1,
                       ),
                       Text(
-                        widget.cDriverTransport.transport.dateScheduleTimeString
-                                ?.format(context)
-                                .withPersianNumbers() ??
-                            '',
+                        widget.cDriverTransport.transport.dateScheduleTimeString?.format(context).withPersianNumbers() ?? '',
                       ),
                     ],
                   )
@@ -328,8 +303,7 @@ class _TransportActiveCompactState extends State<TransportActiveCompact> {
             ),
           ),
           const SizedBox(height: kToolbarHeight * 0.2),
-          if (widget.cDriverTransport.statusId < 3 &&
-              widget.cDriverTransport.statusId > 0) ...[
+          if (widget.cDriverTransport.statusId < 3 && widget.cDriverTransport.statusId > 0) ...[
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -340,8 +314,7 @@ class _TransportActiveCompactState extends State<TransportActiveCompact> {
                       borderRadius: BorderRadius.circular(12),
                       onTap: () {
                         launchUrl(
-                          Uri.parse(
-                              "tel://${widget.cDriverTransport.transport.passengerPhone}"),
+                          Uri.parse("tel://${widget.cDriverTransport.transport.passengerPhone}"),
                         );
                       },
                       child: Container(
@@ -378,8 +351,7 @@ class _TransportActiveCompactState extends State<TransportActiveCompact> {
                       borderRadius: BorderRadius.circular(12),
                       onTap: () {
                         launchUrl(
-                          Uri.parse(
-                              "sms://${widget.cDriverTransport.transport.passengerPhone}"),
+                          Uri.parse("sms://${widget.cDriverTransport.transport.passengerPhone}"),
                         );
                       },
                       child: Container(
@@ -465,10 +437,7 @@ class _TransportActiveCompactState extends State<TransportActiveCompact> {
                               actions: [
                                 IconButton(
                                   onPressed: () async {
-                                    Provider.of<DriverTransportData>(context,
-                                            listen: false)
-                                        .updateDriverTransport(
-                                            widget.cDriverTransport);
+                                    Provider.of<DriverTransportData>(context, listen: false).updateDriverTransport(widget.cDriverTransport);
                                     if (mounted) {
                                       Navigator.of(context).pop();
                                     }
@@ -476,8 +445,7 @@ class _TransportActiveCompactState extends State<TransportActiveCompact> {
                                   icon: Text(
                                     'تغییر وضغیت',
                                     style: TextStyle(
-                                      color:
-                                          Theme.of(context).colorScheme.error,
+                                      color: Theme.of(context).colorScheme.error,
                                       height: 2,
                                       fontSize: 13,
                                       fontFamily: 'IRANYekan',
@@ -541,8 +509,7 @@ class _TransportActiveCompactState extends State<TransportActiveCompact> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              if (!widget.cDriverTransport.isCanceled &&
-                  widget.cDriverTransport.dateEnded == null) ...[
+              if (!widget.cDriverTransport.isCanceled && widget.cDriverTransport.dateEnded == null) ...[
                 Material(
                   color: Theme.of(context).colorScheme.error,
                   borderRadius: BorderRadius.circular(12),
@@ -583,10 +550,7 @@ class _TransportActiveCompactState extends State<TransportActiveCompact> {
                               actions: [
                                 IconButton(
                                   onPressed: () async {
-                                    Provider.of<DriverTransportData>(context,
-                                            listen: false)
-                                        .cancelDriverTransport(
-                                            widget.cDriverTransport);
+                                    Provider.of<DriverTransportData>(context, listen: false).cancelDriverTransport(widget.cDriverTransport);
 
                                     if (mounted) {
                                       Navigator.of(context).pop();
@@ -595,8 +559,7 @@ class _TransportActiveCompactState extends State<TransportActiveCompact> {
                                   icon: Text(
                                     'لغو سفر',
                                     style: TextStyle(
-                                      color:
-                                          Theme.of(context).colorScheme.error,
+                                      color: Theme.of(context).colorScheme.error,
                                       height: 2,
                                       fontSize: 13,
                                       fontFamily: 'IRANYekan',

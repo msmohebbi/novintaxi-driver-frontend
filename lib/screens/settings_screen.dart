@@ -2,13 +2,13 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:transportationdriver/providers/auth_data.dart';
-import 'package:transportationdriver/providers/driver_data.dart';
-import 'package:transportationdriver/screens/license_view_screen.dart';
-import 'package:transportationdriver/screens/profile_view_screen.dart';
-import 'package:transportationdriver/screens/revenue_screen.dart';
-import 'package:transportationdriver/screens/vehicle_view_screen.dart';
-import 'package:transportationdriver/widgets/about_dialog.dart';
+import 'package:novintaxidriver/providers/auth_data.dart';
+import 'package:novintaxidriver/providers/driver_data.dart';
+import 'package:novintaxidriver/screens/license_view_screen.dart';
+import 'package:novintaxidriver/screens/profile_view_screen.dart';
+import 'package:novintaxidriver/screens/revenue_screen.dart';
+import 'package:novintaxidriver/screens/vehicle_view_screen.dart';
+import 'package:novintaxidriver/widgets/about_dialog.dart';
 
 import '../providers/settings_data.dart';
 
@@ -29,8 +29,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     // int fontDelta = 0;
     var heightPix = heightPixFixed;
     // bool isHorizontal = false;
-    if (widthPix > heightPix ||
-        MediaQuery.of(context).orientation == Orientation.landscape) {
+    if (widthPix > heightPix || MediaQuery.of(context).orientation == Orientation.landscape) {
       // fontDelta = 1;
       widthPix = heightPix;
       // isHorizontal = true;
@@ -90,18 +89,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      if (Provider.of<DriverData>(context)
-                              .cDriver
-                              ?.personalImage !=
-                          null) ...[
+                      if (Provider.of<DriverData>(context).cDriver?.personalImage != null) ...[
                         ClipOval(
                           child: SizedBox(
                             width: kToolbarHeight * 0.6,
                             height: kToolbarHeight * 0.6,
                             child: CachedNetworkImage(
-                              imageUrl: Provider.of<DriverData>(context)
-                                  .cDriver!
-                                  .personalImage,
+                              imageUrl: Provider.of<DriverData>(context).cDriver!.personalImage,
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -186,8 +180,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       topRight: Radius.circular(12),
                     ),
                     onTap: () {
-                      Navigator.of(context)
-                          .pushNamed(ProfileViewScreen.routeName);
+                      Navigator.of(context).pushNamed(ProfileViewScreen.routeName);
                     },
                     child: const Padding(
                       padding: EdgeInsets.symmetric(
@@ -212,8 +205,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   color: Theme.of(context).colorScheme.primary.withAlpha(50),
                   child: InkWell(
                     onTap: () {
-                      Navigator.of(context)
-                          .pushNamed(VehicleViewScreen.routeName);
+                      Navigator.of(context).pushNamed(VehicleViewScreen.routeName);
                     },
                     child: const Padding(
                       padding: EdgeInsets.symmetric(
@@ -246,8 +238,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       bottomRight: Radius.circular(12),
                     ),
                     onTap: () {
-                      Navigator.of(context)
-                          .pushNamed(LicenseViewScreen.routeName);
+                      Navigator.of(context).pushNamed(LicenseViewScreen.routeName);
                     },
                     child: const Padding(
                       padding: EdgeInsets.symmetric(
@@ -308,12 +299,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         children: [
                           const Text('حالت شب'),
                           CupertinoSwitch(
-                              activeColor:
-                                  Theme.of(context).colorScheme.primary,
+                              activeColor: Theme.of(context).colorScheme.primary,
                               value: Provider.of<SettingData>(context).isDark,
                               onChanged: (_) {
-                                Provider.of<SettingData>(context, listen: false)
-                                    .changeIsDark();
+                                Provider.of<SettingData>(context, listen: false).changeIsDark();
                               }),
                         ],
                       ),
@@ -527,9 +516,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               actions: [
                                 IconButton(
                                   onPressed: () async {
-                                    await Provider.of<AuthData>(context,
-                                            listen: false)
-                                        .signOut();
+                                    await Provider.of<AuthData>(context, listen: false).signOut();
 
                                     if (mounted) {
                                       Navigator.of(context).pop();

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:transportationdriver/backend/api.dart';
-import 'package:transportationdriver/backend/api_endpoints.dart';
-import 'package:transportationdriver/models/driver_transport_model.dart';
-import 'package:transportationdriver/models/transport_model.dart';
+import 'package:novintaxidriver/backend/api.dart';
+import 'package:novintaxidriver/backend/api_endpoints.dart';
+import 'package:novintaxidriver/models/driver_transport_model.dart';
+import 'package:novintaxidriver/models/transport_model.dart';
 
 class DriverTransportData with ChangeNotifier {
   DriverTransportData() {
@@ -42,26 +42,20 @@ class DriverTransportData with ChangeNotifier {
 
   List<AppDriverTransport> get driverTransports => _driverTransports;
   List<AppDriverTransport> _driverTransports = [];
-  List<AppDriverTransport> get activedriverTransports => _driverTransports
-      .where((element) => element.dateEnded == null && !element.isCanceled)
-      .toList();
-  List<AppDriverTransport> get donedriverTransports =>
-      _driverTransports.where((element) => element.dateEnded != null).toList();
-  List<AppDriverTransport> get canceleddriverTransports =>
-      _driverTransports.where((element) => element.isCanceled).toList();
+  List<AppDriverTransport> get activedriverTransports =>
+      _driverTransports.where((element) => element.dateEnded == null && !element.isCanceled).toList();
+  List<AppDriverTransport> get donedriverTransports => _driverTransports.where((element) => element.dateEnded != null).toList();
+  List<AppDriverTransport> get canceleddriverTransports => _driverTransports.where((element) => element.isCanceled).toList();
 
   List<String> get ignoredTransports => _ignoredTransports;
   List<String> _ignoredTransports = [];
 
   Future<void> getTransports() async {
-    var listofmap = await AppAPI()
-        .getWithoutPaginate(urlPath: '${EndPoints.transports}/get_in_process');
+    var listofmap = await AppAPI().getWithoutPaginate(urlPath: '${EndPoints.transports}/get_in_process');
     _allTransports = [];
     for (var newAppTransport in listofmap) {
       var newElement = AppTransport.fromMap(newAppTransport);
-      if (ignoredTransports
-          .where((element) => element == newElement.id.toString())
-          .isEmpty) {
+      if (ignoredTransports.where((element) => element == newElement.id.toString()).isEmpty) {
         _allTransports.add(newElement);
       }
     }
@@ -69,8 +63,7 @@ class DriverTransportData with ChangeNotifier {
   }
 
   Future<void> getDriverTransports() async {
-    var listofmap =
-        await AppAPI().getWithoutPaginate(urlPath: EndPoints.driverTransports);
+    var listofmap = await AppAPI().getWithoutPaginate(urlPath: EndPoints.driverTransports);
     _driverTransports = [];
     for (var newAppTransport in listofmap) {
       var newElement = AppDriverTransport.fromMap(newAppTransport);
@@ -96,8 +89,7 @@ class DriverTransportData with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> updateDriverTransport(
-      AppDriverTransport cDriverTransport) async {
+  Future<void> updateDriverTransport(AppDriverTransport cDriverTransport) async {
     if (isUpdating) {
       return;
     }
@@ -124,8 +116,7 @@ class DriverTransportData with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> cancelDriverTransport(
-      AppDriverTransport cDriverTransport) async {
+  Future<void> cancelDriverTransport(AppDriverTransport cDriverTransport) async {
     if (_isCanceling || _isUpdating) {
       return;
     }

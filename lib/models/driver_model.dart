@@ -1,4 +1,4 @@
-import 'package:transportationdriver/models/vehicle_type_model.dart';
+import 'package:novintaxidriver/models/vehicle_type_model.dart';
 
 class AppDriver {
   AppDriver({
@@ -29,9 +29,7 @@ class AppDriver {
         name = newItem["name"],
         nationalId = newItem["national_id"],
         gender = newItem["gender"],
-        vehicleType = newItem["vehicle_type"] != null
-            ? AppVehicleType.fromMap(newItem["vehicle_type"])
-            : null,
+        vehicleType = newItem["vehicle_type"] != null ? AppVehicleType.fromMap(newItem["vehicle_type"]) : null,
         isAvailable = newItem["is_available"],
         isDisable = newItem["is_disable"],
         personalImage = newItem["personal_image"],

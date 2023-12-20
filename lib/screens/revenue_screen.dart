@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:transportationdriver/providers/driver_transport_data.dart';
+import 'package:novintaxidriver/providers/driver_transport_data.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class RevenueScreen extends StatefulWidget {
@@ -38,8 +38,7 @@ class _RevenueScreenState extends State<RevenueScreen> {
                         color: Theme.of(context).hintColor.withAlpha(60),
                       )),
                   title: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: kToolbarHeight * 0.1),
+                    padding: const EdgeInsets.symmetric(vertical: kToolbarHeight * 0.1),
                     child: Text(
                       '${e.transport.revenueString} تومان',
                       style: const TextStyle(fontSize: 14),

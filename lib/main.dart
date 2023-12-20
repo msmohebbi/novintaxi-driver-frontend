@@ -10,19 +10,19 @@ import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:transportationdriver/providers/driver_data.dart';
-import 'package:transportationdriver/providers/driver_transport_data.dart';
-import 'package:transportationdriver/providers/faq_data.dart';
-import 'package:transportationdriver/providers/message_data.dart';
-import 'package:transportationdriver/screens/chat_screen.dart';
-import 'package:transportationdriver/screens/driver_profile_screen.dart';
-import 'package:transportationdriver/screens/faq_screen.dart';
-import 'package:transportationdriver/screens/license_view_screen.dart';
-import 'package:transportationdriver/screens/loading_screen.dart';
-import 'package:transportationdriver/screens/main_screen.dart';
-import 'package:transportationdriver/screens/profile_view_screen.dart';
-import 'package:transportationdriver/screens/revenue_screen.dart';
-import 'package:transportationdriver/screens/vehicle_view_screen.dart';
+import 'package:novintaxidriver/providers/driver_data.dart';
+import 'package:novintaxidriver/providers/driver_transport_data.dart';
+import 'package:novintaxidriver/providers/faq_data.dart';
+import 'package:novintaxidriver/providers/message_data.dart';
+import 'package:novintaxidriver/screens/chat_screen.dart';
+import 'package:novintaxidriver/screens/driver_profile_screen.dart';
+import 'package:novintaxidriver/screens/faq_screen.dart';
+import 'package:novintaxidriver/screens/license_view_screen.dart';
+import 'package:novintaxidriver/screens/loading_screen.dart';
+import 'package:novintaxidriver/screens/main_screen.dart';
+import 'package:novintaxidriver/screens/profile_view_screen.dart';
+import 'package:novintaxidriver/screens/revenue_screen.dart';
+import 'package:novintaxidriver/screens/vehicle_view_screen.dart';
 import 'screens/auth/auth_screen.dart';
 import 'screens/search_driver_screen.dart';
 import 'package:url_strategy/url_strategy.dart';
@@ -69,8 +69,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final FirebaseAnalytics analytics = FirebaseAnalytics.instance;
-    FirebaseAnalyticsObserver observer =
-        FirebaseAnalyticsObserver(analytics: analytics);
+    FirebaseAnalyticsObserver observer = FirebaseAnalyticsObserver(analytics: analytics);
 
     return MultiProvider(
       providers: [
@@ -92,11 +91,10 @@ class MyApp extends StatelessWidget {
         // -====================================================================
         // All Need Authentication-------------------------------------------
         ChangeNotifierProxyProvider<AuthData, ProfileData>(
-          update: (context, newAuthData, previousProfileData) =>
-              previousProfileData!
-                ..updater(
-                  newAuthData,
-                ),
+          update: (context, newAuthData, previousProfileData) => previousProfileData!
+            ..updater(
+              newAuthData,
+            ),
           create: (BuildContext context) => ProfileData(),
         ),
         // ChangeNotifierProvider(
@@ -204,8 +202,6 @@ class MyCustomScrollBehavior extends MaterialScrollBehavior {
 class MyHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? context) {
-    return super.createHttpClient(context)
-      ..badCertificateCallback =
-          (X509Certificate cert, String host, int port) => true;
+    return super.createHttpClient(context)..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
   }
 }

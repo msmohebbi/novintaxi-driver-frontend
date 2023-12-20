@@ -1,7 +1,7 @@
 {
   "file_generated_by": "FlutterFire CLI",
   "purpose": "FirebaseAppID & ProjectID for this Firebase app in this directory",
-  "GOOGLE_APP_ID": "1:511795380278:ios:5b5856ab1d0cd600bdd897",
-  "FIREBASE_PROJECT_ID": "safarday-driver",
-  "GCM_SENDER_ID": "511795380278"
+  "GOOGLE_APP_ID": "1:262764376701:ios:6ea8f95891a9d63b623714",
+  "FIREBASE_PROJECT_ID": "novintaxi-driver",
+  "GCM_SENDER_ID": "262764376701"
 }

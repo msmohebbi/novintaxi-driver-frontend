@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:transportationdriver/providers/auth_data.dart';
-import 'package:transportationdriver/providers/driver_data.dart';
-import 'package:transportationdriver/widgets/select_image.dart';
+import 'package:novintaxidriver/providers/auth_data.dart';
+import 'package:novintaxidriver/providers/driver_data.dart';
+import 'package:novintaxidriver/widgets/select_image.dart';
 
 class Page0 extends StatefulWidget {
   final bool isScreen;
@@ -23,8 +23,7 @@ class _Page0State extends State<Page0> {
 
   @override
   Widget build(BuildContext context) {
-    var regexp = RegExp(r'^[آابپتثجچحخدذرزژسشصضطظعغفقکگلمنوهی ]+',
-        caseSensitive: false, unicode: true, dotAll: true);
+    var regexp = RegExp(r'^[آابپتثجچحخدذرزژسشصضطظعغفقکگلمنوهی ]+', caseSensitive: false, unicode: true, dotAll: true);
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -61,8 +60,7 @@ class _Page0State extends State<Page0> {
               children: [
                 const SizedBox(height: kToolbarHeight * 0.2),
                 const Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: kToolbarHeight * 0.4),
+                  padding: EdgeInsets.symmetric(horizontal: kToolbarHeight * 0.4),
                   child: Text(
                     "عکس پرسنلی:",
                     style: TextStyle(),
@@ -71,22 +69,18 @@ class _Page0State extends State<Page0> {
                 const SizedBox(height: kToolbarHeight * 0.2),
                 SelectImage(
                   onSelectImage: (cFile) {
-                    Provider.of<DriverData>(context, listen: false)
-                        .setpersonalImage(cFile);
+                    Provider.of<DriverData>(context, listen: false).setpersonalImage(cFile);
                   },
-                  currentImageUrl:
-                      Provider.of<DriverData>(context).cDriver?.personalImage,
+                  currentImageUrl: Provider.of<DriverData>(context).cDriver?.personalImage,
                   selectedImage: Provider.of<DriverData>(context).personalImage,
                   isReadOnly: widget.isScreen,
                 ),
                 const SizedBox(height: kToolbarHeight * 0.2),
                 if (isNextPressed &&
                     Provider.of<DriverData>(context).personalImage == null &&
-                    Provider.of<DriverData>(context).cDriver?.personalImage ==
-                        null) ...[
+                    Provider.of<DriverData>(context).cDriver?.personalImage == null) ...[
                   Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: kToolbarHeight * 0.4),
+                    padding: const EdgeInsets.symmetric(horizontal: kToolbarHeight * 0.4),
                     child: Text(
                       "لطفا عکس پرسنلی را انتخاب کنید",
                       style: TextStyle(
@@ -102,8 +96,7 @@ class _Page0State extends State<Page0> {
                 ),
                 const SizedBox(height: kToolbarHeight * 0.2),
                 const Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: kToolbarHeight * 0.4),
+                  padding: EdgeInsets.symmetric(horizontal: kToolbarHeight * 0.4),
                   child: Text(
                     "نام و نام خانوادگی:",
                     style: TextStyle(),
@@ -117,10 +110,8 @@ class _Page0State extends State<Page0> {
                     ),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: kToolbarHeight * 0.4),
-                  margin: const EdgeInsets.symmetric(
-                      horizontal: kToolbarHeight * 0.4),
+                  padding: const EdgeInsets.symmetric(horizontal: kToolbarHeight * 0.4),
+                  margin: const EdgeInsets.symmetric(horizontal: kToolbarHeight * 0.4),
                   child: TextFormField(
                     readOnly: widget.isScreen,
                     controller: Provider.of<DriverData>(context).nameController,
@@ -139,23 +130,13 @@ class _Page0State extends State<Page0> {
                         regexp,
                       )
                     ],
-                    decoration: const InputDecoration(
-                        isDense: true,
-                        border: InputBorder.none,
-                        fillColor: Colors.blue,
-                        hintStyle: TextStyle()),
+                    decoration: const InputDecoration(isDense: true, border: InputBorder.none, fillColor: Colors.blue, hintStyle: TextStyle()),
                   ),
                 ),
                 const SizedBox(height: kToolbarHeight * 0.2),
-                if (isNextPressed &&
-                    Provider.of<DriverData>(context)
-                        .nameController
-                        .text
-                        .trim()
-                        .isEmpty) ...[
+                if (isNextPressed && Provider.of<DriverData>(context).nameController.text.trim().isEmpty) ...[
                   Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: kToolbarHeight * 0.4),
+                    padding: const EdgeInsets.symmetric(horizontal: kToolbarHeight * 0.4),
                     child: Text(
                       'لطفا نام و نام خانوادگی را وارد کنید',
                       style: TextStyle(
@@ -171,8 +152,7 @@ class _Page0State extends State<Page0> {
                 ),
                 const SizedBox(height: kToolbarHeight * 0.2),
                 const Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: kToolbarHeight * 0.4),
+                  padding: EdgeInsets.symmetric(horizontal: kToolbarHeight * 0.4),
                   child: Text(
                     "جنسیت:",
                     style: TextStyle(),
@@ -180,14 +160,12 @@ class _Page0State extends State<Page0> {
                 ),
                 const SizedBox(height: kToolbarHeight * 0.2),
                 Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: kToolbarHeight * 0.2),
+                  padding: const EdgeInsets.symmetric(horizontal: kToolbarHeight * 0.2),
                   child: Row(
                     children: [
                       ...Provider.of<DriverData>(context).sexualTypes.map(
                             (e) => Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: kToolbarHeight * 0.2),
+                              padding: const EdgeInsets.symmetric(horizontal: kToolbarHeight * 0.2),
                               child: Material(
                                 borderRadius: BorderRadius.circular(12),
                                 child: InkWell(
@@ -196,19 +174,14 @@ class _Page0State extends State<Page0> {
                                     if (widget.isScreen) {
                                       return;
                                     }
-                                    Provider.of<DriverData>(context,
-                                            listen: false)
-                                        .changeSexualTypes(e);
+                                    Provider.of<DriverData>(context, listen: false).changeSexualTypes(e);
                                   },
                                   child: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: kToolbarHeight * 0.2),
+                                    padding: const EdgeInsets.symmetric(horizontal: kToolbarHeight * 0.2),
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(12),
                                       border: Border.all(
-                                        color: Theme.of(context)
-                                            .hintColor
-                                            .withAlpha(60),
+                                        color: Theme.of(context).hintColor.withAlpha(60),
                                       ),
                                     ),
                                     child: Row(
@@ -216,16 +189,12 @@ class _Page0State extends State<Page0> {
                                         Radio(
                                           visualDensity: VisualDensity.compact,
                                           value: e,
-                                          groupValue:
-                                              Provider.of<DriverData>(context)
-                                                  .selectedSexualTypes,
+                                          groupValue: Provider.of<DriverData>(context).selectedSexualTypes,
                                           onChanged: (_) {
                                             if (widget.isScreen) {
                                               return;
                                             }
-                                            Provider.of<DriverData>(context,
-                                                    listen: false)
-                                                .changeSexualTypes(e);
+                                            Provider.of<DriverData>(context, listen: false).changeSexualTypes(e);
                                           },
                                         ),
                                         Text(
@@ -234,8 +203,7 @@ class _Page0State extends State<Page0> {
                                             fontSize: 13,
                                           ),
                                         ),
-                                        const SizedBox(
-                                            width: kToolbarHeight * 0.2),
+                                        const SizedBox(width: kToolbarHeight * 0.2),
                                       ],
                                     ),
                                   ),
@@ -247,12 +215,9 @@ class _Page0State extends State<Page0> {
                   ),
                 ),
                 const SizedBox(height: kToolbarHeight * 0.2),
-                if (isNextPressed &&
-                    Provider.of<DriverData>(context).selectedSexualTypes ==
-                        null) ...[
+                if (isNextPressed && Provider.of<DriverData>(context).selectedSexualTypes == null) ...[
                   Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: kToolbarHeight * 0.4),
+                    padding: const EdgeInsets.symmetric(horizontal: kToolbarHeight * 0.4),
                     child: Text(
                       "لطفا جنسیت را انتخاب کنید",
                       style: TextStyle(
@@ -268,8 +233,7 @@ class _Page0State extends State<Page0> {
                 ),
                 const SizedBox(height: kToolbarHeight * 0.2),
                 const Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: kToolbarHeight * 0.4),
+                  padding: EdgeInsets.symmetric(horizontal: kToolbarHeight * 0.4),
                   child: Text(
                     "آدرس:",
                     style: TextStyle(),
@@ -283,14 +247,11 @@ class _Page0State extends State<Page0> {
                     ),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: kToolbarHeight * 0.4),
-                  margin: const EdgeInsets.symmetric(
-                      horizontal: kToolbarHeight * 0.4),
+                  padding: const EdgeInsets.symmetric(horizontal: kToolbarHeight * 0.4),
+                  margin: const EdgeInsets.symmetric(horizontal: kToolbarHeight * 0.4),
                   child: TextFormField(
                     readOnly: widget.isScreen,
-                    controller:
-                        Provider.of<DriverData>(context).addressController,
+                    controller: Provider.of<DriverData>(context).addressController,
                     textInputAction: TextInputAction.next,
                     // autofocus: true,
                     keyboardType: TextInputType.name,
@@ -301,24 +262,13 @@ class _Page0State extends State<Page0> {
                     validator: (val) {
                       return null;
                     },
-                    decoration: const InputDecoration(
-                        isDense: true,
-                        border: InputBorder.none,
-                        fillColor: Colors.blue,
-                        hintStyle: TextStyle()),
+                    decoration: const InputDecoration(isDense: true, border: InputBorder.none, fillColor: Colors.blue, hintStyle: TextStyle()),
                   ),
                 ),
                 const SizedBox(height: kToolbarHeight * 0.2),
-                if (isNextPressed &&
-                    Provider.of<DriverData>(context)
-                            .addressController
-                            .text
-                            .trim()
-                            .length <
-                        10) ...[
+                if (isNextPressed && Provider.of<DriverData>(context).addressController.text.trim().length < 10) ...[
                   Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: kToolbarHeight * 0.4),
+                    padding: const EdgeInsets.symmetric(horizontal: kToolbarHeight * 0.4),
                     child: Text(
                       'لطفا آدرس کامل وارد کنید',
                       style: TextStyle(
@@ -334,8 +284,7 @@ class _Page0State extends State<Page0> {
                 ),
                 const SizedBox(height: kToolbarHeight * 0.2),
                 const Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: kToolbarHeight * 0.4),
+                  padding: EdgeInsets.symmetric(horizontal: kToolbarHeight * 0.4),
                   child: Text(
                     "کد پستی:",
                     style: TextStyle(),
@@ -349,14 +298,11 @@ class _Page0State extends State<Page0> {
                     ),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: kToolbarHeight * 0.4),
-                  margin: const EdgeInsets.symmetric(
-                      horizontal: kToolbarHeight * 0.4),
+                  padding: const EdgeInsets.symmetric(horizontal: kToolbarHeight * 0.4),
+                  margin: const EdgeInsets.symmetric(horizontal: kToolbarHeight * 0.4),
                   child: TextFormField(
                     readOnly: widget.isScreen,
-                    controller:
-                        Provider.of<DriverData>(context).postalController,
+                    controller: Provider.of<DriverData>(context).postalController,
                     textInputAction: TextInputAction.next,
                     // autofocus: true,
                     keyboardType: const TextInputType.numberWithOptions(
@@ -374,24 +320,13 @@ class _Page0State extends State<Page0> {
                     inputFormatters: [
                       FilteringTextInputFormatter.digitsOnly,
                     ],
-                    decoration: const InputDecoration(
-                        isDense: true,
-                        border: InputBorder.none,
-                        fillColor: Colors.blue,
-                        hintStyle: TextStyle()),
+                    decoration: const InputDecoration(isDense: true, border: InputBorder.none, fillColor: Colors.blue, hintStyle: TextStyle()),
                   ),
                 ),
                 const SizedBox(height: kToolbarHeight * 0.2),
-                if (isNextPressed &&
-                    Provider.of<DriverData>(context)
-                            .postalController
-                            .text
-                            .trim()
-                            .length !=
-                        10) ...[
+                if (isNextPressed && Provider.of<DriverData>(context).postalController.text.trim().length != 10) ...[
                   Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: kToolbarHeight * 0.4),
+                    padding: const EdgeInsets.symmetric(horizontal: kToolbarHeight * 0.4),
                     child: Text(
                       'لطفا کدپستی صحیح وارد کنید',
                       style: TextStyle(
@@ -404,8 +339,7 @@ class _Page0State extends State<Page0> {
                 if (!widget.isScreen) ...[
                   const SizedBox(height: kToolbarHeight),
                   Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: kToolbarHeight * 0.2),
+                    padding: const EdgeInsets.symmetric(horizontal: kToolbarHeight * 0.2),
                     child: Row(
                       children: [
                         Expanded(
@@ -435,10 +369,7 @@ class _Page0State extends State<Page0> {
                                         actions: [
                                           IconButton(
                                             onPressed: () async {
-                                              await Provider.of<AuthData>(
-                                                      context,
-                                                      listen: false)
-                                                  .signOut();
+                                              await Provider.of<AuthData>(context, listen: false).signOut();
 
                                               if (mounted) {
                                                 Navigator.of(context).pop();
@@ -446,9 +377,7 @@ class _Page0State extends State<Page0> {
                                             },
                                             icon: Icon(
                                               Icons.check,
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .error,
+                                              color: Theme.of(context).colorScheme.error,
                                             ),
                                           ),
                                           IconButton(
@@ -471,9 +400,7 @@ class _Page0State extends State<Page0> {
                                 child: Text(
                                   "خروج از حساب کاربری",
                                   style: TextStyle(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .background,
+                                    color: Theme.of(context).colorScheme.background,
                                   ),
                                 ),
                               ),
@@ -493,40 +420,15 @@ class _Page0State extends State<Page0> {
                                 setState(() {
                                   isNextPressed = true;
                                 });
-                                if ((Provider.of<DriverData>(context,
-                                                    listen: false)
-                                                .personalImage ==
-                                            null &&
-                                        Provider.of<DriverData>(context,
-                                                    listen: false)
-                                                .cDriver
-                                                ?.personalImage ==
-                                            null) ||
-                                    Provider.of<DriverData>(context,
-                                            listen: false)
-                                        .nameController
-                                        .text
-                                        .trim()
-                                        .isEmpty ||
-                                    Provider.of<DriverData>(context, listen: false)
-                                            .selectedSexualTypes ==
-                                        null ||
-                                    Provider.of<DriverData>(context, listen: false)
-                                            .addressController
-                                            .text
-                                            .trim()
-                                            .length <
-                                        10 ||
-                                    Provider.of<DriverData>(context, listen: false)
-                                            .postalController
-                                            .text
-                                            .trim()
-                                            .length !=
-                                        10) {
+                                if ((Provider.of<DriverData>(context, listen: false).personalImage == null &&
+                                        Provider.of<DriverData>(context, listen: false).cDriver?.personalImage == null) ||
+                                    Provider.of<DriverData>(context, listen: false).nameController.text.trim().isEmpty ||
+                                    Provider.of<DriverData>(context, listen: false).selectedSexualTypes == null ||
+                                    Provider.of<DriverData>(context, listen: false).addressController.text.trim().length < 10 ||
+                                    Provider.of<DriverData>(context, listen: false).postalController.text.trim().length != 10) {
                                   return;
                                 }
-                                Provider.of<DriverData>(context, listen: false)
-                                    .setpageIndex(1);
+                                Provider.of<DriverData>(context, listen: false).setpageIndex(1);
                               },
                               child: Container(
                                 alignment: Alignment.center,
@@ -534,8 +436,7 @@ class _Page0State extends State<Page0> {
                                 child: Text(
                                   "ادامه",
                                   style: TextStyle(
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
+                                    color: Theme.of(context).colorScheme.primary,
                                   ),
                                 ),
                               ),

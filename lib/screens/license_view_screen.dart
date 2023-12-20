@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:transportationdriver/providers/driver_data.dart';
-import 'package:transportationdriver/widgets/page_2.dart';
+import 'package:novintaxidriver/providers/driver_data.dart';
+import 'package:novintaxidriver/widgets/page_2.dart';
 
 class LicenseViewScreen extends StatefulWidget {
   static const routeName = '/license';
@@ -14,8 +14,7 @@ class LicenseViewScreen extends StatefulWidget {
 class _LicenseViewScreenState extends State<LicenseViewScreen> {
   @override
   void didChangeDependencies() {
-    Provider.of<DriverData>(context, listen: false)
-        .setDriverFieldsDefaultValue();
+    Provider.of<DriverData>(context, listen: false).setDriverFieldsDefaultValue();
     super.didChangeDependencies();
   }
 

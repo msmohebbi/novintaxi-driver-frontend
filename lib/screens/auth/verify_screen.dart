@@ -12,9 +12,9 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:pinput/pinput.dart';
 import 'package:provider/provider.dart';
-import 'package:transportationdriver/backend/api.dart';
-import 'package:transportationdriver/backend/api_endpoints.dart';
-import 'package:transportationdriver/providers/profile_data.dart';
+import 'package:novintaxidriver/backend/api.dart';
+import 'package:novintaxidriver/backend/api_endpoints.dart';
+import 'package:novintaxidriver/providers/profile_data.dart';
 import '../../backend/auth.dart';
 import '../../providers/auth_data.dart';
 
@@ -45,15 +45,13 @@ class VerifyScreenState extends State<VerifyScreen> {
     String snackText = "";
     Color snackColor = Theme.of(context).colorScheme.error;
     var username = Provider.of<AuthData>(context, listen: false).cuserTempPhone;
-    var lastPassSent =
-        Provider.of<AuthData>(context, listen: false).lastSmsSend;
+    var lastPassSent = Provider.of<AuthData>(context, listen: false).lastSmsSend;
     var nowDateTime = DateTime.now().millisecondsSinceEpoch;
     // bool isrequestedPass = true;
     if (lastPassSent + (2 * 60 * 1000) < nowDateTime) {
       await Auth().requestPass(username);
       // await Future.delayed(Duration(seconds: 4));
-      await Provider.of<AuthData>(context, listen: false)
-          .setLastSmsSend(DateTime.now().millisecondsSinceEpoch);
+      await Provider.of<AuthData>(context, listen: false).setLastSmsSend(DateTime.now().millisecondsSinceEpoch);
       snackText = "کد تایید به شماره تلفن شما ارسال شد";
     } else {
       snackText = "لطفا تا گذشت دو دقیقه از ارسال پیام قبلی منتظر بمانید";
@@ -77,8 +75,7 @@ class VerifyScreenState extends State<VerifyScreen> {
       isVerifing = true;
     });
     String finalPass = _pinController.text;
-    String finalUsername =
-        Provider.of<AuthData>(context, listen: false).cuserTempPhone;
+    String finalUsername = Provider.of<AuthData>(context, listen: false).cuserTempPhone;
 
     String errorString = "خطا در ورود";
     try {
@@ -87,8 +84,7 @@ class VerifyScreenState extends State<VerifyScreen> {
         // bool isChangePass =
         //     await Auth().changePass(finalUsername, loginData["access"]!);
         // if (isChangePass) {
-        await Provider.of<AuthData>(context, listen: false)
-            .saveCredentials(loginData["refresh"]!, loginData["access"]!);
+        await Provider.of<AuthData>(context, listen: false).saveCredentials(loginData["refresh"]!, loginData["access"]!);
         await Provider.of<ProfileData>(context, listen: false).getProfile();
         FirebaseMessaging messaging = FirebaseMessaging.instance;
         var packageInfo = await PackageInfo.fromPlatform();
@@ -168,19 +164,11 @@ class VerifyScreenState extends State<VerifyScreen> {
 
   Future _startTimer() async {
     setState(() {
-      _secondsLeft =
-          ((Provider.of<AuthData>(context, listen: false).lastSmsSend -
-                      DateTime.now().millisecondsSinceEpoch) /
-                  1000)
-              .truncate();
+      _secondsLeft = ((Provider.of<AuthData>(context, listen: false).lastSmsSend - DateTime.now().millisecondsSinceEpoch) / 1000).truncate();
     });
     _timer = Timer.periodic(const Duration(seconds: 1), (Timer timer) {
       setState(() {
-        _secondsLeft =
-            ((Provider.of<AuthData>(context, listen: false).lastSmsSend -
-                        DateTime.now().millisecondsSinceEpoch) /
-                    1000)
-                .truncate();
+        _secondsLeft = ((Provider.of<AuthData>(context, listen: false).lastSmsSend - DateTime.now().millisecondsSinceEpoch) / 1000).truncate();
       });
       if ((_secondsLeft ?? 0) < 1) {
         timer.cancel();
@@ -242,8 +230,7 @@ class VerifyScreenState extends State<VerifyScreen> {
               const SizedBox(height: kToolbarHeight),
               Column(children: [
                 Container(
-                  margin: const EdgeInsets.symmetric(
-                      horizontal: kToolbarHeight * 0.5),
+                  margin: const EdgeInsets.symmetric(horizontal: kToolbarHeight * 0.5),
                   padding: const EdgeInsets.all(kToolbarHeight * 0.3),
                   decoration: BoxDecoration(
                     color: Theme.of(context).colorScheme.primary,
@@ -266,8 +253,7 @@ class VerifyScreenState extends State<VerifyScreen> {
                       Directionality(
                         textDirection: TextDirection.ltr,
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: kToolbarHeight * 0.2),
+                          padding: const EdgeInsets.symmetric(horizontal: kToolbarHeight * 0.2),
                           child: Pinput(
                             controller: _pinController,
                             defaultPinTheme: PinTheme(
@@ -308,16 +294,13 @@ class VerifyScreenState extends State<VerifyScreen> {
               Column(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: kToolbarHeight * 0.5),
+                    padding: const EdgeInsets.symmetric(horizontal: kToolbarHeight * 0.5),
                     child: Hero(
                       tag: "button",
                       child: InkWell(
                         onTap: verifyUser,
                         child: Container(
-                          decoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.primary,
-                              borderRadius: BorderRadius.circular(20)),
+                          decoration: BoxDecoration(color: Theme.of(context).colorScheme.primary, borderRadius: BorderRadius.circular(20)),
                           padding: const EdgeInsets.all(kToolbarHeight * 0.3),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -326,16 +309,12 @@ class VerifyScreenState extends State<VerifyScreen> {
                                   ? Text(
                                       "تایید",
                                       style: TextStyle(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onPrimary,
+                                        color: Theme.of(context).colorScheme.onPrimary,
                                         fontSize: 17,
                                       ),
                                     )
                                   : CupertinoActivityIndicator(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onPrimary,
+                                      color: Theme.of(context).colorScheme.onPrimary,
                                     ),
                             ],
                           ),
@@ -362,17 +341,13 @@ class VerifyScreenState extends State<VerifyScreen> {
                           padding: const EdgeInsets.all(kToolbarHeight * 0.1),
                           child: !isResending
                               ? Text(
-                                  (_secondsLeft ?? 0) > 0
-                                      ? countdownString
-                                      : "ارسال مجدد",
+                                  (_secondsLeft ?? 0) > 0 ? countdownString : "ارسال مجدد",
                                   style: TextStyle(
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
+                                    color: Theme.of(context).colorScheme.primary,
                                   ),
                                 )
                               : CupertinoActivityIndicator(
-                                  color:
-                                      Theme.of(context).colorScheme.onPrimary,
+                                  color: Theme.of(context).colorScheme.onPrimary,
                                 ),
                         ),
                       )

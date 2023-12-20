@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:transportationdriver/backend/api_endpoints.dart';
+import 'package:novintaxidriver/backend/api_endpoints.dart';
 import '../models/chat_massage_model.dart';
 
 import '../backend/api.dart';
@@ -30,8 +30,7 @@ class MessageData with ChangeNotifier {
   List<AppChatMassage> get supportMessageList => _supportMessageList;
 
   Future<void> getSupportMessages() async {
-    var messagesData =
-        await AppAPI().getWithoutPaginate(urlPath: EndPoints.support);
+    var messagesData = await AppAPI().getWithoutPaginate(urlPath: EndPoints.support);
     _supportMessageList = [];
     for (var element in messagesData) {
       var newPostType = AppChatMassage.fromMap(element);

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:transportationdriver/providers/driver_data.dart';
-import 'package:transportationdriver/widgets/page_0.dart';
-import 'package:transportationdriver/widgets/page_1.dart';
+import 'package:novintaxidriver/providers/driver_data.dart';
+import 'package:novintaxidriver/widgets/page_0.dart';
+import 'package:novintaxidriver/widgets/page_1.dart';
 
 class ProfileViewScreen extends StatefulWidget {
   static const routeName = '/profile';
@@ -15,8 +15,7 @@ class ProfileViewScreen extends StatefulWidget {
 class _ProfileViewScreenState extends State<ProfileViewScreen> {
   @override
   void didChangeDependencies() {
-    Provider.of<DriverData>(context, listen: false)
-        .setDriverFieldsDefaultValue();
+    Provider.of<DriverData>(context, listen: false).setDriverFieldsDefaultValue();
     super.didChangeDependencies();
   }
 

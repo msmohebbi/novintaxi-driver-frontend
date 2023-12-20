@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "511795380278",
-    "project_id": "safarday-driver",
-    "storage_bucket": "safarday-driver.appspot.com"
+    "project_number": "262764376701",
+    "project_id": "novintaxi-driver",
+    "storage_bucket": "novintaxi-driver.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:511795380278:android:75d8fc2b1052805ebdd897",
+        "mobilesdk_app_id": "1:262764376701:android:56cac501a3bf6ae9623714",
         "android_client_info": {
-          "package_name": "com.pishranesh.transportationdriver"
+          "package_name": "com.pishranesh.novintaxidriver"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBKtNXEj1gwezfqMt1xZg_V0tVynVRrc7M"
+          "current_key": "AIzaSyBvSe_KYK8Tc_ktA-pUNNAcOWMPoyRudnQ"
         }
       ],
       "services": {

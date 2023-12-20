@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:transportationdriver/backend/api_endpoints.dart';
+import 'package:novintaxidriver/backend/api_endpoints.dart';
 
 import '../backend/api.dart';
 import '../models/faq_model.dart';

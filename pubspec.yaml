@@ -1,5 +1,5 @@
-name: transportationdriver
-description: A new Flutter project.
+name: novintaxidriver
+description: Driver app for Novin Taxi.
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -77,16 +77,24 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
-  # The "flutter_lints" package below contains a set of recommended lints to
-  # encourage good coding practices. The lint set provided by the package is
-  # activated in the `analysis_options.yaml` file located at the root of your
-  # package. See that file for information about deactivating specific lint
-  # rules and activating additional ones.
   flutter_lints: ^3.0.1
-
-# For information on the generic Dart part of this file, see the
-# following page: https://dart.dev/tools/pub/pubspec
+  
+flutter_icons:
+  image_path: "assets/images/logo.png"
+  android: "launcher_icon"
+  ios: true
+  image_path_ios: "assets/images/logoios.png"
+  remove_alpha_ios: true
+  web:
+    generate: true
+    image_path: "assets/images/logo.png"
+    background_color: "#FFFFFF"
+    theme_color: "#F7CE46"
+  windows:
+    generate: true
+    image_path: "assets/images/logo.png"
+    icon_size: 48
+    # min:48, max:256, default: 48
 
 # The following section is specific to Flutter packages.
 flutter:

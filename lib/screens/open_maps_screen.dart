@@ -9,8 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:transportationdriver/models/location_model.dart';
-import 'package:transportationdriver/models/transport_model.dart';
+import 'package:novintaxidriver/models/location_model.dart';
+import 'package:novintaxidriver/models/transport_model.dart';
 
 class OpenMapsScreen extends StatefulWidget {
   final AppTransport cTransport;
@@ -20,8 +20,7 @@ class OpenMapsScreen extends StatefulWidget {
   State<OpenMapsScreen> createState() => OpenMapsScreenState();
 }
 
-class OpenMapsScreenState extends State<OpenMapsScreen>
-    with TickerProviderStateMixin {
+class OpenMapsScreenState extends State<OpenMapsScreen> with TickerProviderStateMixin {
   @override
   void initState() {
     mapController = AnimatedMapController(
@@ -50,8 +49,7 @@ class OpenMapsScreenState extends State<OpenMapsScreen>
           polyLines.clear();
           var geometry = json.decode(widget.cTransport.geometery!);
           var legLatLngs = [];
-          legLatLngs
-              .addAll(geometry["coordinates"].map((e) => LatLng(e[1], e[0])));
+          legLatLngs.addAll(geometry["coordinates"].map((e) => LatLng(e[1], e[0])));
           setState(() {
             polyLines.add(
               Polyline(
@@ -187,8 +185,7 @@ class OpenMapsScreenState extends State<OpenMapsScreen>
                 children: [
                   TileLayer(
                     // attributionAlignment: Alignment.bottomCenter,
-                    urlTemplate:
-                        'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                    urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
                     tileBuilder: (context, tileWidget, tile) {
                       return tileWidget;
                     },
@@ -209,10 +206,7 @@ class OpenMapsScreenState extends State<OpenMapsScreen>
                               Icon(
                                 CupertinoIcons.bubble_middle_bottom_fill,
                                 size: kToolbarHeight,
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .primary
-                                    .withAlpha(180),
+                                color: Theme.of(context).colorScheme.primary.withAlpha(180),
                               ),
                               const Positioned.fill(
                                 child: Align(
@@ -242,10 +236,7 @@ class OpenMapsScreenState extends State<OpenMapsScreen>
                               Icon(
                                 CupertinoIcons.bubble_middle_bottom_fill,
                                 size: kToolbarHeight,
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .primary
-                                    .withAlpha(180),
+                                color: Theme.of(context).colorScheme.primary.withAlpha(180),
                               ),
                               const Positioned.fill(
                                 child: Align(
@@ -303,8 +294,7 @@ class OpenMapsScreenState extends State<OpenMapsScreen>
               ),
             ],
           ),
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerDocked,
+          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
           floatingActionButton: Container(
             padding: const EdgeInsets.symmetric(
               horizontal: kToolbarHeight * 0.2,
@@ -321,9 +311,7 @@ class OpenMapsScreenState extends State<OpenMapsScreen>
                       heroTag: "zoom+",
                       onPressed: () {
                         setState(() {
-                          mapController.mapController.move(
-                              mapController.mapController.camera.center,
-                              mapController.mapController.camera.zoom + 1);
+                          mapController.mapController.move(mapController.mapController.camera.center, mapController.mapController.camera.zoom + 1);
                         });
                       },
                       backgroundColor: Theme.of(context).colorScheme.background,
@@ -337,9 +325,7 @@ class OpenMapsScreenState extends State<OpenMapsScreen>
                       heroTag: "zoom-",
                       onPressed: () {
                         setState(() {
-                          mapController.mapController.move(
-                              mapController.mapController.camera.center,
-                              mapController.mapController.camera.zoom - 1);
+                          mapController.mapController.move(mapController.mapController.camera.center, mapController.mapController.camera.zoom - 1);
                         });
                       },
                       backgroundColor: Theme.of(context).colorScheme.background,
@@ -357,8 +343,7 @@ class OpenMapsScreenState extends State<OpenMapsScreen>
                     var currLocation = await getCurrentLocation();
                     if (currLocation != null) {
                       setState(() {
-                        currentLatLng = LatLng(
-                            currLocation.latitude, currLocation.longitude);
+                        currentLatLng = LatLng(currLocation.latitude, currLocation.longitude);
                       });
                       checkZoom(
                         [
@@ -369,9 +354,7 @@ class OpenMapsScreenState extends State<OpenMapsScreen>
                       );
                     }
                   },
-                  child: isGPSing
-                      ? const CupertinoActivityIndicator()
-                      : const Icon(Icons.gps_fixed),
+                  child: isGPSing ? const CupertinoActivityIndicator() : const Icon(Icons.gps_fixed),
                 ),
               ],
             ),

@@ -47,29 +47,29 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyD5bB2oXvbmu-M2ncoPTKEGPCvQwoMUYQM',
-    appId: '1:511795380278:web:0f5e9de0583b7bd4bdd897',
-    messagingSenderId: '511795380278',
-    projectId: 'safarday-driver',
-    authDomain: 'safarday-driver.firebaseapp.com',
-    storageBucket: 'safarday-driver.appspot.com',
-    measurementId: 'G-WNPBBGWWPM',
+    apiKey: 'AIzaSyC1zb6S-nUqWIlhGN6eXrVyhlO53Ffy9QU',
+    appId: '1:262764376701:web:d7f471b99e2354b7623714',
+    messagingSenderId: '262764376701',
+    projectId: 'novintaxi-driver',
+    authDomain: 'novintaxi-driver.firebaseapp.com',
+    storageBucket: 'novintaxi-driver.appspot.com',
+    measurementId: 'G-SXN99T5E0W',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBKtNXEj1gwezfqMt1xZg_V0tVynVRrc7M',
-    appId: '1:511795380278:android:75d8fc2b1052805ebdd897',
-    messagingSenderId: '511795380278',
-    projectId: 'safarday-driver',
-    storageBucket: 'safarday-driver.appspot.com',
+    apiKey: 'AIzaSyBvSe_KYK8Tc_ktA-pUNNAcOWMPoyRudnQ',
+    appId: '1:262764376701:android:56cac501a3bf6ae9623714',
+    messagingSenderId: '262764376701',
+    projectId: 'novintaxi-driver',
+    storageBucket: 'novintaxi-driver.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBYO4Wdb-jR4pxNnbFh3xMHIBWfKLdxxLs',
-    appId: '1:511795380278:ios:5b5856ab1d0cd600bdd897',
-    messagingSenderId: '511795380278',
-    projectId: 'safarday-driver',
-    storageBucket: 'safarday-driver.appspot.com',
-    iosBundleId: 'com.pishranesh.transportationdriver',
+    apiKey: 'AIzaSyBLUZD9jXLWGsBrnhtDhOGgUMf37P9fd3U',
+    appId: '1:262764376701:ios:6ea8f95891a9d63b623714',
+    messagingSenderId: '262764376701',
+    projectId: 'novintaxi-driver',
+    storageBucket: 'novintaxi-driver.appspot.com',
+    iosBundleId: 'com.pishranesh.novintaxidriver',
   );
 }

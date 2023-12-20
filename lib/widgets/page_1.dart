@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:transportationdriver/providers/driver_data.dart';
-import 'package:transportationdriver/widgets/select_image.dart';
+import 'package:novintaxidriver/providers/driver_data.dart';
+import 'package:novintaxidriver/widgets/select_image.dart';
 
 class Page1 extends StatefulWidget {
   final bool isScreen;
@@ -56,8 +56,7 @@ class _Page1State extends State<Page1> {
               children: [
                 const SizedBox(height: kToolbarHeight * 0.2),
                 const Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: kToolbarHeight * 0.4),
+                  padding: EdgeInsets.symmetric(horizontal: kToolbarHeight * 0.4),
                   child: Text(
                     "کد ملی:",
                     style: TextStyle(),
@@ -71,14 +70,11 @@ class _Page1State extends State<Page1> {
                     ),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: kToolbarHeight * 0.4),
-                  margin: const EdgeInsets.symmetric(
-                      horizontal: kToolbarHeight * 0.4),
+                  padding: const EdgeInsets.symmetric(horizontal: kToolbarHeight * 0.4),
+                  margin: const EdgeInsets.symmetric(horizontal: kToolbarHeight * 0.4),
                   child: TextFormField(
                     readOnly: widget.isScreen,
-                    controller:
-                        Provider.of<DriverData>(context).melliCodeController,
+                    controller: Provider.of<DriverData>(context).melliCodeController,
                     keyboardType: const TextInputType.numberWithOptions(
                       decimal: false,
                       signed: false,
@@ -94,24 +90,13 @@ class _Page1State extends State<Page1> {
                     inputFormatters: [
                       FilteringTextInputFormatter.digitsOnly,
                     ],
-                    decoration: const InputDecoration(
-                        isDense: true,
-                        border: InputBorder.none,
-                        fillColor: Colors.blue,
-                        hintStyle: TextStyle()),
+                    decoration: const InputDecoration(isDense: true, border: InputBorder.none, fillColor: Colors.blue, hintStyle: TextStyle()),
                   ),
                 ),
                 const SizedBox(height: kToolbarHeight * 0.2),
-                if (isNextPressed &&
-                    Provider.of<DriverData>(context)
-                            .melliCodeController
-                            .text
-                            .trim()
-                            .length !=
-                        10) ...[
+                if (isNextPressed && Provider.of<DriverData>(context).melliCodeController.text.trim().length != 10) ...[
                   Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: kToolbarHeight * 0.4),
+                    padding: const EdgeInsets.symmetric(horizontal: kToolbarHeight * 0.4),
                     child: Text(
                       'لطفا کد ملی صحیح وارد کنید',
                       style: TextStyle(
@@ -127,8 +112,7 @@ class _Page1State extends State<Page1> {
                 ),
                 const SizedBox(height: kToolbarHeight * 0.2),
                 const Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: kToolbarHeight * 0.4),
+                  padding: EdgeInsets.symmetric(horizontal: kToolbarHeight * 0.4),
                   child: Text(
                     "عکس از روی کارت ملی:",
                     style: TextStyle(),
@@ -137,26 +121,18 @@ class _Page1State extends State<Page1> {
                 const SizedBox(height: kToolbarHeight * 0.2),
                 SelectImage(
                   onSelectImage: (cFile) {
-                    Provider.of<DriverData>(context, listen: false)
-                        .setmelliFrontImage(cFile);
+                    Provider.of<DriverData>(context, listen: false).setmelliFrontImage(cFile);
                   },
-                  currentImageUrl: Provider.of<DriverData>(context)
-                      .cDriverProfile
-                      ?.nationalCardImageFront,
-                  selectedImage:
-                      Provider.of<DriverData>(context).melliFrontImage,
+                  currentImageUrl: Provider.of<DriverData>(context).cDriverProfile?.nationalCardImageFront,
+                  selectedImage: Provider.of<DriverData>(context).melliFrontImage,
                   isReadOnly: widget.isScreen,
                 ),
                 const SizedBox(height: kToolbarHeight * 0.2),
                 if (isNextPressed &&
                     Provider.of<DriverData>(context).melliFrontImage == null &&
-                    Provider.of<DriverData>(context)
-                            .cDriverProfile
-                            ?.nationalCardImageFront ==
-                        null) ...[
+                    Provider.of<DriverData>(context).cDriverProfile?.nationalCardImageFront == null) ...[
                   Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: kToolbarHeight * 0.4),
+                    padding: const EdgeInsets.symmetric(horizontal: kToolbarHeight * 0.4),
                     child: Text(
                       "لطفا عکس را انتخاب کنید",
                       style: TextStyle(
@@ -172,8 +148,7 @@ class _Page1State extends State<Page1> {
                 ),
                 const SizedBox(height: kToolbarHeight * 0.2),
                 const Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: kToolbarHeight * 0.4),
+                  padding: EdgeInsets.symmetric(horizontal: kToolbarHeight * 0.4),
                   child: Text(
                     "عکس از پشت کارت ملی:",
                     style: TextStyle(),
@@ -182,26 +157,18 @@ class _Page1State extends State<Page1> {
                 const SizedBox(height: kToolbarHeight * 0.2),
                 SelectImage(
                   onSelectImage: (cFile) {
-                    Provider.of<DriverData>(context, listen: false)
-                        .setmelliBackImage(cFile);
+                    Provider.of<DriverData>(context, listen: false).setmelliBackImage(cFile);
                   },
-                  currentImageUrl: Provider.of<DriverData>(context)
-                      .cDriverProfile
-                      ?.nationalCardImageBack,
-                  selectedImage:
-                      Provider.of<DriverData>(context).melliBackImage,
+                  currentImageUrl: Provider.of<DriverData>(context).cDriverProfile?.nationalCardImageBack,
+                  selectedImage: Provider.of<DriverData>(context).melliBackImage,
                   isReadOnly: widget.isScreen,
                 ),
                 const SizedBox(height: kToolbarHeight * 0.2),
                 if (isNextPressed &&
                     Provider.of<DriverData>(context).melliBackImage == null &&
-                    Provider.of<DriverData>(context)
-                            .cDriverProfile
-                            ?.nationalCardImageBack ==
-                        null) ...[
+                    Provider.of<DriverData>(context).cDriverProfile?.nationalCardImageBack == null) ...[
                   Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: kToolbarHeight * 0.4),
+                    padding: const EdgeInsets.symmetric(horizontal: kToolbarHeight * 0.4),
                     child: Text(
                       "لطفا عکس را انتخاب کنید",
                       style: TextStyle(
@@ -214,8 +181,7 @@ class _Page1State extends State<Page1> {
                 if (!widget.isScreen) ...[
                   const SizedBox(height: kToolbarHeight),
                   Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: kToolbarHeight * 0.2),
+                    padding: const EdgeInsets.symmetric(horizontal: kToolbarHeight * 0.2),
                     child: Row(
                       children: [
                         Expanded(
@@ -226,8 +192,7 @@ class _Page1State extends State<Page1> {
                             child: InkWell(
                               borderRadius: BorderRadius.circular(12),
                               onTap: () async {
-                                Provider.of<DriverData>(context, listen: false)
-                                    .setpageIndex(0);
+                                Provider.of<DriverData>(context, listen: false).setpageIndex(0);
                               },
                               child: Container(
                                 alignment: Alignment.center,
@@ -235,8 +200,7 @@ class _Page1State extends State<Page1> {
                                 child: Text(
                                   "بازگشت",
                                   style: TextStyle(
-                                    color:
-                                        Theme.of(context).colorScheme.onPrimary,
+                                    color: Theme.of(context).colorScheme.onPrimary,
                                   ),
                                 ),
                               ),
@@ -256,35 +220,14 @@ class _Page1State extends State<Page1> {
                                 setState(() {
                                   isNextPressed = true;
                                 });
-                                if ((Provider.of<DriverData>(context,
-                                                    listen: false)
-                                                .melliFrontImage ==
-                                            null &&
-                                        Provider.of<DriverData>(context,
-                                                    listen: false)
-                                                .cDriverProfile
-                                                ?.nationalCardImageFront ==
-                                            null) ||
-                                    (Provider.of<DriverData>(context,
-                                                    listen: false)
-                                                .melliBackImage ==
-                                            null &&
-                                        Provider.of<DriverData>(context,
-                                                    listen: false)
-                                                .cDriverProfile
-                                                ?.nationalCardImageBack ==
-                                            null) ||
-                                    Provider.of<DriverData>(context,
-                                                listen: false)
-                                            .melliCodeController
-                                            .text
-                                            .trim()
-                                            .length !=
-                                        10) {
+                                if ((Provider.of<DriverData>(context, listen: false).melliFrontImage == null &&
+                                        Provider.of<DriverData>(context, listen: false).cDriverProfile?.nationalCardImageFront == null) ||
+                                    (Provider.of<DriverData>(context, listen: false).melliBackImage == null &&
+                                        Provider.of<DriverData>(context, listen: false).cDriverProfile?.nationalCardImageBack == null) ||
+                                    Provider.of<DriverData>(context, listen: false).melliCodeController.text.trim().length != 10) {
                                   return;
                                 }
-                                Provider.of<DriverData>(context, listen: false)
-                                    .setpageIndex(2);
+                                Provider.of<DriverData>(context, listen: false).setpageIndex(2);
                               },
                               child: Container(
                                 alignment: Alignment.center,
@@ -292,8 +235,7 @@ class _Page1State extends State<Page1> {
                                 child: Text(
                                   "ادامه",
                                   style: TextStyle(
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
+                                    color: Theme.of(context).colorScheme.primary,
                                   ),
                                 ),
                               ),
