@@ -21,6 +21,16 @@ class AuthScreen extends StatefulWidget {
 class AuthScreenState extends State<AuthScreen> {
   @override
   Widget build(BuildContext context) {
+    var widthPixFixed = MediaQuery.of(context).size.width;
+    var heightPixFixed = MediaQuery.of(context).size.height;
+    var widthPix = widthPixFixed;
+    var heightPix = heightPixFixed;
+    // bool isHorizontal = false;
+    if (widthPix > heightPix ||
+        MediaQuery.of(context).orientation == Orientation.landscape) {
+      widthPix = heightPix;
+      // isHorizontal = true;
+    }
     var pageList = [
       const IntroScreen(),
       Provider.of<SettingData>(context).isLogin
@@ -79,42 +89,47 @@ class AuthScreenState extends State<AuthScreen> {
                 )
               : null,
         ),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Expanded(
-              flex: 6,
-              child: pageList[pageIndex],
+        body: Center(
+          child: SizedBox(
+            width: widthPix,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                  flex: 6,
+                  child: pageList[pageIndex],
+                ),
+                Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CircleAvatar(
+                        backgroundColor: pageIndex == 0
+                            ? Theme.of(context).colorScheme.primary
+                            : Theme.of(context).hintColor,
+                        maxRadius: kToolbarHeight * 0.1,
+                      ),
+                      const SizedBox(width: kToolbarHeight * 0.1),
+                      CircleAvatar(
+                        backgroundColor: pageIndex == 1
+                            ? Theme.of(context).colorScheme.primary
+                            : Theme.of(context).hintColor,
+                        maxRadius: kToolbarHeight * 0.1,
+                      ),
+                      const SizedBox(width: kToolbarHeight * 0.1),
+                      CircleAvatar(
+                        backgroundColor: pageIndex == 2
+                            ? Theme.of(context).colorScheme.primary
+                            : Theme.of(context).hintColor,
+                        maxRadius: kToolbarHeight * 0.1,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
-            Expanded(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CircleAvatar(
-                    backgroundColor: pageIndex == 0
-                        ? Theme.of(context).colorScheme.primary
-                        : Theme.of(context).hintColor,
-                    maxRadius: kToolbarHeight * 0.1,
-                  ),
-                  const SizedBox(width: kToolbarHeight * 0.1),
-                  CircleAvatar(
-                    backgroundColor: pageIndex == 1
-                        ? Theme.of(context).colorScheme.primary
-                        : Theme.of(context).hintColor,
-                    maxRadius: kToolbarHeight * 0.1,
-                  ),
-                  const SizedBox(width: kToolbarHeight * 0.1),
-                  CircleAvatar(
-                    backgroundColor: pageIndex == 2
-                        ? Theme.of(context).colorScheme.primary
-                        : Theme.of(context).hintColor,
-                    maxRadius: kToolbarHeight * 0.1,
-                  ),
-                ],
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );

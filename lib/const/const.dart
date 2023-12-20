@@ -1,1 +1,1 @@
-String apiUrl = 'https://safarday-back.iran.liara.run';
+String apiUrl = 'https://api.novintaxi.ir';

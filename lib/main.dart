@@ -69,7 +69,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final FirebaseAnalytics analytics = FirebaseAnalytics.instance;
-    FirebaseAnalyticsObserver observer = FirebaseAnalyticsObserver(analytics: analytics);
+    FirebaseAnalyticsObserver observer =
+        FirebaseAnalyticsObserver(analytics: analytics);
 
     return MultiProvider(
       providers: [
@@ -91,10 +92,11 @@ class MyApp extends StatelessWidget {
         // -====================================================================
         // All Need Authentication-------------------------------------------
         ChangeNotifierProxyProvider<AuthData, ProfileData>(
-          update: (context, newAuthData, previousProfileData) => previousProfileData!
-            ..updater(
-              newAuthData,
-            ),
+          update: (context, newAuthData, previousProfileData) =>
+              previousProfileData!
+                ..updater(
+                  newAuthData,
+                ),
           create: (BuildContext context) => ProfileData(),
         ),
         // ChangeNotifierProvider(
@@ -153,7 +155,7 @@ class MyMaterial extends StatelessWidget {
       scrollBehavior: MyCustomScrollBehavior(),
       locale: const Locale("fa"),
       debugShowCheckedModeBanner: false,
-      title: "حمل و نقل",
+      title: kIsWeb ? "Novin Driver | نوین راننده" : "نوین راننده",
       theme: Provider.of<SettingData>(context).isDark ? darkTheme : lightTheme,
       builder: (context, child) => MediaQuery(
         data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
@@ -202,6 +204,8 @@ class MyCustomScrollBehavior extends MaterialScrollBehavior {
 class MyHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? context) {
-    return super.createHttpClient(context)..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
   }
 }
