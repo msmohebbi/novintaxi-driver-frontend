@@ -72,7 +72,7 @@ class _MainScreenState extends State<MainScreen> {
             appBar: AppBar(
               elevation: 0,
               title: const Text(
-                "حمل و نقل بین شهری",
+                "نوین راننده",
                 style: TextStyle(
                   fontSize: 15,
                 ),
@@ -82,7 +82,6 @@ class _MainScreenState extends State<MainScreen> {
                 padding: const EdgeInsets.all(kToolbarHeight * 0.1),
                 child: Image.asset(
                   'assets/images/logo.png',
-                  color: Theme.of(context).primaryColor,
                   fit: BoxFit.fitHeight,
                 ),
               ),
