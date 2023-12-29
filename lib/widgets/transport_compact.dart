@@ -41,7 +41,9 @@ class _TransportCompactState extends State<TransportCompact> {
     if (!transportTimers.contains(widget.cTransport.id.toString())) {
       startTimer();
     } else {
-      seconds = 0;
+      setState(() {
+        seconds = 0;
+      });
     }
   }
 
