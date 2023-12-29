@@ -102,7 +102,7 @@ class _TransportActiveCompactState extends State<TransportActiveCompact> {
                 Row(
                   children: [
                     const Text(
-                      'مسافت:',
+                      'مسافت سفر:',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                       ),

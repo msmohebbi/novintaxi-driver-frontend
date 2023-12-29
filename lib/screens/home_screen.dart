@@ -23,6 +23,7 @@ class HomeScreenState extends State<HomeScreen> {
               .getTransports();
         },
         child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
           child: Column(
             children: [
               const SizedBox(height: kToolbarHeight * 0.3),

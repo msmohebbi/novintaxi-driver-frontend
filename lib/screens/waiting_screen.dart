@@ -41,21 +41,50 @@ class _WaitingScreenState extends State<WaitingScreen> {
                     const SizedBox(
                       height: kToolbarHeight * 0.4,
                     ),
-                    Text(
-                      'احراز هویت و مدارک شما، در دست بررسی می باشد',
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.background,
+                    if (Provider.of<DriverData>(context).cDriver?.verifyDesc !=
+                        null) ...[
+                      Text(
+                        'احراز هویت و مدارک شما رد شد!',
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.background,
+                        ),
                       ),
-                    ),
-                    const SizedBox(
-                      height: kToolbarHeight * 0.4,
-                    ),
-                    Text(
-                      'از شکیبایی شما سپاس گذاریم',
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.background,
+                      const SizedBox(
+                        height: kToolbarHeight * 0.2,
                       ),
-                    ),
+                      Text(
+                        'پیام مدیر :',
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.background,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: kToolbarHeight * 0.2,
+                      ),
+                      Text(
+                        Provider.of<DriverData>(context).cDriver?.verifyDesc ??
+                            '',
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.error,
+                        ),
+                      ),
+                    ] else ...[
+                      Text(
+                        'احراز هویت و مدارک شما، در دست بررسی می باشد',
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.background,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: kToolbarHeight * 0.4,
+                      ),
+                      Text(
+                        'از شکیبایی شما سپاس گذاریم',
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.background,
+                        ),
+                      ),
+                    ],
                     const SizedBox(
                       height: kToolbarHeight * 0.4,
                     ),
@@ -64,8 +93,10 @@ class _WaitingScreenState extends State<WaitingScreen> {
                       child: InkWell(
                         borderRadius: BorderRadius.circular(12),
                         onTap: () {
-                          Provider.of<DriverData>(context, listen: false).changeisEditRequested(true);
-                          Provider.of<DriverData>(context, listen: false).setpageIndex(0);
+                          Provider.of<DriverData>(context, listen: false)
+                              .changeisEditRequested(true);
+                          Provider.of<DriverData>(context, listen: false)
+                              .setpageIndex(0);
                         },
                         child: const Padding(
                           padding: EdgeInsets.symmetric(

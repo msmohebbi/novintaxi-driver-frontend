@@ -180,7 +180,7 @@ class _TransportSummaryModalState extends State<TransportSummaryModal> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(
-                            "مسافت: ",
+                            "مسافت سفر: ",
                             style: TextStyle(
                               color: Theme.of(context).colorScheme.onPrimary,
                               fontWeight: FontWeight.bold,

@@ -118,7 +118,10 @@ class _TransportCompactState extends State<TransportCompact> {
                         width: kToolbarHeight * 0.1,
                       ),
                       Text(
-                        widget.cTransport.dateScheduleTimeString?.format(context).withPersianNumbers() ?? '',
+                        widget.cTransport.dateScheduleTimeString
+                                ?.format(context)
+                                .withPersianNumbers() ??
+                            '',
                       ),
                     ],
                   ),
@@ -144,7 +147,7 @@ class _TransportCompactState extends State<TransportCompact> {
                 Row(
                   children: [
                     const Text(
-                      'مسافت:',
+                      'مسافت سفر:',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                       ),
@@ -223,10 +226,13 @@ class _TransportCompactState extends State<TransportCompact> {
                 child: InkWell(
                     borderRadius: BorderRadius.circular(12),
                     onTap: () {
-                      Provider.of<DriverTransportData>(context, listen: false).ignoreTransport(widget.cTransport);
+                      Provider.of<DriverTransportData>(context, listen: false)
+                          .ignoreTransport(widget.cTransport);
                     },
                     child: const Padding(
-                      padding: EdgeInsets.symmetric(vertical: kToolbarHeight * 0.2, horizontal: kToolbarHeight * 0.4),
+                      padding: EdgeInsets.symmetric(
+                          vertical: kToolbarHeight * 0.2,
+                          horizontal: kToolbarHeight * 0.4),
                       child: Text('نادیده گرفتن'),
                     )),
               ),
@@ -271,8 +277,13 @@ class _TransportCompactState extends State<TransportCompact> {
                               actions: [
                                 IconButton(
                                   onPressed: () async {
-                                    Provider.of<DriverTransportData>(context, listen: false).confirmTransport(widget.cTransport).then((value) {
-                                      Provider.of<SettingData>(context, listen: false).setbnbIndex(1);
+                                    Provider.of<DriverTransportData>(context,
+                                            listen: false)
+                                        .confirmTransport(widget.cTransport)
+                                        .then((value) {
+                                      Provider.of<SettingData>(context,
+                                              listen: false)
+                                          .setbnbIndex(1);
                                     });
                                     if (mounted) {
                                       Navigator.of(context).pop();
@@ -308,11 +319,10 @@ class _TransportCompactState extends State<TransportCompact> {
                           );
                         },
                       );
-                      if (mounted) {
-                        Provider.of<SettingData>(context, listen: false).setbnbIndex(1);
-                      }
                     },
-                    child: Provider.of<DriverTransportData>(context).isConfirmingId == widget.cTransport.id
+                    child: Provider.of<DriverTransportData>(context)
+                                .isConfirmingId ==
+                            widget.cTransport.id
                         ? const Padding(
                             padding: EdgeInsets.symmetric(
                               vertical: kToolbarHeight * 0.2,

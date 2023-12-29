@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import '../models/location_model.dart';
 import '../models/transport_model.dart';
@@ -9,7 +11,6 @@ import '../backend/api_endpoints.dart';
 
 class TransportData with ChangeNotifier {
   TransportData() {
-    // getUserLocations();
     getVehicles();
     _isInitialized = true;
     notifyListeners();

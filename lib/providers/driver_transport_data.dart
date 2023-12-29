@@ -82,7 +82,6 @@ class DriverTransportData with ChangeNotifier {
   Future<void> getTransports() async {
     var listofmap = await AppAPI()
         .getWithoutPaginate(urlPath: '${EndPoints.transports}/get_in_process');
-    print(listofmap);
     _allTransports = [];
     for (var newAppTransport in listofmap) {
       var newElement = AppTransport.fromMap(newAppTransport);

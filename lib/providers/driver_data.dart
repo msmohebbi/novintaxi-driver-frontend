@@ -1,6 +1,10 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:latlong2/latlong.dart';
+import 'package:novintaxidriver/backend/map.dart';
 import 'package:persian_datetime_picker/persian_datetime_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:novintaxidriver/backend/api.dart';
@@ -13,7 +17,21 @@ import '../models/transport_model.dart';
 
 class DriverData with ChangeNotifier {
   DriverData() {
+    _timer = Timer.periodic(
+      const Duration(seconds: 120),
+      (timer) {
+        if ((cDriver?.isAvailable ?? false) && (cDriver?.isVerify ?? false)) {
+          sendLiveLocation();
+        }
+      },
+    );
     initilizeDriverData();
+  }
+  Timer? _timer;
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
   }
 
   initilizeDriverData() async {
@@ -137,10 +155,12 @@ class DriverData with ChangeNotifier {
   final TextEditingController _nameController = TextEditingController(text: "");
   TextEditingController get nameController => _nameController;
 
-  final TextEditingController _addressController = TextEditingController(text: "");
+  final TextEditingController _addressController =
+      TextEditingController(text: "");
   TextEditingController get addressController => _addressController;
 
-  final TextEditingController _postalController = TextEditingController(text: "");
+  final TextEditingController _postalController =
+      TextEditingController(text: "");
   TextEditingController get postalController => _postalController;
 
   final List<String> _sexualTypes = [
@@ -156,7 +176,8 @@ class DriverData with ChangeNotifier {
   }
 
 // Page 1
-  final TextEditingController _melliCodeController = TextEditingController(text: "");
+  final TextEditingController _melliCodeController =
+      TextEditingController(text: "");
   TextEditingController get melliCodeController => _melliCodeController;
 
   File? _melliFrontImage;
@@ -174,14 +195,16 @@ class DriverData with ChangeNotifier {
   }
 
 // Page 2
-  final TextEditingController _govahiCodeController = TextEditingController(text: "");
+  final TextEditingController _govahiCodeController =
+      TextEditingController(text: "");
   TextEditingController get govahiCodeController => _govahiCodeController;
 
   int? _govahiExpDate;
   int? get govahiExpDate => _govahiExpDate;
   String? get govahiExpDateString {
     if (_govahiExpDate != null) {
-      Jalali? jalali = Jalali.fromDateTime(DateTime.fromMillisecondsSinceEpoch(govahiExpDate!));
+      Jalali? jalali = Jalali.fromDateTime(
+          DateTime.fromMillisecondsSinceEpoch(govahiExpDate!));
       return jalali.formatFullDate();
     } else {
       return null;
@@ -219,7 +242,8 @@ class DriverData with ChangeNotifier {
 
 // Page 4
   TextEditingController get vehicleCartBackNo => _vehicleCartBackNo;
-  final TextEditingController _vehicleCartBackNo = TextEditingController(text: "");
+  final TextEditingController _vehicleCartBackNo =
+      TextEditingController(text: "");
 
   File? get vehicleCartBackImage => _vehicleCartBackImage;
   File? _vehicleCartBackImage;
@@ -430,5 +454,56 @@ class DriverData with ChangeNotifier {
 
     _isChangeAvailable = false;
     notifyListeners();
+  }
+
+// ---------------------------------- LiveLocation ------------------------
+
+  Future<Position?> getCurrentLocation() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      await Geolocator.openLocationSettings();
+    }
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return null;
+      }
+    }
+    try {
+      var currLocation = await Geolocator.getCurrentPosition();
+
+      return currLocation;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  Future<void> sendLiveLocation() async {
+    // Start Live Location
+    var currLocation = await getCurrentLocation();
+
+    if (currLocation != null) {
+      var currentLatLng = LatLng(currLocation.latitude, currLocation.longitude);
+      // Start Live Location GeoCoding
+      var revGeo = await MapBackend()
+          .reverseGeocoding(currLocation.latitude, currLocation.longitude);
+      if (revGeo.isNotEmpty) {
+        var newLocation = AppLocation.fromMap(revGeo);
+        // Start Live Location Updating
+        await AppAPI().create(
+          'driver/driver_live_location',
+          {
+            'lat': currentLatLng.latitude,
+            'lng': currentLatLng.longitude,
+            'desc': newLocation.desc,
+            'city': newLocation.city,
+          },
+          null,
+        );
+      }
+    }
   }
 }
