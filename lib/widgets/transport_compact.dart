@@ -1,13 +1,19 @@
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:intl/intl.dart' as intl;
+import 'package:latlong2/latlong.dart';
+import 'package:novintaxidriver/models/location_model.dart';
+import 'package:novintaxidriver/widgets/confirm_transport_dialog.dart';
 import 'package:persian/persian.dart';
 import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:novintaxidriver/models/transport_model.dart';
 import 'package:novintaxidriver/providers/driver_transport_data.dart';
-import 'package:novintaxidriver/providers/settings_data.dart';
 
 class TransportCompact extends StatefulWidget {
   final AppTransport cTransport;
@@ -19,6 +25,87 @@ class TransportCompact extends StatefulWidget {
 }
 
 class _TransportCompactState extends State<TransportCompact> {
+  var mapController = MapController();
+  List<Polyline> polyLines = [];
+  late AppLocation? originLocation;
+  late AppLocation? targetLocation;
+
+  @override
+  void initState() {
+    originLocation = widget.cTransport.ods?.firstOrNull?.location;
+    targetLocation = widget.cTransport.ods?.lastOrNull?.location;
+
+    WidgetsBinding.instance.addPostFrameCallback(
+      (timeStamp) async {
+        mapController.move(originLocation!.latLng, 11);
+        mapController.move(
+          targetLocation!.latLng,
+          11,
+        );
+        await checkZoom(
+          [originLocation!.latLng, targetLocation!.latLng],
+        );
+        if (widget.cTransport.geometery != null) {
+          await Future.delayed(const Duration(milliseconds: 200));
+
+          polyLines.clear();
+          var geometry = json.decode(widget.cTransport.geometery!);
+          var legLatLngs = [];
+          legLatLngs
+              .addAll(geometry["coordinates"].map((e) => LatLng(e[1], e[0])));
+          setState(() {
+            polyLines.add(
+              Polyline(
+                color: Theme.of(context).colorScheme.error,
+                strokeWidth: 5,
+                points: [...legLatLngs],
+              ),
+            );
+          });
+        }
+      },
+    );
+    super.initState();
+  }
+
+  Future<void> checkZoom(List<LatLng> allLatLng) async {
+    double n = allLatLng[0].latitude;
+    double s = allLatLng[0].latitude;
+    double w = allLatLng[0].longitude;
+    double e = allLatLng[0].longitude;
+    for (var element in allLatLng) {
+      if (element.latitude > n) {
+        n = element.latitude;
+      }
+      if (element.latitude < s) {
+        s = element.latitude;
+      }
+      if (element.longitude > e) {
+        e = element.longitude;
+      }
+      if (element.longitude < w) {
+        w = element.longitude;
+      }
+    }
+    var xx = CameraFit.bounds(
+      bounds: LatLngBounds(
+        LatLng(s, w),
+        LatLng(n, e),
+      ),
+      padding: const EdgeInsets.only(
+        left: kToolbarHeight * 0.4,
+        right: kToolbarHeight * 0.4,
+        bottom: kToolbarHeight * 0.4,
+        top: kToolbarHeight * 1,
+      ),
+    ).fit(mapController.camera);
+
+    mapController.move(
+      xx.center,
+      xx.zoom,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     var rialFormat = intl.NumberFormat.currency(
@@ -183,6 +270,114 @@ class _TransportCompactState extends State<TransportCompact> {
             ),
           ),
           const SizedBox(height: kToolbarHeight * 0.2),
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: kToolbarHeight * 0.2,
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: SizedBox(
+                height: kToolbarHeight * 5,
+                child: IgnorePointer(
+                  child: FlutterMap(
+                    mapController: mapController,
+                    options: MapOptions(
+                      minZoom: 4,
+                      maxZoom: 13,
+                      onTap: (newTap, newLatLng) async {},
+                      initialCenter:
+                          widget.cTransport.ods!.first.location.latLng,
+                      initialZoom: 11,
+                    ),
+                    children: [
+                      TileLayer(
+                        // attributionAlignment: Alignment.bottomCenter,
+                        urlTemplate:
+                            'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                        tileBuilder: (context, tileWidget, tile) {
+                          return tileWidget;
+                        },
+                      ),
+                      PolylineLayer(
+                        polylines: polyLines,
+                      ),
+                      MarkerLayer(
+                        markers: [
+                          if (originLocation != null) ...[
+                            Marker(
+                              alignment: Alignment.topCenter,
+                              height: kToolbarHeight,
+                              width: kToolbarHeight,
+                              point: originLocation!.latLng,
+                              child: Stack(
+                                children: [
+                                  Icon(
+                                    CupertinoIcons.bubble_middle_bottom_fill,
+                                    size: kToolbarHeight,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .primary
+                                        .withAlpha(180),
+                                  ),
+                                  const Positioned.fill(
+                                    child: Align(
+                                      alignment: Alignment.center,
+                                      child: FittedBox(
+                                        child: Padding(
+                                          padding: EdgeInsets.only(
+                                            bottom: kToolbarHeight * 0.2,
+                                          ),
+                                          child: Text('مبدا'),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )
+                          ],
+                          if (targetLocation != null) ...[
+                            Marker(
+                              height: kToolbarHeight,
+                              width: kToolbarHeight,
+                              point: targetLocation!.latLng,
+                              alignment: Alignment.topCenter,
+                              child: Stack(
+                                children: [
+                                  Icon(
+                                    CupertinoIcons.bubble_middle_bottom_fill,
+                                    size: kToolbarHeight,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .primary
+                                        .withAlpha(180),
+                                  ),
+                                  const Positioned.fill(
+                                    child: Align(
+                                      alignment: Alignment.center,
+                                      child: FittedBox(
+                                        child: Padding(
+                                          padding: EdgeInsets.only(
+                                            bottom: kToolbarHeight * 0.2,
+                                          ),
+                                          child: Text('مقصد'),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: kToolbarHeight * 0.2),
           Divider(
             height: 1,
             color: Theme.of(context).colorScheme.primary.withAlpha(180),
@@ -247,76 +442,8 @@ class _TransportCompactState extends State<TransportCompact> {
                         barrierDismissible: true,
                         context: context,
                         builder: (context) {
-                          return Directionality(
-                            textDirection: TextDirection.rtl,
-                            child: CupertinoAlertDialog(
-                              title: const Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                    'شما در حال تایید و شروع سفر جدید هستید',
-                                    style: TextStyle(
-                                      height: 2,
-                                      fontSize: 13,
-                                      fontFamily: 'IRANYekan',
-                                      fontWeight: FontWeight.normal,
-                                    ),
-                                  ),
-                                  SizedBox(height: kToolbarHeight * 0.1),
-                                  Text(
-                                    'آیا مطمئن هستید؟',
-                                    style: TextStyle(
-                                      height: 2,
-                                      fontSize: 12,
-                                      fontFamily: 'IRANYekan',
-                                      fontWeight: FontWeight.normal,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              actions: [
-                                IconButton(
-                                  onPressed: () async {
-                                    Provider.of<DriverTransportData>(context,
-                                            listen: false)
-                                        .confirmTransport(widget.cTransport)
-                                        .then((value) {
-                                      Provider.of<SettingData>(context,
-                                              listen: false)
-                                          .setbnbIndex(1);
-                                    });
-                                    if (mounted) {
-                                      Navigator.of(context).pop();
-                                    }
-                                  },
-                                  icon: const Text(
-                                    'تایید سفر',
-                                    style: TextStyle(
-                                      color: Colors.teal,
-                                      height: 2,
-                                      fontSize: 13,
-                                      fontFamily: 'IRANYekan',
-                                      fontWeight: FontWeight.normal,
-                                    ),
-                                  ),
-                                ),
-                                IconButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                  icon: const Text(
-                                    'بیخیال',
-                                    style: TextStyle(
-                                      height: 2,
-                                      fontSize: 13,
-                                      fontFamily: 'IRANYekan',
-                                      fontWeight: FontWeight.normal,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
+                          return ConfirmTransportDialog(
+                              cTransport: widget.cTransport);
                         },
                       );
                     },
