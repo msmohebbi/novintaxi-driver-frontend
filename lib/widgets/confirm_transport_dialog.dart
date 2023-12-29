@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:novintaxidriver/models/transport_model.dart';
@@ -17,45 +15,15 @@ class ConfirmTransportDialog extends StatefulWidget {
 }
 
 class _ConfirmTransportDialogState extends State<ConfirmTransportDialog> {
-  int seconds = 15;
-  Timer? _timer;
-  @override
-  void initState() {
-    super.initState();
-    startTimer();
-  }
-
-  void startTimer() {
-    const oneSec = Duration(seconds: 1);
-    _timer = Timer.periodic(
-      oneSec,
-      (Timer timer) {
-        setState(() {
-          if (seconds == 0) {
-            timer.cancel();
-          } else {
-            seconds--;
-          }
-        });
-      },
-    );
-  }
-
-  @override
-  void dispose() {
-    _timer?.cancel();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: CupertinoAlertDialog(
-        title: Column(
+        title: const Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text(
+            Text(
               'شما در حال تایید و شروع سفر جدید هستید',
               style: TextStyle(
                 height: 2,
@@ -64,20 +32,10 @@ class _ConfirmTransportDialogState extends State<ConfirmTransportDialog> {
                 fontWeight: FontWeight.normal,
               ),
             ),
-            const SizedBox(height: kToolbarHeight * 0.1),
-            const Text(
+            SizedBox(height: kToolbarHeight * 0.1),
+            Text(
               'آیا مطمئن هستید؟',
               style: TextStyle(
-                height: 2,
-                fontSize: 12,
-                fontFamily: 'IRANYekan',
-                fontWeight: FontWeight.normal,
-              ),
-            ),
-            const SizedBox(height: kToolbarHeight * 0.1),
-            Text(
-              '$seconds ثانیه صبر کنید',
-              style: const TextStyle(
                 height: 2,
                 fontSize: 12,
                 fontFamily: 'IRANYekan',
@@ -88,29 +46,31 @@ class _ConfirmTransportDialogState extends State<ConfirmTransportDialog> {
         ),
         actions: [
           IconButton(
-            onPressed: seconds == 0
-                ? () async {
-                    Provider.of<DriverTransportData>(context, listen: false)
-                        .confirmTransport(widget.cTransport)
-                        .then((value) {
-                      Provider.of<SettingData>(context, listen: false)
-                          .setbnbIndex(1);
-                    });
-                    if (mounted) {
-                      Navigator.of(context).pop();
-                    }
-                  }
-                : null,
-            icon: const Text(
-              'تایید سفر',
-              style: TextStyle(
-                color: Colors.teal,
-                height: 2,
-                fontSize: 13,
-                fontFamily: 'IRANYekan',
-                fontWeight: FontWeight.normal,
-              ),
-            ),
+            onPressed: () async {
+              await Provider.of<DriverTransportData>(context, listen: false)
+                  .confirmTransport(widget.cTransport);
+
+              if (mounted) {
+                Provider.of<SettingData>(context, listen: false).setbnbIndex(1);
+              }
+
+              if (mounted) {
+                Navigator.of(context).pop();
+              }
+            },
+            icon: Provider.of<DriverTransportData>(context).isConfirmingId ==
+                    widget.cTransport.id
+                ? const CupertinoActivityIndicator()
+                : const Text(
+                    'تایید سفر',
+                    style: TextStyle(
+                      color: Colors.teal,
+                      height: 2,
+                      fontSize: 13,
+                      fontFamily: 'IRANYekan',
+                      fontWeight: FontWeight.normal,
+                    ),
+                  ),
           ),
           IconButton(
             onPressed: () {

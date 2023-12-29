@@ -12,6 +12,7 @@ class AppDriver {
     this.isDisable = false,
     this.personalImage = '',
     this.isVerify = false,
+    this.rate,
     this.verifyDesc,
   });
   int id;
@@ -24,6 +25,7 @@ class AppDriver {
   bool isDisable;
   String personalImage;
   bool isVerify;
+  double? rate;
   String? verifyDesc;
   AppDriver.fromMap(Map<String, dynamic> newItem)
       : id = newItem["id"],
@@ -38,6 +40,7 @@ class AppDriver {
         isDisable = newItem["is_disable"],
         personalImage = newItem["personal_image"],
         isVerify = newItem["is_verify"],
+        rate = newItem["rate"],
         verifyDesc = newItem["verify_desc"];
   Map<String, dynamic> toMap() {
     return {

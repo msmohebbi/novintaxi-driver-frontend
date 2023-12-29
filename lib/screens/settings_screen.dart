@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:novintaxidriver/providers/profile_data.dart';
 import 'package:provider/provider.dart';
 import 'package:novintaxidriver/providers/auth_data.dart';
 import 'package:novintaxidriver/providers/driver_data.dart';
@@ -9,6 +11,7 @@ import 'package:novintaxidriver/screens/profile_view_screen.dart';
 import 'package:novintaxidriver/screens/revenue_screen.dart';
 import 'package:novintaxidriver/screens/vehicle_view_screen.dart';
 import 'package:novintaxidriver/widgets/about_dialog.dart';
+import 'package:persian/persian.dart';
 
 import '../providers/settings_data.dart';
 
@@ -29,11 +32,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
     // int fontDelta = 0;
     var heightPix = heightPixFixed;
     // bool isHorizontal = false;
-    if (widthPix > heightPix || MediaQuery.of(context).orientation == Orientation.landscape) {
+    if (widthPix > heightPix ||
+        MediaQuery.of(context).orientation == Orientation.landscape) {
       // fontDelta = 1;
       widthPix = heightPix;
       // isHorizontal = true;
     } // var csetting = Provider.of<SettingData>(context);
+    var cDriver = Provider.of<DriverData>(context).cDriver;
     return ListView(
       shrinkWrap: true,
       children: [
@@ -89,22 +94,67 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      if (Provider.of<DriverData>(context).cDriver?.personalImage != null) ...[
+                      if (cDriver?.personalImage != null) ...[
                         ClipOval(
                           child: SizedBox(
                             width: kToolbarHeight * 0.6,
                             height: kToolbarHeight * 0.6,
                             child: CachedNetworkImage(
-                              imageUrl: Provider.of<DriverData>(context).cDriver!.personalImage,
+                              imageUrl: cDriver!.personalImage,
                               fit: BoxFit.cover,
                             ),
                           ),
                         ),
                         const SizedBox(width: kToolbarHeight * 0.2),
                       ],
-                      Text(
-                        Provider.of<DriverData>(context).cDriver?.name ?? '',
+                      Column(
+                        children: [
+                          Text(
+                            Provider.of<DriverData>(context).cDriver?.name ??
+                                '',
+                          ),
+                          if (Provider.of<ProfileData>(context)
+                                  .cUserProfile
+                                  ?.username !=
+                              null) ...[
+                            const SizedBox(height: kToolbarHeight * 0.1),
+                            Text(
+                              "(${Provider.of<ProfileData>(context).cUserProfile!.username.withPersianNumbers()})",
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Theme.of(context)
+                                    .primaryColor
+                                    .withAlpha(150),
+                              ),
+                            ),
+                          ],
+                        ],
                       ),
+                      const Spacer(),
+                      if (Provider.of<DriverData>(context).cDriver?.rate !=
+                          null) ...[
+                        const Spacer(),
+                        SizedBox(
+                          width: kToolbarHeight * 1.3,
+                          child: FittedBox(
+                            child: RatingBarIndicator(
+                              rating: cDriver!.rate!,
+                              itemBuilder: (context, index) => Listener(
+                                onPointerDown: (_) {},
+                                child: Icon(
+                                  cDriver.rate! < index + 1
+                                      ? CupertinoIcons.star
+                                      : CupertinoIcons.star_fill,
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                              ),
+                              itemCount: 5,
+                              itemSize: kToolbarHeight * 0.4,
+                              direction: Axis.horizontal,
+                            ),
+                          ),
+                        ),
+                      ],
                     ],
                   ),
                 ),
@@ -180,7 +230,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       topRight: Radius.circular(12),
                     ),
                     onTap: () {
-                      Navigator.of(context).pushNamed(ProfileViewScreen.routeName);
+                      Navigator.of(context)
+                          .pushNamed(ProfileViewScreen.routeName);
                     },
                     child: const Padding(
                       padding: EdgeInsets.symmetric(
@@ -205,7 +256,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   color: Theme.of(context).colorScheme.primary.withAlpha(50),
                   child: InkWell(
                     onTap: () {
-                      Navigator.of(context).pushNamed(VehicleViewScreen.routeName);
+                      Navigator.of(context)
+                          .pushNamed(VehicleViewScreen.routeName);
                     },
                     child: const Padding(
                       padding: EdgeInsets.symmetric(
@@ -238,7 +290,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       bottomRight: Radius.circular(12),
                     ),
                     onTap: () {
-                      Navigator.of(context).pushNamed(LicenseViewScreen.routeName);
+                      Navigator.of(context)
+                          .pushNamed(LicenseViewScreen.routeName);
                     },
                     child: const Padding(
                       padding: EdgeInsets.symmetric(
@@ -299,10 +352,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         children: [
                           const Text('حالت شب'),
                           CupertinoSwitch(
-                              activeColor: Theme.of(context).colorScheme.primary,
+                              activeColor:
+                                  Theme.of(context).colorScheme.primary,
                               value: Provider.of<SettingData>(context).isDark,
                               onChanged: (_) {
-                                Provider.of<SettingData>(context, listen: false).changeIsDark();
+                                Provider.of<SettingData>(context, listen: false)
+                                    .changeIsDark();
                               }),
                         ],
                       ),
@@ -516,7 +571,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               actions: [
                                 IconButton(
                                   onPressed: () async {
-                                    await Provider.of<AuthData>(context, listen: false).signOut();
+                                    await Provider.of<AuthData>(context,
+                                            listen: false)
+                                        .signOut();
 
                                     if (mounted) {
                                       Navigator.of(context).pop();

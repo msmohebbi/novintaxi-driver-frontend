@@ -73,6 +73,7 @@ dependencies:
   flutter_map_animations: ^0.5.3
   persian: ^1.2.0
   permission_handler: ^11.1.0
+  flutter_rating_bar: ^4.0.1
   
 dev_dependencies:
   flutter_test:

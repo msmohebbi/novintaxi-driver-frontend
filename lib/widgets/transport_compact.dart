@@ -11,6 +11,7 @@ import 'package:novintaxidriver/models/location_model.dart';
 import 'package:novintaxidriver/widgets/confirm_transport_dialog.dart';
 import 'package:persian/persian.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:novintaxidriver/models/transport_model.dart';
 import 'package:novintaxidriver/providers/driver_transport_data.dart';
@@ -30,8 +31,53 @@ class _TransportCompactState extends State<TransportCompact> {
   late AppLocation? originLocation;
   late AppLocation? targetLocation;
 
+  int seconds = 15;
+  Timer? _timer;
+
+  initializeTimer() async {
+    var prefs = await SharedPreferences.getInstance();
+    var transportTimers = prefs.getStringList('timerTransports') ?? [];
+
+    if (!transportTimers.contains(widget.cTransport.id.toString())) {
+      startTimer();
+    } else {
+      seconds = 0;
+    }
+  }
+
+  void startTimer() {
+    const oneSec = Duration(seconds: 1);
+    _timer = Timer.periodic(
+      oneSec,
+      (Timer timer) {
+        setState(() {
+          if (seconds == 0) {
+            timer.cancel();
+            SharedPreferences.getInstance().then((prefs) {
+              var transportTimers =
+                  prefs.getStringList('timerTransports') ?? [];
+              prefs.setStringList(
+                'timerTransports',
+                transportTimers..add(widget.cTransport.id.toString()),
+              );
+            });
+          } else {
+            seconds--;
+          }
+        });
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
   @override
   void initState() {
+    initializeTimer();
     originLocation = widget.cTransport.ods?.firstOrNull?.location;
     targetLocation = widget.cTransport.ods?.lastOrNull?.location;
 
@@ -437,16 +483,18 @@ class _TransportCompactState extends State<TransportCompact> {
                 borderRadius: BorderRadius.circular(12),
                 child: InkWell(
                     borderRadius: BorderRadius.circular(12),
-                    onTap: () async {
-                      await showCupertinoDialog(
-                        barrierDismissible: true,
-                        context: context,
-                        builder: (context) {
-                          return ConfirmTransportDialog(
-                              cTransport: widget.cTransport);
-                        },
-                      );
-                    },
+                    onTap: seconds == 0
+                        ? () async {
+                            await showCupertinoDialog(
+                              barrierDismissible: true,
+                              context: context,
+                              builder: (context) {
+                                return ConfirmTransportDialog(
+                                    cTransport: widget.cTransport);
+                              },
+                            );
+                          }
+                        : null,
                     child: Provider.of<DriverTransportData>(context)
                                 .isConfirmingId ==
                             widget.cTransport.id
@@ -459,14 +507,14 @@ class _TransportCompactState extends State<TransportCompact> {
                               color: Colors.white,
                             ),
                           )
-                        : const Padding(
-                            padding: EdgeInsets.symmetric(
+                        : Padding(
+                            padding: const EdgeInsets.symmetric(
                               vertical: kToolbarHeight * 0.2,
                               horizontal: kToolbarHeight * 0.4,
                             ),
                             child: Text(
-                              'تایید سفر',
-                              style: TextStyle(
+                              seconds != 0 ? '$seconds ثانیه' : 'تایید سفر',
+                              style: const TextStyle(
                                 color: Colors.black,
                               ),
                             ),
