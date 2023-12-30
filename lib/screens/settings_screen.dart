@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:novintaxidriver/providers/profile_data.dart';
+import 'package:novintaxidriver/widgets/contactus_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:novintaxidriver/providers/auth_data.dart';
 import 'package:novintaxidriver/providers/driver_data.dart';
@@ -426,7 +427,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       bottomLeft: Radius.circular(12),
                       bottomRight: Radius.circular(12),
                     ),
-                    onTap: () {},
+                    onTap: () {
+                      showCupertinoDialog(
+                        barrierDismissible: true,
+                        context: context,
+                        builder: (context) {
+                          return const AppContactUsDialog();
+                        },
+                      );
+                    },
                     child: const Padding(
                       padding: EdgeInsets.symmetric(
                         vertical: kToolbarHeight * 0.3,
@@ -503,21 +512,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         barrierDismissible: true,
                         context: context,
                         builder: (context) {
-                          return const Directionality(
-                            textDirection: TextDirection.rtl,
-                            child: CupertinoAlertDialog(
-                              content: AppAboutDialog(),
-                              title: Text(
-                                'درباره ما',
-                                style: TextStyle(
-                                  height: 2,
-                                  fontSize: 13,
-                                  fontFamily: 'IRANYekan',
-                                  fontWeight: FontWeight.normal,
-                                ),
-                              ),
-                            ),
-                          );
+                          return const AppAboutDialog();
                         },
                       );
                     },
